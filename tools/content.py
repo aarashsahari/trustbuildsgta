@@ -57,11 +57,6 @@ SERVICES = [
             ("A second suite", "Fire separation, egress, a separate entrance and permit drawings add cost. They also add rent."),
             ("Finish level", "LVP or engineered, hollow or solid-core doors, a wet bar or not."),
         ],
-        "table": [
-            ("Open rec room, no bathroom", "[price range]", "[X weeks]"),
-            ("Rec room with three-piece bathroom", "[price range]", "[X weeks]"),
-            ("Legal second suite", "[price range]", "[X weeks]"),
-        ],
         "local": {
             "Mississauga": "Meadowvale and Erin Mills townhouses and semis make up a lot of our basement work, and many of them become legal second suites.",
             "Oakville": "Glen Abbey and Joshua Creek basements are usually big, open and unfinished, which makes them good candidates for a rec room with a full bathroom.",
@@ -123,11 +118,6 @@ SERVICES = [
             ("Counters", "Quartz and porcelain are priced by the slab, so a large island can mean an extra slab."),
             ("Flooring", "Running new flooring through the main floor avoids a seam but adds square footage."),
         ],
-        "table": [
-            ("Refresh: same layout, new cabinets and counters", "[price range]", "[X weeks]"),
-            ("Full renovation with layout changes", "[price range]", "[X weeks]"),
-            ("Open concept with wall removal", "[price range]", "[X weeks]"),
-        ],
         "local": {
             "Mississauga": "Lorne Park and Port Credit kitchens tend to be full renovations, often with a wall coming down to the dining room.",
             "Oakville": "Glen Abbey and Joshua Creek homes from the eighties and nineties are due for their first real kitchen.",
@@ -188,11 +178,6 @@ SERVICES = [
             ("Shower type", "A curbless shower needs the floor recessed or built up, which adds framing time."),
             ("Glass", "Custom glass is measured after tile and priced by size and hardware."),
             ("Heated floors", "Electric floor heat adds a circuit and a thermostat, but little labour."),
-        ],
-        "table": [
-            ("Powder room refresh", "[price range]", "[X weeks]"),
-            ("Main bathroom with tub-to-shower conversion", "[price range]", "[X weeks]"),
-            ("Full ensuite with walk-in shower", "[price range]", "[X weeks]"),
         ],
         "local": {
             "Mississauga": "Townhouses in Meadowvale and Erin Mills often have a tub nobody uses, which makes them good tub-to-shower conversions.",
@@ -265,11 +250,6 @@ SERVICES = [
             ("Removal", "Tearing out glued-down flooring or tile takes longer than carpet."),
             ("Pattern", "Herringbone and diagonal layouts take more time and more waste."),
         ],
-        "table": [
-            ("LVP, per square foot installed", "[price range]", "[X] days for [X] sq ft"),
-            ("Engineered hardwood, per square foot installed", "[price range]", "[X] days for [X] sq ft"),
-            ("Stairs, per step", "[price range]", "[X] days per staircase"),
-        ],
         "local": {
             "Mississauga": "Streetsville and Port Credit homes often have original hardwood under the carpet, and sometimes it can be saved.",
             "Oakville": "Engineered hardwood through the main floor of Glen Abbey and Bronte homes is our most common Oakville flooring job.",
@@ -331,11 +311,6 @@ SERVICES = [
             ("Steps", "Formed steps take more labour per square foot than a flat slab."),
             ("Grading", "A yard that slopes toward the house needs more fill, or a step down."),
         ],
-        "table": [
-            ("Walkway", "[price range]", "[X] days"),
-            ("Back patio", "[price range]", "[X] days"),
-            ("Patio with steps and a landing", "[price range]", "[X] days"),
-        ],
         "local": {
             "Mississauga": "Port Credit and Lorne Park lots have plenty of clay, so the base goes deeper there.",
             "Oakville": "Bronte backyards often want a patio and a walkway to the side gate done in one pour.",
@@ -396,11 +371,6 @@ SERVICES = [
             ("Wall height", "Retaining walls over about a metre need engineering and geogrid."),
             ("Soil", "Clay and fill need more excavation and base than sandy ground."),
             ("Permits", "Attached and raised decks need drawings and inspections."),
-        ],
-        "table": [
-            ("Interlock patio", "[price range]", "[X] days"),
-            ("Pressure-treated deck", "[price range]", "[X weeks]"),
-            ("Composite deck with railing", "[price range]", "[X weeks]"),
         ],
         "local": {
             "Mississauga": "Lorne Park and Erin Mills yards are big enough for a deck and a patio, and that's usually what people ask for.",

@@ -38,7 +38,7 @@ id, a broken internal link, or an in-page link to a missing anchor. Don't edit t
   it is set, every form shows an error with the phone number, and the browser console
   says the lead was not sent. Any service that accepts a JSON POST works (Formspree,
   Basin, a CRM or Zapier/Make webhook).
-- **Placeholders.** Search for `[X]`, `[X weeks]`, `[price range]`, `[EMAIL]`,
+- **Placeholders.** Search for `[X]`, `[X weeks]`, `[EMAIL]`,
   `[OWNER NAME]`, `[GOOGLE_REVIEWS_URL]`, `[REVIEW TEXT]`, `[NAME]` and `[CITY]`.
 - **Photos.** Unsplash images are placeholders. Each one has a `REAL PHOTO` comment, or a
   note in `content.py`, describing the photo to swap in.

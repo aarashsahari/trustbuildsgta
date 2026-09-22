@@ -897,8 +897,6 @@ def service_page(s):
     </section>"""
 
     drivers = "".join(f"<li><strong>{e(t)}</strong><span>{e(d)}</span></li>" for t, d in s["drivers"])
-    trows = "".join(
-        f'<tr><th scope="row">{e(a)}</th><td>{e(b)}</td><td>{e(c)}</td></tr>' for a, b, c in s["table"])
 
     local = []
     for city in CITIES_ORDER:
@@ -950,18 +948,11 @@ def service_page(s):
           <p class="eyebrow">Cost</p>
           <h2 id="cost-title">{e(s["price_h2"])}</h2>
           <p class="lede">{e(s["price_intro"])}</p>
-          <ul class="drivers">{drivers}</ul>
+          <p class="price__note">Every quote is a fixed price for your house, with HST shown as its own line.</p>
+          <p><a class="btn btn--primary" href="#quote">Get your fixed price</a></p>
         </div>
         <div class="reveal">
-          <div class="table-scroll" role="region" aria-label="Planning price ranges" tabindex="0">
-            <table class="compare compare--wide">
-              <caption>Planning ranges</caption>
-              <thead><tr><th scope="col">Typical scope</th><th scope="col">Price range</th><th scope="col">Time on site</th></tr></thead>
-              <tbody>{trows}</tbody>
-            </table>
-          </div>
-          <p class="price__note">Ranges are for planning only. Your quote is a fixed price for your house, with HST shown as its own line.</p>
-          <p><a class="arrow-link" href="#quote">Get your fixed price {ARROW}</a></p>
+          <ul class="drivers">{drivers}</ul>
         </div>
       </div>
     </section>

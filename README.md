@@ -8,7 +8,7 @@ Python script that keeps the shared parts in sync.
 
 | Page | File |
 | --- | --- |
-| Homepage (short: hero, services list, featured project, promises, reviews, quote form) | `index.html` |
+| Homepage (hero, services with photos, recent-work photo grid, featured project, promises, reviews, quote form) | `index.html` |
 | Header pages | `services.html`, `projects.html`, `process.html`, `areas.html`, `faq.html`, `contact.html` |
 | Service landing pages | `basement-renovation.html`, `kitchen-renovation.html`, `bathroom-renovation.html`, `flooring.html`, `concrete-patios.html`, `backyard-landscaping.html` |
 | City pages | `mississauga.html`, `oakville.html`, `burlington.html`, `hamilton.html` |
@@ -24,7 +24,7 @@ works on any host, in a subfolder, or opened straight from disk.
 | General FAQ answers | `tools/home_faq.json` |
 | Hand-written sections (services grid, gallery, process, why, reviews, areas, hero) | `src/partials/*.html` |
 | Colours, type, layout | `src/site.css` (palette tokens at the top) |
-| Menus, loader, forms, gallery, tracking | `src/site.js` |
+| Menus, forms, gallery, tracking | `src/site.js` |
 | Page structure, header, footer, quote form | `tools/build.py` |
 
 Then run `python3 tools/build.py`. It fails if a page has a banned word, an em or en dash,

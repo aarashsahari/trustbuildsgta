@@ -134,66 +134,11 @@
     }
     TB.jumpTo = jumpTo;
 
-    /* ---------- Page loader for header links ----------
-       A short branded loading screen when a header link is clicked. Kept brief on
-       purpose: long fake waits cost enquiries. Visitors arriving from Google never
-       see it, only people who click in the header. */
-    var loader = document.getElementById('loader');
-    var loaderLabel = loader ? loader.querySelector('.loader__label') : null;
-    var HOLD_MS = reduceMotion ? 120 : 620;
-
-    function showLoader(label) {
-      if (!loader) return;
-      loaderLabel.textContent = label || 'Loading';
-      loader.classList.add('is-on');
-    }
-    function hideLoader() {
-      if (!loader) return;
-      loader.classList.remove('is-on');
-      root.classList.remove('tb-arriving');
-    }
-    // Arriving from a header click on another page: the overlay is already up
-    if (root.classList.contains('tb-arriving') && loader) {
-      loaderLabel.textContent = root.getAttribute('data-nav-label') || 'Loading';
-      loader.classList.add('is-on');
-      root.classList.remove('tb-arriving');
-      setTimeout(hideLoader, reduceMotion ? 0 : 360);
-    }
-    // Back/forward cache restores the page as it was: make sure the overlay is gone
-    window.addEventListener('pageshow', function (e) { if (e.persisted) hideLoader(); });
-
-    function samePath(url) {
-      var norm = function (p) { return p.replace(/index\.html$/, '').replace(/\/$/, ''); };
-      return url.origin === window.location.origin && norm(url.pathname) === norm(window.location.pathname);
-    }
-
+    /* ---------- In-page anchors: smooth scroll and move focus ---------- */
     document.addEventListener('click', function (e) {
-      var a = e.target.closest('a[data-load]');
-      if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || a.target === '_blank') return;
-      var url;
-      try { url = new URL(a.getAttribute('href'), window.location.href); } catch (err) { return; }
-      var label = a.getAttribute('data-load') || a.textContent.trim();
-      e.preventDefault();
-      setMenu(false);
-      closeDrops();
-      showLoader(label);
-
-      if (samePath(url)) {
-        setTimeout(function () {
-          if (!url.hash || !jumpTo(url.hash.slice(1), true)) window.scrollTo(0, 0);
-          setTimeout(hideLoader, 80);
-        }, HOLD_MS);
-      } else {
-        set(ss, 'tb-nav', label);
-        setTimeout(function () { window.location.href = url.href; }, HOLD_MS);
-      }
-    });
-
-    /* ---------- Plain in-page anchors (outside the header) ---------- */
-    document.addEventListener('click', function (e) {
-      if (e.defaultPrevented) return;
       var link = e.target.closest('a[href^="#"]');
       if (!link) return;
+      setMenu(false);
       var id = link.getAttribute('href').slice(1);
       if (id && document.getElementById(id)) {
         e.preventDefault();

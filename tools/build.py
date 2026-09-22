@@ -112,8 +112,8 @@ BUSINESS = {
 # Shared chrome: head, header, footer, script
 # ======================================================================
 
-EARLY = """<!-- Flag JS, and keep the loader up if we arrived from a header link -->
-  <script>(function(d){d.classList.add('js');try{var l=sessionStorage.getItem('tb-nav');if(l){sessionStorage.removeItem('tb-nav');d.classList.add('tb-arriving');d.setAttribute('data-nav-label',l);}}catch(e){}})(document.documentElement);</script>"""
+EARLY = """<!-- Flag JS so scroll reveals only hide content when they can also show it -->
+  <script>document.documentElement.classList.add('js');</script>"""
 
 
 def head(title, desc, slug, og_img, schema):
@@ -166,13 +166,13 @@ def head(title, desc, slug, og_img, schema):
 
 
 def header(current):
-    """Loader overlay, skip link and site header. `current` is the page slug."""
+    """Skip link and site header. `current` is the page slug."""
 
     def cur(slug):
         return ' aria-current="page"' if slug == current else ""
 
     def a(slug, label, load=None, indent=14):
-        return (" " * indent + f'<li><a href="{link(slug)}" data-load="{e(load or label)}"{cur(slug)}>'
+        return (" " * indent + f'<li><a href="{link(slug)}"{cur(slug)}>'
                 f'{e(label)}</a></li>')
 
     svc = "\n".join(a(s["slug"], s["name"]) for s in SERVICES)
@@ -183,23 +183,13 @@ def header(current):
     in_areas = current == "areas" or current in [c["slug"] for c in CITIES]
 
     def top(slug, label):
-        return f'<li><a href="{link(slug)}" data-load="{e(label)}"{cur(slug)}>{e(label)}</a></li>'
+        return f'<li><a href="{link(slug)}"{cur(slug)}>{e(label)}</a></li>'
 
-    return f"""<!-- Page loader: only shown for header navigation -->
-  <div class="loader" id="loader" aria-hidden="true">
-    <span class="loader__bar"></span>
-    <div class="loader__inner">
-      <div class="loader__courses"><span></span><span></span><span></span></div>
-      <p class="loader__label">Loading</p>
-      <p class="loader__brand">TrustBuildGTA</p>
-    </div>
-  </div>
-
-  <a class="skip" href="#main">Skip to content</a>
+    return f"""<a class="skip" href="#main">Skip to content</a>
 
   <header class="site-header" id="top">
     <div class="wrap header-bar">
-      <a class="logo" href="{link('index')}" data-load="Home" aria-label="TrustBuildGTA home">
+      <a class="logo" href="{link('index')}" aria-label="TrustBuildGTA home">
         <span class="logo__mark" aria-hidden="true"></span>
         <span aria-hidden="true">TrustBuild<span class="logo__gta">GTA</span></span>
       </a>
@@ -209,7 +199,7 @@ def header(current):
           <li class="nav-drop{' is-current' if in_services else ''}" data-dropdown>
             <button class="nav-drop__btn" type="button" aria-expanded="false" aria-controls="dd-services">Services<span class="nav-drop__caret" aria-hidden="true"></span></button>
             <ul class="nav-drop__menu" id="dd-services">
-              <li><a href="{link('services')}" data-load="Services"{cur('services')}>All services</a></li>
+              <li><a href="{link('services')}"{cur('services')}>All services</a></li>
 {svc}
             </ul>
           </li>
@@ -218,7 +208,7 @@ def header(current):
           <li class="nav-drop{' is-current' if in_areas else ''}" data-dropdown>
             <button class="nav-drop__btn" type="button" aria-expanded="false" aria-controls="dd-areas">Areas<span class="nav-drop__caret" aria-hidden="true"></span></button>
             <ul class="nav-drop__menu" id="dd-areas">
-              <li><a href="{link('areas')}" data-load="Service areas"{cur('areas')}>All service areas</a></li>
+              <li><a href="{link('areas')}"{cur('areas')}>All service areas</a></li>
 {city}
             </ul>
           </li>
@@ -232,7 +222,7 @@ def header(current):
           {PHONE}
           <span>Call any time, 24/7</span>
         </a>
-        <a class="btn btn--brass header-cta" href="#quote">Get a Quote</a>
+        <a class="btn btn--primary header-cta" href="#quote">Get a Quote</a>
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
           <span class="sr-only">Menu</span>
           <span class="menu-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span>
@@ -246,7 +236,7 @@ def header(current):
         <nav class="wrap" aria-label="Mobile">
           <ul>
             <li>
-              <a href="{link('services')}" data-load="Services"{cur('services')}>Services</a>
+              <a href="{link('services')}"{cur('services')}>Services</a>
               <ul class="mp-sub">
 {msvc}
               </ul>
@@ -254,7 +244,7 @@ def header(current):
             {top('projects', 'Projects')}
             {top('process', 'Process')}
             <li>
-              <a href="{link('areas')}" data-load="Service areas"{cur('areas')}>Areas</a>
+              <a href="{link('areas')}"{cur('areas')}>Areas</a>
               <ul class="mp-sub">
 {mcity}
               </ul>
@@ -263,7 +253,7 @@ def header(current):
             {top('contact', 'Contact')}
           </ul>
           <div class="mobile-panel__foot">
-            <a class="btn btn--brass" href="#quote">Get a Quote</a>
+            <a class="btn btn--primary" href="#quote">Get a Quote</a>
             <a class="btn btn--line" href="{TEL}">Call {PHONE}</a>
             <p class="mobile-panel__hours">Call any time, 24/7</p>
           </div>
@@ -293,7 +283,7 @@ def footer():
             <a href="{TEL}">{PHONE}</a>
           </address>
           <p class="foot-hours">Open 24 hours, 7 days a week</p>
-          <a class="btn btn--brass" href="#quote">Get a Quote</a>
+          <a class="btn btn--primary" href="#quote">Get a Quote</a>
         </div>
 
         <nav aria-label="Services">
@@ -481,7 +471,7 @@ def lead_form(fid, service=None, city=None, wrap_class=""):
               <label for="{fid}-message">What are you planning? <span class="opt">(optional)</span></label>
               <textarea id="{fid}-message" name="message" rows="3" placeholder="Rough size, what's there now, when you'd like to start."></textarea>
             </div>
-            <button class="btn btn--brass lform__submit" type="submit">Get my free quote</button>
+            <button class="btn btn--primary lform__submit" type="submit">Get my free quote</button>
             <div class="qstatus qstatus--error" role="alert" hidden></div>
             <p class="qfine">No obligation. We reply within [X] hours, or call {PHONE} any time. Your details are only used for this quote.</p>
           </form>
@@ -586,7 +576,7 @@ def cta_band(h2, p):
           <p>{e(p)}</p>
         </div>
         <div class="cta-band__btns">
-          <a class="btn btn--brass" href="#quote">Get a Free Quote</a>
+          <a class="btn btn--primary" href="#quote">Get a Free Quote</a>
           <a class="btn btn--ghost-light" href="{TEL}">Call {PHONE}</a>
         </div>
       </div>
@@ -620,11 +610,32 @@ def home_page():
 
     rows = []
     for i, s in enumerate(SERVICES, 1):
+        pid, alt, _note = s["hero"]
         rows.append(f"""          <li class="reveal">
-            <span class="svc-rows__n">{i:02d}</span>
+            <!-- REAL PHOTO: finished {e(s["name"].lower())} job, crops to 4:3 -->
+            <div class="svc-rows__thumb ph"><img src="{e(img_url(pid, 480, 360))}" width="480" height="360" loading="lazy" decoding="async" alt="{e(alt)}"></div>
             <h3>{e(s["name"])}</h3>
             <p>{e(first_sentence(s["sub"]))}</p>
             <a class="arrow-link" href="{link(s["slug"])}">Learn more<span class="sr-only"> about {e(s["name"].lower())}</span> {ARROW}</a>
+          </li>""")
+
+    # Recent work mosaic: first photo is the big one
+    recent = [
+        ("1600210492486-724fe5c67fb0", "Finished basement in Erin Mills with LVP flooring and pot lights", "Erin Mills, Mississauga", "Basement"),
+        ("1484154218962-a197022b5858", "White kitchen in Glen Abbey with quartz counters and a tiled backsplash", "Glen Abbey, Oakville", "Kitchen"),
+        ("1584622650111-993a426fbf0a", "Ensuite in Millcroft with a floating vanity and porcelain wall tile", "Millcroft, Burlington", "Bathroom"),
+        ("1600047509807-ba8f99d2cdde", "Interlock patio and low retaining wall in an Ancaster backyard", "Ancaster, Hamilton", "Outdoor"),
+        ("1586023492125-27b2c045efd7", "Wide-plank engineered oak flooring through a Bronte living room", "Bronte, Oakville", "Flooring"),
+    ]
+    mosaic = []
+    for i, (pid, alt, place, kind) in enumerate(recent):
+        w, h = (1200, 1200) if i == 0 else (700, 525)
+        mosaic.append(f"""          <li class="mosaic__item{' mosaic__item--big' if i == 0 else ''} reveal">
+            <!-- REAL PHOTO: {e(kind.lower())} project in {e(place)} -->
+            <a href="{link('projects')}" class="ph">
+              <img src="{e(img_url(pid, w, h))}" width="{w}" height="{h}" loading="lazy" decoding="async" alt="{e(alt)}">
+              <span class="mosaic__cap"><strong>{e(kind)}</strong> {e(place)}</span>
+            </a>
           </li>""")
 
     promises = [
@@ -640,14 +651,24 @@ def home_page():
     <section class="section" id="services" aria-labelledby="services-title">
       <div class="wrap">
 {section_head("Services", "Basement renovation, kitchens, bathrooms, floors and the concrete patio", "Six kinds of work make up most of our calendar. Each has its own page with what's included, how we build it and what moves the price.", "services-title")}
-        <ol class="svc-rows">
+        <ol class="svc-rows svc-rows--thumbs">
 {chr(10).join(rows)}
         </ol>
         <p class="more-link reveal"><a class="btn btn--line" href="{link('services')}">See all services</a></p>
       </div>
     </section>
 
-    <section class="section bg-limestone" id="featured" aria-labelledby="featured-title">
+    <section class="section bg-limestone" id="recent" aria-labelledby="recent-title">
+      <div class="wrap">
+{section_head("Recent work", "Recent kitchens, bathrooms, basements and backyards", "A few finished jobs from across the four cities. The full gallery, with a before and after, is on the Projects page.", "recent-title")}
+        <ul class="mosaic">
+{chr(10).join(mosaic)}
+        </ul>
+        <p class="more-link reveal"><a class="btn btn--line" href="{link('projects')}">See all projects</a></p>
+      </div>
+    </section>
+
+    <section class="section" id="featured" aria-labelledby="featured-title">
       <div class="wrap teaser">
         <!-- REAL PHOTO: the finished Lorne Park kitchen (same job as the before/after on the Projects page) -->
         <figure class="teaser__img ph reveal">
@@ -751,7 +772,7 @@ def section_page(slug):
     ]
     hero_extra = ""
     if slug == "contact":
-        hero_extra = f'<p class="phero__call"><a class="btn btn--brass" href="{TEL}">Call {PHONE}</a> <span>Call any time, 24/7</span></p>'
+        hero_extra = f'<p class="phero__call"><a class="btn btn--primary" href="{TEL}">Call {PHONE}</a> <span>Call any time, 24/7</span></p>'
     hero = page_hero(crumbs, m["eyebrow"], m["h1"], m["lede"], hero_extra)
     fid = f"lead-{slug}"
 

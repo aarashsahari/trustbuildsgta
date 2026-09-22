@@ -4,24 +4,33 @@ Static site: a homepage, six service landing pages and four city pages. Every pa
 self-contained HTML file (inline CSS and JS, no frameworks). The only build step is a
 Python script that keeps the shared parts in sync.
 
-## Files
+## Pages
 
-| Path | What it is |
+| Page | File |
 | --- | --- |
-| `index.html` | Homepage. Hand-edited, except the regions between `@build` markers. |
-| `*-renovation.html`, `flooring.html`, `concrete-patios.html`, `backyard-landscaping.html` | Service landing pages (generated) |
-| `mississauga.html`, `oakville.html`, `burlington.html`, `hamilton.html` | City pages (generated) |
-| `src/site.css` | Styles shared by every page |
-| `src/site.js` | Shared script: menus, header loader, lead forms, tracking |
-| `tools/content.py` | All copy for the service and city pages |
-| `tools/build.py` | Generates the pages, patches the homepage, writes `sitemap.xml` and `robots.txt`, lints copy |
+| Homepage (short: hero, services list, featured project, promises, reviews, quote form) | `index.html` |
+| Header pages | `services.html`, `projects.html`, `process.html`, `areas.html`, `faq.html`, `contact.html` |
+| Service landing pages | `basement-renovation.html`, `kitchen-renovation.html`, `bathroom-renovation.html`, `flooring.html`, `concrete-patios.html`, `backyard-landscaping.html` |
+| City pages | `mississauga.html`, `oakville.html`, `burlington.html`, `hamilton.html` |
+
+Every page is generated. Links between pages are relative (`services.html`), so the site
+works on any host, in a subfolder, or opened straight from disk.
 
 ## Editing
 
-1. Change copy in `tools/content.py`, styles in `src/site.css` or behaviour in `src/site.js`.
-2. Run `python3 tools/build.py`. It fails if a page has a banned word, an em or en dash,
-   a meta description outside 150 to 160 characters, or more or less than one H1.
-3. Don't edit the generated `.html` pages directly. The next build overwrites them.
+| Change | Edit |
+| --- | --- |
+| Service and city copy | `tools/content.py` |
+| General FAQ answers | `tools/home_faq.json` |
+| Hand-written sections (services grid, gallery, process, why, reviews, areas, hero) | `src/partials/*.html` |
+| Colours, type, layout | `src/site.css` (palette tokens at the top) |
+| Menus, loader, forms, gallery, tracking | `src/site.js` |
+| Page structure, header, footer, quote form | `tools/build.py` |
+
+Then run `python3 tools/build.py`. It fails if a page has a banned word, an em or en dash,
+a meta description outside 150 to 160 characters, anything other than one H1, a duplicate
+id, a broken internal link, or an in-page link to a missing anchor. Don't edit the generated
+`.html` files directly. The next build overwrites them.
 
 ## Before launch
 
@@ -40,8 +49,7 @@ Python script that keeps the shared parts in sync.
 
 ## Hosting
 
-Pages link to clean URLs like `/basement-renovation`. Netlify, Cloudflare Pages and
-GitHub Pages serve `basement-renovation.html` at that address with no redirect. On
-Vercel, add `{ "cleanUrls": true }` to `vercel.json`. Opening the files directly from disk
-works for the homepage, but links between pages need a local server
-(for example `npx serve .`).
+Upload the `.html` files, `sitemap.xml` and `robots.txt` (the `src` and `tools` folders are
+only needed for editing). Canonical URLs use the clean form (`/services`), which Netlify,
+Cloudflare Pages and GitHub Pages serve from `services.html`. On Vercel, add
+`{ "cleanUrls": true }` to `vercel.json`.

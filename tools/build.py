@@ -4,20 +4,23 @@ Build the TrustBuildGTA site.
 
   python3 tools/build.py
 
-What it does:
-  1. Writes one self-contained page per service and per city
-     (e.g. basement-renovation.html, oakville.html). Netlify, Cloudflare Pages
-     and GitHub Pages serve these at /basement-renovation with no redirect,
-     which matches the canonical URLs. On Vercel, set "cleanUrls": true.
-  2. Refreshes the shared regions of index.html (CSS, header, footer, loader,
-     shared script) between the @build markers. Everything else in index.html
-     is hand-edited and left alone.
-  3. Writes sitemap.xml and robots.txt.
-  4. Lints every page: banned words, em/en dashes, meta description length,
-     exactly one H1.
+Every page is generated, homepage included, as one self-contained HTML file
+at the repo root (index.html, services.html, basement-renovation.html, ...).
 
-Edit copy in tools/content.py, shared styles in src/site.css and shared
-behaviour in src/site.js. Never edit the generated pages directly.
+Links between pages are relative (e.g. href="services.html"), so the site
+works on any static host, in a subfolder, and when opened straight from disk.
+Canonical URLs and the sitemap use the clean form (/services), which Netlify,
+Cloudflare Pages and GitHub Pages serve from services.html.
+
+Sources:
+  tools/content.py     copy for service and city landing pages
+  tools/home_faq.json  the eight general FAQ answers (FAQ page)
+  src/partials/*.html  hand-written sections (services grid, gallery, process...)
+  src/site.css         styles for every page
+  src/site.js          behaviour for every page
+
+The build lints every page (banned words, em/en dashes, meta description
+length, one H1, duplicate ids, root-absolute links) and fails if anything is off.
 """
 import datetime
 import html
@@ -35,6 +38,7 @@ PHONE = "(647) 513-7955"
 TEL = "tel:+16475137955"
 CSS = (ROOT / "src" / "site.css").read_text().rstrip()
 JS = (ROOT / "src" / "site.js").read_text().rstrip()
+HOME_FAQ = json.loads((ROOT / "tools" / "home_faq.json").read_text())
 
 BANNED = ["elevate", "seamless", "transform", "unlock", "dream home", "nestled", "testament",
           "look no further", "one-stop", "tailored", "bespoke", "cutting-edge", "state-of-the-art",
@@ -43,10 +47,33 @@ BANNED = ["elevate", "seamless", "transform", "unlock", "dream home", "nestled",
 
 EXTRA_WORK = "Drywall, trim, painting or addition"
 
+# Section pages that replace the old long homepage. Order = header order.
+SECTIONS = [
+    ("services", "Services"),
+    ("projects", "Projects"),
+    ("process", "Process"),
+    ("areas", "Areas"),
+    ("faq", "FAQ"),
+    ("contact", "Contact"),
+]
+
 
 def e(s):
     """Escape text for HTML text and attribute positions."""
     return html.escape(str(s), quote=True)
+
+
+def link(slug):
+    """Relative link to a page. Works on a host, in a subfolder and from disk."""
+    return "index.html" if slug in ("", "index") else f"{slug}.html"
+
+
+def canonical(slug):
+    return SITE + "/" if slug in ("", "index") else f"{SITE}/{slug}"
+
+
+def partial(name):
+    return (ROOT / "src" / "partials" / f"{name}.html").read_text().rstrip()
 
 
 def img_url(pid, w, h=None, q=72):
@@ -54,8 +81,21 @@ def img_url(pid, w, h=None, q=72):
     return url + (f"&h={h}" if h else "")
 
 
+def first_sentence(text):
+    return text.split(". ")[0].rstrip(".") + "."
+
+
 ARROW = ('<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" '
          'fill="none" stroke="currentColor" stroke-width="1.6"/></svg>')
+
+ADDRESS = {
+    "@type": "PostalAddress",
+    "streetAddress": "8 Matheson Blvd E",
+    "addressLocality": "Mississauga",
+    "addressRegion": "ON",
+    "postalCode": "L4W 2V3",
+    "addressCountry": "CA",
+}
 
 BUSINESS = {
     "@type": "GeneralContractor",
@@ -64,218 +104,20 @@ BUSINESS = {
     "url": SITE,
     "telephone": "+1-647-513-7955",
     "priceRange": "$$",
-    "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "8 Matheson Blvd E",
-        "addressLocality": "Mississauga",
-        "addressRegion": "ON",
-        "postalCode": "L4W 2V3",
-        "addressCountry": "CA",
-    },
+    "address": ADDRESS,
 }
 
 
 # ======================================================================
-# Shared regions
+# Shared chrome: head, header, footer, script
 # ======================================================================
 
-EARLY = """<!-- @build:early -->
-  <!-- Flag JS, and keep the loader up if we arrived from a header link -->
-  <script>(function(d){d.classList.add('js');try{var l=sessionStorage.getItem('tb-nav');if(l){sessionStorage.removeItem('tb-nav');d.classList.add('tb-arriving');d.setAttribute('data-nav-label',l);}}catch(e){}})(document.documentElement);</script>
-  <!-- @end:early -->"""
+EARLY = """<!-- Flag JS, and keep the loader up if we arrived from a header link -->
+  <script>(function(d){d.classList.add('js');try{var l=sessionStorage.getItem('tb-nav');if(l){sessionStorage.removeItem('tb-nav');d.classList.add('tb-arriving');d.setAttribute('data-nav-label',l);}}catch(e){}})(document.documentElement);</script>"""
 
 
-def css_region():
-    return f"/* @build:css (generated from src/site.css) */\n{CSS}\n    /* @end:css */"
-
-
-def header(current="", home=False):
-    """Loader overlay, skip link and site header. `current` is the page path."""
-    p = "" if home else "/"
-    logo_href = "#top" if home else "/"
-    contact = "#contact" if home else "#quote"
-
-    def cur(path):
-        return ' aria-current="page"' if path == current else ""
-
-    svc_links = "\n".join(
-        f'              <li><a href="/{s["slug"]}" data-load="{e(s["name"])}"{cur("/" + s["slug"])}>{e(s["name"])}</a></li>'
-        for s in SERVICES)
-    city_links = "\n".join(
-        f'              <li><a href="/{c["slug"]}" data-load="{e(c["name"])}"{cur("/" + c["slug"])}>{e(c["name"])}</a></li>'
-        for c in CITIES)
-    mp_svc = "\n".join(
-        f'                <li><a href="/{s["slug"]}" data-load="{e(s["name"])}"{cur("/" + s["slug"])}>{e(s["name"])}</a></li>'
-        for s in SERVICES)
-    mp_city = "\n".join(
-        f'                <li><a href="/{c["slug"]}" data-load="{e(c["name"])}"{cur("/" + c["slug"])}>{e(c["name"])}</a></li>'
-        for c in CITIES)
-
-    return f"""<!-- @build:header (generated by tools/build.py) -->
-  <!-- Page loader: only shown for header navigation -->
-  <div class="loader" id="loader" aria-hidden="true">
-    <span class="loader__bar"></span>
-    <div class="loader__inner">
-      <div class="loader__courses"><span></span><span></span><span></span></div>
-      <p class="loader__label">Loading</p>
-      <p class="loader__brand">TrustBuildGTA</p>
-    </div>
-  </div>
-
-  <a class="skip" href="#main">Skip to content</a>
-
-  <header class="site-header" id="top">
-    <div class="wrap header-bar">
-      <a class="logo" href="{logo_href}" data-load="Home" aria-label="TrustBuildGTA home">
-        <span class="logo__mark" aria-hidden="true"></span>
-        <span aria-hidden="true">TrustBuild<span class="logo__gta">GTA</span></span>
-      </a>
-
-      <nav class="nav-desktop" aria-label="Main">
-        <ul>
-          <li class="nav-drop" data-dropdown>
-            <button class="nav-drop__btn" type="button" aria-expanded="false" aria-controls="dd-services">Services<span class="nav-drop__caret" aria-hidden="true"></span></button>
-            <ul class="nav-drop__menu" id="dd-services">
-              <li><a href="{p}#services" data-load="Services">All services</a></li>
-{svc_links}
-            </ul>
-          </li>
-          <li><a href="{p}#projects" data-load="Projects">Projects</a></li>
-          <li><a href="{p}#process" data-load="Process">Process</a></li>
-          <li class="nav-drop" data-dropdown>
-            <button class="nav-drop__btn" type="button" aria-expanded="false" aria-controls="dd-areas">Areas<span class="nav-drop__caret" aria-hidden="true"></span></button>
-            <ul class="nav-drop__menu" id="dd-areas">
-              <li><a href="{p}#areas" data-load="Service areas">All service areas</a></li>
-{city_links}
-            </ul>
-          </li>
-          <li><a href="{p}#faq" data-load="FAQ">FAQ</a></li>
-          <li><a href="{contact}" data-load="Contact">Contact</a></li>
-        </ul>
-      </nav>
-
-      <div class="header-actions">
-        <a class="header-phone" href="{TEL}">
-          {PHONE}
-          <span>Call any time, 24/7</span>
-        </a>
-        <a class="btn btn--clay header-cta" href="#quote">Get a Quote</a>
-        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
-          <span class="sr-only">Menu</span>
-          <span class="menu-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Mobile slide-down panel -->
-    <div class="mobile-panel" id="mobile-menu">
-      <div class="mobile-panel__inner">
-        <nav class="wrap" aria-label="Mobile">
-          <ul>
-            <li>
-              <a href="{p}#services" data-load="Services">Services</a>
-              <ul class="mp-sub">
-{mp_svc}
-              </ul>
-            </li>
-            <li><a href="{p}#projects" data-load="Projects">Projects</a></li>
-            <li><a href="{p}#process" data-load="Process">Process</a></li>
-            <li>
-              <a href="{p}#areas" data-load="Service areas">Areas</a>
-              <ul class="mp-sub">
-{mp_city}
-              </ul>
-            </li>
-            <li><a href="{p}#faq" data-load="FAQ">FAQ</a></li>
-            <li><a href="{contact}" data-load="Contact">Contact</a></li>
-          </ul>
-          <div class="mobile-panel__foot">
-            <a class="btn btn--clay" href="#quote">Get a Quote</a>
-            <a class="btn btn--line" href="{TEL}">Call {PHONE}</a>
-            <p class="mobile-panel__hours">Call any time, 24/7</p>
-          </div>
-        </nav>
-      </div>
-    </div>
-  </header>
-  <!-- @end:header -->"""
-
-
-def footer(home=False):
-    logo_href = "#top" if home else "/"
-    quote = "#quote"
-    svc = "\n".join(f'            <li><a href="/{s["slug"]}">{e(s["name"])}</a></li>' for s in SERVICES)
-    cities = "\n".join(f'            <li><a href="/{c["slug"]}">{e(c["name"])}</a></li>' for c in CITIES)
-    return f"""<!-- @build:footer (generated by tools/build.py). NAP must match the Google Business Profile exactly. -->
-  <footer class="site-footer on-dark">
-    <div class="wrap">
-      <div class="foot-grid">
-        <div>
-          <a class="logo" href="{logo_href}" aria-label="TrustBuildGTA home">
-            <span class="logo__mark" aria-hidden="true"></span>
-            <span aria-hidden="true">TrustBuild<span class="logo__gta">GTA</span></span>
-          </a>
-          <address class="foot-nap">
-            <strong>TrustBuildGTA</strong><br>
-            8 Matheson Blvd E, Mississauga, ON L4W 2V3<br>
-            <a href="{TEL}">{PHONE}</a>
-          </address>
-          <p class="foot-hours">Open 24 hours, 7 days a week</p>
-        </div>
-
-        <nav aria-label="Services">
-          <p class="foot-h">Services</p>
-          <ul>
-{svc}
-          </ul>
-        </nav>
-
-        <nav aria-label="Service areas">
-          <p class="foot-h">Areas</p>
-          <ul>
-{cities}
-          </ul>
-        </nav>
-
-        <div>
-          <p class="foot-h">Start a project</p>
-          <p class="foot-hours">A written, fixed-price quote after one site visit.</p>
-          <a class="btn btn--clay" href="{quote}">Get a Quote</a>
-        </div>
-      </div>
-
-      <div class="foot-base">
-        <p>Serving Mississauga, Oakville, Burlington and Hamilton</p>
-        <p>&copy; <span id="year">2026</span> TrustBuildGTA</p>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Sticky mobile call/quote bar -->
-  <nav class="mbar" aria-label="Quick contact">
-    <a href="{TEL}">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z" fill="currentColor"/></svg>
-      Call
-    </a>
-    <a href="{quote}">Quote</a>
-  </nav>
-  <!-- @end:footer -->"""
-
-
-def js_region():
-    return f"""<!-- @build:js (generated from src/site.js) -->
-  <script>
-{JS}
-  </script>
-  <!-- @end:js -->"""
-
-
-# ======================================================================
-# Page parts
-# ======================================================================
-
-def head(title, desc, path, og_img, schema):
-    url = SITE + path
+def head(title, desc, slug, og_img, schema):
+    url = canonical(slug)
     blocks = "\n".join(
         f'  <script type="application/ld+json">\n{json.dumps(s, indent=2, ensure_ascii=False)}\n  </script>'
         for s in schema)
@@ -285,12 +127,12 @@ def head(title, desc, path, og_img, schema):
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Generated by tools/build.py from tools/content.py. Do not edit this file by hand. -->
+  <!-- Generated by tools/build.py. Do not edit this file by hand. -->
   <title>{e(title)}</title>
   <meta name="description" content="{e(desc)}">
   <link rel="canonical" href="{url}">
   <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#1C1F1D">
+  <meta name="theme-color" content="#14212B">
 
   <meta property="og:type" content="website">
   <meta property="og:locale" content="en_CA">
@@ -317,11 +159,204 @@ def head(title, desc, path, og_img, schema):
 {blocks}
 
   <style>
-    {css_region()}
+{CSS}
   </style>
 </head>
 """
 
+
+def header(current):
+    """Loader overlay, skip link and site header. `current` is the page slug."""
+
+    def cur(slug):
+        return ' aria-current="page"' if slug == current else ""
+
+    def a(slug, label, load=None, indent=14):
+        return (" " * indent + f'<li><a href="{link(slug)}" data-load="{e(load or label)}"{cur(slug)}>'
+                f'{e(label)}</a></li>')
+
+    svc = "\n".join(a(s["slug"], s["name"]) for s in SERVICES)
+    city = "\n".join(a(c["slug"], c["name"]) for c in CITIES)
+    msvc = "\n".join(a(s["slug"], s["name"], indent=16) for s in SERVICES)
+    mcity = "\n".join(a(c["slug"], c["name"], indent=16) for c in CITIES)
+    in_services = current == "services" or current in [s["slug"] for s in SERVICES]
+    in_areas = current == "areas" or current in [c["slug"] for c in CITIES]
+
+    def top(slug, label):
+        return f'<li><a href="{link(slug)}" data-load="{e(label)}"{cur(slug)}>{e(label)}</a></li>'
+
+    return f"""<!-- Page loader: only shown for header navigation -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <span class="loader__bar"></span>
+    <div class="loader__inner">
+      <div class="loader__courses"><span></span><span></span><span></span></div>
+      <p class="loader__label">Loading</p>
+      <p class="loader__brand">TrustBuildGTA</p>
+    </div>
+  </div>
+
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header" id="top">
+    <div class="wrap header-bar">
+      <a class="logo" href="{link('index')}" data-load="Home" aria-label="TrustBuildGTA home">
+        <span class="logo__mark" aria-hidden="true"></span>
+        <span aria-hidden="true">TrustBuild<span class="logo__gta">GTA</span></span>
+      </a>
+
+      <nav class="nav-desktop" aria-label="Main">
+        <ul>
+          <li class="nav-drop{' is-current' if in_services else ''}" data-dropdown>
+            <button class="nav-drop__btn" type="button" aria-expanded="false" aria-controls="dd-services">Services<span class="nav-drop__caret" aria-hidden="true"></span></button>
+            <ul class="nav-drop__menu" id="dd-services">
+              <li><a href="{link('services')}" data-load="Services"{cur('services')}>All services</a></li>
+{svc}
+            </ul>
+          </li>
+          {top('projects', 'Projects')}
+          {top('process', 'Process')}
+          <li class="nav-drop{' is-current' if in_areas else ''}" data-dropdown>
+            <button class="nav-drop__btn" type="button" aria-expanded="false" aria-controls="dd-areas">Areas<span class="nav-drop__caret" aria-hidden="true"></span></button>
+            <ul class="nav-drop__menu" id="dd-areas">
+              <li><a href="{link('areas')}" data-load="Service areas"{cur('areas')}>All service areas</a></li>
+{city}
+            </ul>
+          </li>
+          {top('faq', 'FAQ')}
+          {top('contact', 'Contact')}
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <a class="header-phone" href="{TEL}">
+          {PHONE}
+          <span>Call any time, 24/7</span>
+        </a>
+        <a class="btn btn--brass header-cta" href="#quote">Get a Quote</a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
+          <span class="sr-only">Menu</span>
+          <span class="menu-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile slide-down panel -->
+    <div class="mobile-panel" id="mobile-menu">
+      <div class="mobile-panel__inner">
+        <nav class="wrap" aria-label="Mobile">
+          <ul>
+            <li>
+              <a href="{link('services')}" data-load="Services"{cur('services')}>Services</a>
+              <ul class="mp-sub">
+{msvc}
+              </ul>
+            </li>
+            {top('projects', 'Projects')}
+            {top('process', 'Process')}
+            <li>
+              <a href="{link('areas')}" data-load="Service areas"{cur('areas')}>Areas</a>
+              <ul class="mp-sub">
+{mcity}
+              </ul>
+            </li>
+            {top('faq', 'FAQ')}
+            {top('contact', 'Contact')}
+          </ul>
+          <div class="mobile-panel__foot">
+            <a class="btn btn--brass" href="#quote">Get a Quote</a>
+            <a class="btn btn--line" href="{TEL}">Call {PHONE}</a>
+            <p class="mobile-panel__hours">Call any time, 24/7</p>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>"""
+
+
+def footer():
+    svc = "\n".join(f'            <li><a href="{link(s["slug"])}">{e(s["name"])}</a></li>' for s in SERVICES)
+    cities = "\n".join(f'            <li><a href="{link(c["slug"])}">{e(c["name"])}</a></li>' for c in CITIES)
+    company = "\n".join(f'            <li><a href="{link(slug)}">{e(label)}</a></li>'
+                        for slug, label in SECTIONS if slug != "services")
+    return f"""<!-- Footer. NAP must match the Google Business Profile exactly. -->
+  <footer class="site-footer on-dark">
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <a class="logo" href="{link('index')}" aria-label="TrustBuildGTA home">
+            <span class="logo__mark" aria-hidden="true"></span>
+            <span aria-hidden="true">TrustBuild<span class="logo__gta">GTA</span></span>
+          </a>
+          <address class="foot-nap">
+            <strong>TrustBuildGTA</strong><br>
+            8 Matheson Blvd E, Mississauga, ON L4W 2V3<br>
+            <a href="{TEL}">{PHONE}</a>
+          </address>
+          <p class="foot-hours">Open 24 hours, 7 days a week</p>
+          <a class="btn btn--brass" href="#quote">Get a Quote</a>
+        </div>
+
+        <nav aria-label="Services">
+          <p class="foot-h">Services</p>
+          <ul>
+{svc}
+          </ul>
+        </nav>
+
+        <nav aria-label="Service areas">
+          <p class="foot-h">Areas</p>
+          <ul>
+{cities}
+          </ul>
+        </nav>
+
+        <nav aria-label="Company">
+          <p class="foot-h">Company</p>
+          <ul>
+{company}
+          </ul>
+        </nav>
+      </div>
+
+      <div class="foot-base">
+        <p>Serving Mississauga, Oakville, Burlington and Hamilton</p>
+        <p>&copy; <span id="year">2026</span> TrustBuildGTA</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Sticky mobile call/quote bar -->
+  <nav class="mbar" aria-label="Quick contact">
+    <a href="{TEL}">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z" fill="currentColor"/></svg>
+      Call
+    </a>
+    <a href="#quote">Quote</a>
+  </nav>"""
+
+
+def page_shell(head_html, current, main_html):
+    return f"""{head_html}
+<body>
+  {header(current)}
+
+  <main id="main">
+{main_html}
+  </main>
+
+  {footer()}
+
+  <script>
+{JS}
+  </script>
+</body>
+</html>
+"""
+
+
+# ======================================================================
+# Reusable blocks
+# ======================================================================
 
 def faq_schema(faq):
     return {
@@ -335,23 +370,24 @@ def faq_schema(faq):
 
 
 def breadcrumbs_schema(items):
+    """items: list of (name, slug)."""
     return {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         "itemListElement": [
-            {"@type": "ListItem", "position": i + 1, "name": n, "item": SITE + u}
-            for i, (n, u) in enumerate(items)
+            {"@type": "ListItem", "position": i + 1, "name": n, "item": canonical(slug)}
+            for i, (n, slug) in enumerate(items)
         ],
     }
 
 
 def crumbs_html(items):
     lis = []
-    for i, (name, url) in enumerate(items):
+    for i, (name, slug) in enumerate(items):
         if i == len(items) - 1:
             lis.append(f'<li aria-current="page">{e(name)}</li>')
         else:
-            lis.append(f'<li><a href="{e(url)}">{e(name)}</a></li>')
+            lis.append(f'<li><a href="{link(slug)}">{e(name)}</a></li>')
     return f'<nav class="crumbs" aria-label="Breadcrumb"><ol>{"".join(lis)}</ol></nav>'
 
 
@@ -369,38 +405,56 @@ def trust_strip():
     </div>"""
 
 
-def lead_form(fid, service=None, city=None):
-    """Short single-step lead form. Service pages fix the service; city pages fix the city."""
+def section_head(eyebrow, h2, lede, hid):
+    return f"""        <div class="section-head reveal">
+          <div>
+            <p class="eyebrow">{e(eyebrow)}</p>
+            <h2 id="{hid}">{e(h2)}</h2>
+          </div>
+          <p class="lede">{e(lede)}</p>
+        </div>"""
+
+
+def lead_form(fid, service=None, city=None, wrap_class=""):
+    """The one quote form used everywhere. Service pages fix the service, city
+    pages fix the city, every other page asks for both."""
     city_opts = "".join(f"<option>{c}</option>" for c in CITIES_ORDER) + "<option>Somewhere nearby</option>"
+    proj_opts = "".join(f"<option>{e(s['name'])}</option>" for s in SERVICES)
+    proj_opts += f"<option>{EXTRA_WORK}</option><option>Not sure yet</option>"
+    tags, fixed, selects = [], [], []
+
     if service:
-        fixed = (f'<input type="hidden" name="service" value="{e(service)}">\n'
-                 f'            <p class="lform__tag">{e(service)}</p>')
-        choice = f"""<div class="field">
+        fixed.append(f'<input type="hidden" name="service" value="{e(service)}">')
+        tags.append(service)
+    else:
+        selects.append(f"""<div class="field">
+              <label for="{fid}-project">Type of project</label>
+              <select id="{fid}-project" name="project" required aria-describedby="{fid}-project-err">
+                <option value="">Choose one</option>{proj_opts}
+              </select>
+              <p class="err" id="{fid}-project-err"></p>
+            </div>""")
+    if city:
+        fixed.append(f'<input type="hidden" name="city" value="{e(city)}">')
+        tags.append(city)
+    else:
+        selects.append(f"""<div class="field">
               <label for="{fid}-city">City</label>
               <select id="{fid}-city" name="city" required aria-describedby="{fid}-city-err">
                 <option value="">Choose a city</option>{city_opts}
               </select>
               <p class="err" id="{fid}-city-err"></p>
-            </div>"""
-    else:
-        fixed = (f'<input type="hidden" name="city" value="{e(city)}">\n'
-                 f'            <p class="lform__tag">{e(city)}</p>')
-        proj = "".join(f"<option>{e(s['name'])}</option>" for s in SERVICES)
-        proj += f"<option>{EXTRA_WORK}</option><option>Not sure yet</option>"
-        choice = f"""<div class="field">
-              <label for="{fid}-project">Type of project</label>
-              <select id="{fid}-project" name="project" required aria-describedby="{fid}-project-err">
-                <option value="">Choose one</option>{proj}
-              </select>
-              <p class="err" id="{fid}-project-err"></p>
-            </div>"""
+            </div>""")
+    tag_html = "".join(f'<p class="lform__tag">{e(t)}</p> ' for t in tags)
+    select_html = (f'<div class="row-2">{"".join(selects)}</div>' if len(selects) == 2 else "".join(selects))
 
-    return f"""<div class="lhero__form" id="quote">
+    return f"""<div class="{wrap_class}" id="quote">
           <!-- Posts JSON to FORM_ENDPOINT in the shared script. Name and phone are the only required details. -->
           <form class="qform lform" id="{fid}" data-lead="short" data-done="{fid}-done" novalidate>
             <p class="lform__title">Get a free, fixed-price quote</p>
             <p class="lform__sub">Takes about a minute. A project lead calls you back to book a site visit.</p>
-            {fixed}
+            {"".join(fixed)}
+            {tag_html}
             <div class="hp" aria-hidden="true">
               <label for="{fid}-hp">Leave this field empty</label>
               <input type="text" id="{fid}-hp" name="tb_hp_field" tabindex="-1" autocomplete="off">
@@ -422,12 +476,12 @@ def lead_form(fid, service=None, city=None):
                 <p class="err" id="{fid}-email-err"></p>
               </div>
             </div>
-            {choice}
+            {select_html}
             <div class="field">
               <label for="{fid}-message">What are you planning? <span class="opt">(optional)</span></label>
               <textarea id="{fid}-message" name="message" rows="3" placeholder="Rough size, what's there now, when you'd like to start."></textarea>
             </div>
-            <button class="btn btn--clay lform__submit" type="submit">Get my free quote</button>
+            <button class="btn btn--brass lform__submit" type="submit">Get my free quote</button>
             <div class="qstatus qstatus--error" role="alert" hidden></div>
             <p class="qfine">No obligation. We reply within [X] hours, or call {PHONE} any time. Your details are only used for this quote.</p>
           </form>
@@ -436,7 +490,7 @@ def lead_form(fid, service=None, city=None):
             <div class="qdone__mark" aria-hidden="true">
               <svg viewBox="0 0 16 16"><path d="M2 8.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2"/></svg>
             </div>
-            <h2 class="lform__title">Got it. Thanks.</h2>
+            <p class="lform__title">Got it. Thanks.</p>
             <p>Here's what happens next:</p>
             <ol>
               <li>A project lead calls you, usually within [X] hours.</li>
@@ -448,55 +502,59 @@ def lead_form(fid, service=None, city=None):
         </div>"""
 
 
-def landing_hero(page, fid, crumbs, eyebrow, service=None, city=None):
-    pid, alt, note = page["hero"]
-    hero_img = (f'<!-- REAL PHOTO: {e(note)} -->\n'
-                f'      <img class="{{cls}}" src="{e(img_url(pid, 2000, 1200, 75))}"\n'
-                f'           srcset="{e(img_url(pid, 900, 600, 70))} 900w, {e(img_url(pid, 1400, 840, 72))} 1400w, {e(img_url(pid, 2000, 1200, 75))} 2000w"\n'
-                f'           sizes="100vw" width="2000" height="1200" alt="{e(alt)}" fetchpriority="high" decoding="async">')
-    ticks = "".join(f"<li>{e(t)}</li>" for t in page["ticks"])
-    copy = f"""<div class="lhero__copy">
-          {crumbs_html(crumbs)}
-          <p class="eyebrow">{e(eyebrow)}</p>
-          <h1 id="page-title">{e(page["h1"])}</h1>
-          <p class="lhero__sub">{e(page["sub"])}</p>
-          <ul class="ticks">{ticks}</ul>
-          <p class="lhero__call">Rather talk it through? Call <a href="{TEL}">{PHONE}</a>. Any time, 24/7.</p>
-        </div>"""
-    form = lead_form(fid, service=service, city=city)
-    if page["variant"] == "photo":
-        return f"""    <section class="lhero lhero--photo" aria-labelledby="page-title">
-      {hero_img.replace("{cls}", "lhero__img")}
-      <div class="wrap lhero__grid">
-        {copy}
-        {form}
-      </div>
-    </section>
-{trust_strip()}"""
-    return f"""    <section class="lhero lhero--split" aria-labelledby="page-title">
-      <div class="wrap lhero__grid">
-        {copy}
-        {form}
-      </div>
-    </section>
-    <div class="lband-wrap">
+def contact_section(fid, h2="Get a written quote",
+                    lede="Name and phone are all we need. A project lead calls you back to book a site visit. If it's urgent, just call.",
+                    bg=""):
+    """Form plus contact details. Identical on the homepage, the contact page and every section page."""
+    cities = ", ".join(f'<a href="{link(c["slug"])}">{e(c["name"])}</a>' for c in CITIES)
+    return f"""    <section class="section {bg}" id="contact" aria-labelledby="contact-title">
       <div class="wrap">
-        <figure class="lband ph">
-          {hero_img.replace("{cls}", "lband__img")}
-        </figure>
+{section_head("Contact", h2, lede, "contact-title")}
+        <div class="quote">
+          {lead_form(fid, wrap_class="reveal")}
+
+          <aside class="contact-card reveal" aria-label="Contact details">
+            <h3>Talk to a person</h3>
+            <dl>
+              <dt>Phone</dt>
+              <dd><a class="big-phone" href="{TEL}">{PHONE}</a></dd>
+              <dt>Hours</dt>
+              <dd>Call any time, 24/7</dd>
+              <dt>Office</dt>
+              <dd>
+                <address>
+                  TrustBuildGTA<br>
+                  8 Matheson Blvd E, Mississauga, ON L4W 2V3
+                </address>
+              </dd>
+              <dt>Email</dt>
+              <dd><a href="mailto:[EMAIL]">[EMAIL]</a></dd>
+              <dt>Serving</dt>
+              <dd>{cities}</dd>
+            </dl>
+            <!-- REAL PHOTO: the project lead or crew on a real job site, landscape, faces optional -->
+            <figure class="contact-img ph">
+              <img src="{e(img_url('1504307651254-35680f356dfd', 900, 675, 70))}"
+                   width="900" height="675" loading="lazy" decoding="async"
+                   alt="Crew framing walls on a renovation site">
+            </figure>
+          </aside>
+        </div>
       </div>
-    </div>
-{trust_strip()}"""
+    </section>"""
 
 
-def section_head(eyebrow, h2, lede, hid):
-    return f"""        <div class="section-head reveal">
-          <div>
-            <p class="eyebrow">{e(eyebrow)}</p>
-            <h2 id="{hid}">{e(h2)}</h2>
-          </div>
-          <p class="lede">{e(lede)}</p>
-        </div>"""
+def page_hero(crumbs, eyebrow, h1, lede, extra=""):
+    """Compact header for section pages (Services, Projects, Process...)."""
+    return f"""    <section class="phero" aria-labelledby="page-title">
+      <div class="wrap">
+        {crumbs_html(crumbs)}
+        <p class="eyebrow">{e(eyebrow)}</p>
+        <h1 id="page-title">{e(h1)}</h1>
+        <p class="phero__lede">{e(lede)}</p>
+        {extra}
+      </div>
+    </section>"""
 
 
 def faq_section(faq, h2, prefix, bg=""):
@@ -528,37 +586,241 @@ def cta_band(h2, p):
           <p>{e(p)}</p>
         </div>
         <div class="cta-band__btns">
-          <a class="btn btn--clay" href="#quote">Get a Free Quote</a>
+          <a class="btn btn--brass" href="#quote">Get a Free Quote</a>
           <a class="btn btn--ghost-light" href="{TEL}">Call {PHONE}</a>
         </div>
       </div>
     </section>"""
 
 
-def page_shell(head_html, path, main_html):
-    return f"""{head_html}
-<body>
-  {header(current=path)}
+# ======================================================================
+# Homepage (short: teasers that point to the section pages)
+# ======================================================================
 
-  <main id="main">
-{main_html}
-  </main>
+def home_page():
+    schema = [
+        dict({"@context": "https://schema.org"}, **BUSINESS, **{
+            "image": img_url("1600585154340-be6161a56a0c", 1200, None, 80),
+            "openingHoursSpecification": [{
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+                "opens": "00:00", "closes": "23:59"}],
+            "areaServed": [{"@type": "City", "name": c} for c in CITIES_ORDER],
+            "hasOfferCatalog": {
+                "@type": "OfferCatalog",
+                "name": "Renovation and general contracting services",
+                "itemListElement": [
+                    {"@type": "Offer", "itemOffered": {"@type": "Service", "name": s["name"], "url": canonical(s["slug"])}}
+                    for s in SERVICES
+                ] + [{"@type": "Offer", "itemOffered": {"@type": "Service", "name": "General home contracting: drywall, trim, painting and additions"}}],
+            },
+        }),
+        breadcrumbs_schema([("Home", "index")]),
+    ]
 
-  {footer()}
+    rows = []
+    for i, s in enumerate(SERVICES, 1):
+        rows.append(f"""          <li class="reveal">
+            <span class="svc-rows__n">{i:02d}</span>
+            <h3>{e(s["name"])}</h3>
+            <p>{e(first_sentence(s["sub"]))}</p>
+            <a class="arrow-link" href="{link(s["slug"])}">Learn more<span class="sr-only"> about {e(s["name"].lower())}</span> {ARROW}</a>
+          </li>""")
 
-  {js_region()}
-</body>
-</html>
-"""
+    promises = [
+        ("Written fixed-price quotes", "Every line priced and HST shown. Changes come as a written change order, priced first."),
+        ("One point of contact", "Your project lead is on site, knows your house and answers their phone."),
+        ("Permits handled", "We apply, book inspections and meet the inspector under the Ontario Building Code."),
+        ("Site cleaned daily", "Floor protection, dust walls, and a swept site before we leave each day."),
+    ]
+    promise_html = "".join(f"<li class=\"reveal\"><h3>{e(t)}</h3><p>{e(d)}</p></li>" for t, d in promises)
+
+    main = f"""{partial("home-hero")}
+
+    <section class="section" id="services" aria-labelledby="services-title">
+      <div class="wrap">
+{section_head("Services", "Basement renovation, kitchens, bathrooms, floors and the concrete patio", "Six kinds of work make up most of our calendar. Each has its own page with what's included, how we build it and what moves the price.", "services-title")}
+        <ol class="svc-rows">
+{chr(10).join(rows)}
+        </ol>
+        <p class="more-link reveal"><a class="btn btn--line" href="{link('services')}">See all services</a></p>
+      </div>
+    </section>
+
+    <section class="section bg-limestone" id="featured" aria-labelledby="featured-title">
+      <div class="wrap teaser">
+        <!-- REAL PHOTO: the finished Lorne Park kitchen (same job as the before/after on the Projects page) -->
+        <figure class="teaser__img ph reveal">
+          <img src="{e(img_url('1556912173-3bb406ef7e77', 1400, 933))}" width="1400" height="933" loading="lazy" decoding="async"
+               alt="Finished kitchen in Lorne Park with new cabinets, quartz counters and an island">
+        </figure>
+        <div class="teaser__body reveal">
+          <p class="eyebrow">Featured project</p>
+          <h2 id="featured-title">Kitchen renovation in Lorne Park</h2>
+          <p>A 1970s side-split, opened up. The wall to the dining room came out, an engineered beam went in, and engineered oak runs through the main floor with no seam at the old doorway. [X weeks] on site.</p>
+          <p class="teaser__links">
+            <a class="arrow-link" href="{link('projects')}">See the before and after {ARROW}</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section bg-ink on-dark" id="why" aria-labelledby="why-title">
+      <div class="wrap">
+{section_head("Why TrustBuildGTA", "The contractor you can check up on", "The name is the promise. This is what it means on your job.", "why-title")}
+        <ul class="promise-strip">{promise_html}</ul>
+        <p class="more-link reveal"><a class="arrow-link" href="{link('process')}">How a job runs, start to finish {ARROW}</a></p>
+      </div>
+    </section>
+
+{partial("reviews")}
+
+{contact_section("lead-home")}"""
+
+    return page_shell(
+        head("General Contractor Mississauga, Oakville, Burlington & Hamilton | TrustBuildGTA",
+             "Basement, kitchen and bathroom renovation, flooring and concrete patios in Mississauga, Oakville, Burlington and Hamilton. Written fixed-price quotes.",
+             "index", "1600585154340-be6161a56a0c", schema),
+        "index", main)
 
 
 # ======================================================================
-# Service page
+# Section pages (one per header item)
 # ======================================================================
+
+SECTION_META = {
+    "services": dict(
+        title="Renovation Services Mississauga, Oakville, Burlington & Hamilton | TrustBuildGTA",
+        desc="Basement, kitchen and bathroom renovation, flooring installation, concrete patios and backyard builds across Mississauga, Oakville, Burlington and Hamilton.",
+        eyebrow="Services",
+        h1="Renovation Services in Mississauga, Oakville, Burlington & Hamilton",
+        lede="Pick a service for the full details: what's included, how we build it, what moves the price and what we see most in your city.",
+        og="1600566753190-17f0baa2a6c3"),
+    "projects": dict(
+        title="Renovation Projects Mississauga, Oakville, Burlington & Hamilton | TrustBuildGTA",
+        desc="Before and after photos of TrustBuildGTA basements, kitchens, bathrooms, flooring and outdoor work across Mississauga, Oakville, Burlington and Hamilton.",
+        eyebrow="Projects",
+        h1="Recent Renovation Projects",
+        lede="Finished jobs from Port Credit to Ancaster. Drag the before and after, or filter the gallery by the kind of work you're planning.",
+        og="1556912173-3bb406ef7e77"),
+    "process": dict(
+        title="How We Work: Renovation Process and Guarantees | TrustBuildGTA",
+        desc="How a TrustBuildGTA renovation runs: site visit, written fixed-price quote, one project lead, permits and inspections, daily clean-up and a written warranty.",
+        eyebrow="Process",
+        h1="How a Renovation Runs With Us",
+        lede="Four stages, one project lead, and a price that doesn't move unless you sign a change order. Here's what happens and what you get at each step.",
+        og="1504307651254-35680f356dfd"),
+    "areas": dict(
+        title="Service Areas: Mississauga, Oakville, Burlington & Hamilton | TrustBuildGTA",
+        desc="TrustBuildGTA is a general contractor serving Mississauga, Oakville, Burlington and Hamilton. See the neighbourhoods we work in and the projects we see most.",
+        eyebrow="Service areas",
+        h1="General Contractor for Mississauga, Oakville, Burlington & Hamilton",
+        lede="From our office near Hurontario and the 401 to the Hamilton Mountain is about an hour on a good day. We don't go further than that, so your project lead can be on site every working day.",
+        og="1600047509807-ba8f99d2cdde"),
+    "faq": dict(
+        title="Renovation FAQ: Costs, Permits, Timelines & Warranty | TrustBuildGTA",
+        desc="Answers on renovation costs in Ontario, building permits, kitchen timelines, LVP vs hardwood, concrete vs interlock, design, payment schedules and warranty.",
+        eyebrow="FAQ",
+        h1="Renovation Questions, Answered",
+        lede="The questions we hear every week about cost, permits, timelines and materials. Specific answers, with placeholders where a real number depends on your house.",
+        og="1600607687939-ce8a6c25118c"),
+    "contact": dict(
+        title="Contact TrustBuildGTA | General Contractor in Mississauga, Call 24/7",
+        desc="Get a free written quote from TrustBuildGTA. Call (647) 513-7955 any time, 24/7, or send the form. Office at 8 Matheson Blvd E, Mississauga, ON L4W 2V3.",
+        eyebrow="Contact",
+        h1="Contact TrustBuildGTA",
+        lede="Send the form or call. Either way you talk to a project lead, not a call centre, and the next step is a site visit.",
+        og="1504307651254-35680f356dfd"),
+}
+
+
+def section_page(slug):
+    m = SECTION_META[slug]
+    label = dict(SECTIONS)[slug]
+    crumbs = [("Home", "index"), (label, slug)]
+    schema = [
+        {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "name": m["h1"],
+            "url": canonical(slug),
+            "description": m["desc"],
+            "about": {"@id": f"{SITE}/#business"},
+        },
+        breadcrumbs_schema(crumbs),
+    ]
+    hero_extra = ""
+    if slug == "contact":
+        hero_extra = f'<p class="phero__call"><a class="btn btn--brass" href="{TEL}">Call {PHONE}</a> <span>Call any time, 24/7</span></p>'
+    hero = page_hero(crumbs, m["eyebrow"], m["h1"], m["lede"], hero_extra)
+    fid = f"lead-{slug}"
+
+    if slug == "services":
+        body = partial("services-grid") + "\n\n" + contact_section(fid, bg="bg-limestone")
+    elif slug == "projects":
+        body = partial("featured") + "\n\n" + partial("gallery") + "\n\n" + contact_section(fid, bg="bg-limestone")
+    elif slug == "process":
+        body = partial("process") + "\n\n" + partial("why") + "\n\n" + contact_section(fid, bg="bg-limestone")
+    elif slug == "areas":
+        body = partial("areas") + "\n\n" + contact_section(fid, bg="bg-limestone")
+    elif slug == "faq":
+        schema.append(faq_schema(HOME_FAQ))
+        body = faq_section(HOME_FAQ, "Questions we answer every week", "faq") + "\n\n" + contact_section(fid, bg="bg-limestone")
+    else:  # contact
+        body = contact_section(fid, h2="Send us the details",
+                               lede="Name and phone are all we need to start. We reply to set up a site visit, usually the same day.")
+
+    return page_shell(head(m["title"], m["desc"], slug, m["og"], schema), slug, hero + "\n\n" + body)
+
+
+# ======================================================================
+# Service and city landing pages
+# ======================================================================
+
+def landing_hero(page, fid, crumbs, eyebrow, service=None, city=None):
+    pid, alt, note = page["hero"]
+    hero_img = (f'<!-- REAL PHOTO: {e(note)} -->\n'
+                f'      <img class="{{cls}}" src="{e(img_url(pid, 2000, 1200, 75))}"\n'
+                f'           srcset="{e(img_url(pid, 900, 600, 70))} 900w, {e(img_url(pid, 1400, 840, 72))} 1400w, {e(img_url(pid, 2000, 1200, 75))} 2000w"\n'
+                f'           sizes="100vw" width="2000" height="1200" alt="{e(alt)}" fetchpriority="high" decoding="async">')
+    ticks = "".join(f"<li>{e(t)}</li>" for t in page["ticks"])
+    copy = f"""<div class="lhero__copy">
+          {crumbs_html(crumbs)}
+          <p class="eyebrow">{e(eyebrow)}</p>
+          <h1 id="page-title">{e(page["h1"])}</h1>
+          <p class="lhero__sub">{e(page["sub"])}</p>
+          <ul class="ticks">{ticks}</ul>
+          <p class="lhero__call">Rather talk it through? Call <a href="{TEL}">{PHONE}</a>. Any time, 24/7.</p>
+        </div>"""
+    form = lead_form(fid, service=service, city=city, wrap_class="lhero__form")
+    if page["variant"] == "photo":
+        return f"""    <section class="lhero lhero--photo" aria-labelledby="page-title">
+      {hero_img.replace("{cls}", "lhero__img")}
+      <div class="wrap lhero__grid">
+        {copy}
+        {form}
+      </div>
+    </section>
+{trust_strip()}"""
+    return f"""    <section class="lhero lhero--split" aria-labelledby="page-title">
+      <div class="wrap lhero__grid">
+        {copy}
+        {form}
+      </div>
+    </section>
+    <div class="lband-wrap">
+      <div class="wrap">
+        <figure class="lband ph">
+          {hero_img.replace("{cls}", "lband__img")}
+        </figure>
+      </div>
+    </div>
+{trust_strip()}"""
+
 
 def service_page(s):
-    path = "/" + s["slug"]
-    crumbs = [("Home", "/"), ("Services", "/#services"), (s["name"], path)]
+    slug = s["slug"]
+    crumbs = [("Home", "index"), ("Services", "services"), (s["name"], slug)]
     schema = [
         {
             "@context": "https://schema.org",
@@ -566,14 +828,14 @@ def service_page(s):
             "name": s["name"],
             "serviceType": s["name"],
             "description": s["desc"],
-            "url": SITE + path,
+            "url": canonical(slug),
             "provider": BUSINESS,
             "areaServed": [{"@type": "City", "name": c} for c in CITIES_ORDER],
         },
         breadcrumbs_schema(crumbs),
         faq_schema(s["faq"]),
     ]
-    fid = "lead-" + s["slug"]
+    fid = "lead-" + slug
 
     scope = "\n".join(
         f"""          <li class="scope__group">
@@ -619,17 +881,16 @@ def service_page(s):
 
     local = []
     for city in CITIES_ORDER:
-        slug = city.lower()
         local.append(f"""          <article class="area reveal">
             <div class="area__top"><h3>{city}</h3></div>
             <p>{e(s["local"][city])}</p>
-            <a class="arrow-link" href="/{slug}">General contractor in {city}
+            <a class="arrow-link" href="{link(city.lower())}">General contractor in {city}
               {ARROW}</a>
           </article>""")
 
     related = "\n".join(
-        f'          <li><a href="/{o["slug"]}">{e(o["name"])}{ARROW}</a></li>'
-        for o in SERVICES if o["slug"] != s["slug"])
+        f'          <li><a href="{link(o["slug"])}">{e(o["name"])}{ARROW}</a></li>'
+        for o in SERVICES if o["slug"] != slug)
 
     main = f"""{landing_hero(s, fid, crumbs, "Service", service=s["name"])}
 
@@ -706,16 +967,12 @@ def service_page(s):
       </div>
     </section>"""
 
-    return page_shell(head(s["title"], s["desc"], path, s["hero"][0], schema), path, main)
+    return page_shell(head(s["title"], s["desc"], slug, s["hero"][0], schema), slug, main)
 
-
-# ======================================================================
-# City page
-# ======================================================================
 
 def city_page(c):
-    path = "/" + c["slug"]
-    crumbs = [("Home", "/"), ("Areas", "/#areas"), (c["name"], path)]
+    slug = c["slug"]
+    crumbs = [("Home", "index"), ("Areas", "areas"), (c["name"], slug)]
     schema = [
         {
             "@context": "https://schema.org",
@@ -723,14 +980,14 @@ def city_page(c):
             "name": f"General contracting in {c['name']}",
             "serviceType": "General contractor",
             "description": c["desc"],
-            "url": SITE + path,
+            "url": canonical(slug),
             "provider": BUSINESS,
             "areaServed": {"@type": "City", "name": c["name"]},
         },
         breadcrumbs_schema(crumbs),
         faq_schema(c["faq"]),
     ]
-    fid = "lead-" + c["slug"]
+    fid = "lead-" + slug
 
     hoods = "".join(f"<li><h3>{e(n)}</h3><p>{e(t)}</p></li>" for n, t in c["hoods"])
 
@@ -740,7 +997,7 @@ def city_page(c):
             <span class="svc-rows__n">{i:02d}</span>
             <h3>{e(s["name"])}</h3>
             <p>{e(s["local"][c["name"]])}</p>
-            <a class="arrow-link" href="/{s["slug"]}">Learn more<span class="sr-only"> about {e(s["name"].lower())}</span> {ARROW}</a>
+            <a class="arrow-link" href="{link(s["slug"])}">Learn more<span class="sr-only"> about {e(s["name"].lower())}</span> {ARROW}</a>
           </li>""")
 
     steps = []
@@ -753,8 +1010,8 @@ def city_page(c):
           </li>""")
 
     others = "\n".join(
-        f'          <li><a href="/{o["slug"]}">General contractor in {e(o["name"])}{ARROW}</a></li>'
-        for o in CITIES if o["slug"] != c["slug"])
+        f'          <li><a href="{link(o["slug"])}">General contractor in {e(o["name"])}{ARROW}</a></li>'
+        for o in CITIES if o["slug"] != slug)
 
     main = f"""{landing_hero(c, fid, crumbs, "Service area", city=c["name"])}
 
@@ -804,33 +1061,14 @@ def city_page(c):
       </div>
     </section>"""
 
-    return page_shell(head(c["title"], c["desc"], path, c["hero"][0], schema), path, main)
+    return page_shell(head(c["title"], c["desc"], slug, c["hero"][0], schema), slug, main)
 
 
 # ======================================================================
-# Homepage patching, sitemap, lint
+# Lint, sitemap, main
 # ======================================================================
 
-def replace_region(text, start, end, new):
-    pat = re.compile(re.escape(start) + r".*?" + re.escape(end), re.S)
-    if not pat.search(text):
-        sys.exit(f"Marker {start!r} not found in index.html")
-    return pat.sub(lambda m: new, text, count=1)
-
-
-def patch_home():
-    p = ROOT / "index.html"
-    t = p.read_text()
-    t = replace_region(t, "<!-- @build:early -->", "<!-- @end:early -->", EARLY)
-    t = replace_region(t, "/* @build:css", "/* @end:css */", css_region())
-    t = replace_region(t, "<!-- @build:header", "<!-- @end:header -->", header(home=True))
-    t = replace_region(t, "<!-- @build:footer", "<!-- @end:footer -->", footer(home=True))
-    t = replace_region(t, "<!-- @build:js", "<!-- @end:js -->", js_region())
-    p.write_text(t)
-    return t
-
-
-def lint(name, text):
+def lint(name, text, all_pages):
     problems = []
     visible = re.sub(r"<style.*?</style>|<script(?! type=\"application/ld\+json\").*?</script>", "", text, flags=re.S)
     low = visible.lower()
@@ -844,39 +1082,46 @@ def lint(name, text):
     if h1 != 1:
         problems.append(f"{h1} H1 elements")
     m = re.search(r'<meta name="description" content="([^"]*)"', text)
-    if m:
-        n = len(html.unescape(m.group(1)))
-        if not 150 <= n <= 160:
-            problems.append(f"meta description is {n} characters (want 150 to 160)")
+    n = len(html.unescape(m.group(1))) if m else 0
+    if not 150 <= n <= 160:
+        problems.append(f"meta description is {n} characters (want 150 to 160)")
     ids = re.findall(r'\sid="([^"]+)"', text)
-    dup = {i for i in ids if ids.count(i) > 1}
+    dup = sorted({i for i in ids if ids.count(i) > 1})
     if dup:
-        problems.append(f"duplicate ids {sorted(dup)}")
+        problems.append(f"duplicate ids {dup}")
+    # Internal links must be relative .html links to pages that exist, or in-page anchors
+    for href in re.findall(r'href="([^"]+)"', visible):
+        if href.startswith(("http", "tel:", "mailto:", "#", "[")):
+            continue
+        target = href.split("#")[0]
+        if target not in all_pages:
+            problems.append(f"broken or non-relative link {href!r}")
+    for anchor in set(re.findall(r'href="#([^"]+)"', visible)):
+        if anchor not in ids:
+            problems.append(f"in-page link to missing #{anchor}")
     for p in problems:
         print(f"  LINT {name}: {p}")
     return not problems
 
 
 def main():
-    pages = {}
+    pages = {"index": home_page()}
+    for slug, _ in SECTIONS:
+        pages[slug] = section_page(slug)
     for s in SERVICES:
         pages[s["slug"]] = service_page(s)
     for c in CITIES:
         pages[c["slug"]] = city_page(c)
 
+    names = {f"{slug}.html" for slug in pages}
     ok = True
     for slug, text in pages.items():
-        out = ROOT / f"{slug}.html"
-        out.write_text(text)
-        ok &= lint(slug, text)
+        (ROOT / f"{slug}.html").write_text(text)
+        ok &= lint(slug, text, names)
         print(f"wrote {slug}.html ({len(text) // 1024} KB)")
 
-    home = patch_home()
-    ok &= lint("index", home)
-    print("patched index.html")
-
     today = datetime.date.today().isoformat()
-    urls = [SITE + "/"] + [f"{SITE}/{slug}" for slug in pages]
+    urls = [canonical(slug) for slug in pages]
     (ROOT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + "".join(f"  <url><loc>{u}</loc><lastmod>{today}</lastmod></url>\n" for u in urls)

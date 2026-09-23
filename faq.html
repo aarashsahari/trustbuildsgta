@@ -75,7 +75,7 @@
       "name": "How much does a basement renovation cost in Ontario?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Most basement finishes we quote in Mississauga, Oakville, Burlington and Hamilton land between [price range]. Size matters, but the items that move the number most are adding a bathroom, building a legal second unit, waterproofing, egress windows and relocating plumbing. We give you a fixed written price after a site visit, not a per-square-foot guess over the phone."
+        "text": "Most of the price comes down to a handful of things: size, adding a bathroom, building a legal second unit, waterproofing, egress windows and relocating plumbing. Two basements the same size can be far apart in price, so we don't quote by the square foot over the phone. We give you a fixed written price after a free site visit."
       }
     },
     {
@@ -91,7 +91,7 @@
       "name": "How long does a kitchen renovation take?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Plan on [X weeks] of on-site work for a typical kitchen once materials have arrived, and longer if walls move or plumbing relocates. Cabinets have the longest lead time, so we order them the week the design is signed. Quartz or porcelain counters are templated after the cabinets are installed, which adds [X] days before the sink and backsplash go in."
+        "text": "It depends on how much of the room moves. Keeping the layout is quicker than moving walls or plumbing. Cabinets have the longest lead time, so we order them the week the design is signed, and quartz or porcelain counters are templated after the cabinets are installed. Your quote gives you a start date and a finish date in writing."
       }
     },
     {
@@ -123,7 +123,7 @@
       "name": "What is your payment schedule?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "A deposit of [X]% when you sign, progress payments tied to finished stages that are written into the contract, and a final payment after the walkthrough list is closed. You never pay ahead of work that has not happened. HST is shown as its own line on the quote and on every invoice."
+        "text": "A deposit when you sign, progress payments tied to finished stages that are written into the contract, and a final payment after the walkthrough list is closed. You never pay ahead of work that has not happened. HST is shown as its own line on the quote and on every invoice."
       }
     },
     {
@@ -131,7 +131,7 @@
       "name": "What does your warranty cover?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Our workmanship warranty covers labour and installation for [X] years from completion, in writing. If a tile cracks because of how it was set, or a door we hung stops closing properly, we come back and fix it. Manufacturer warranties on flooring, fixtures and cabinetry are passed to you with the paperwork at handover."
+        "text": "Our workmanship warranty covers labour and installation, in writing, for the term stated in your contract. If a tile cracks because of how it was set, or a door we hung stops closing properly, we come back and fix it. Manufacturer warranties on flooring, fixtures and cabinetry are passed to you with the paperwork at handover."
       }
     }
   ]
@@ -1362,6 +1362,29 @@
     }
     .mosaic__cap strong { font-weight: 600; }
     .mosaic__item { min-width: 0; }
+
+    /* ============================================================
+       24. CONVERSION DETAILS
+       ============================================================ */
+    /* Tap-to-call button in the header on phones */
+    .header-call {
+      display: inline-grid; place-items: center; flex: none;
+      width: 46px; height: 46px; border-radius: var(--pill);
+      background: var(--accent); color: var(--white);
+    }
+    .header-call:hover { background: var(--accent-dark); color: var(--white); }
+    .header-call svg { width: 20px; height: 20px; }
+    @media (min-width: 768px) { .header-call { display: none; } }
+    .header-actions { gap: 12px; }
+    @media (min-width: 768px) { .header-actions { gap: 20px; } }
+
+    .hero__assure { margin: 18px 0 0; font-size: 15px; color: rgba(248, 247, 243, .85); }
+
+    /* Light version of the promise strip ("Before you sign") */
+    .promise-strip--light li { border-top-color: var(--ink); }
+    .promise-strip--light li::before { background: var(--accent); }
+    .promise-strip--light h3 { color: var(--ink); }
+    .promise-strip--light p { color: #26323B; }
   </style>
 </head>
 
@@ -1411,7 +1434,10 @@
           (647) 513-7955
           <span>Call any time, 24/7</span>
         </a>
-        <a class="btn btn--primary header-cta" href="#quote">Get a Quote</a>
+        <a class="btn btn--primary header-cta" href="#quote">Get a Free Quote</a>
+        <a class="header-call" href="tel:+16475137955" aria-label="Call (647) 513-7955">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z" fill="currentColor"/></svg>
+        </a>
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
           <span class="sr-only">Menu</span>
           <span class="menu-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span>
@@ -1450,7 +1476,7 @@
             <li><a href="contact.html">Contact</a></li>
           </ul>
           <div class="mobile-panel__foot">
-            <a class="btn btn--primary" href="#quote">Get a Quote</a>
+            <a class="btn btn--primary" href="#quote">Get a Free Quote</a>
             <a class="btn btn--line" href="tel:+16475137955">Call (647) 513-7955</a>
             <p class="mobile-panel__hours">Call any time, 24/7</p>
           </div>
@@ -1466,7 +1492,7 @@
         <p class="eyebrow">FAQ</p>
         <h1 id="page-title">Renovation Questions, Answered</h1>
         <p class="phero__lede">The questions we hear every week about cost, permits, timelines and materials. Specific answers, with placeholders where a real number depends on your house.</p>
-        
+        <p class="phero__call"><a class="btn btn--primary" href="#quote">Get a Free Quote</a> <a class="btn btn--line" href="tel:+16475137955">Call (647) 513-7955</a> <span>Free site visit. Call any time, 24/7.</span></p>
       </div>
     </section>
 
@@ -1480,7 +1506,7 @@
         <div class="acc reveal">
           <div class="acc__item">
             <h3><button class="acc__btn" type="button" aria-expanded="false" aria-controls="faq-a1" id="faq-q1">How much does a basement renovation cost in Ontario?<span class="acc__icon" aria-hidden="true"></span></button></h3>
-            <div class="acc__panel" id="faq-a1" role="region" aria-labelledby="faq-q1"><div><p>Most basement finishes we quote in Mississauga, Oakville, Burlington and Hamilton land between [price range]. Size matters, but the items that move the number most are adding a bathroom, building a legal second unit, waterproofing, egress windows and relocating plumbing. We give you a fixed written price after a site visit, not a per-square-foot guess over the phone.</p></div></div>
+            <div class="acc__panel" id="faq-a1" role="region" aria-labelledby="faq-q1"><div><p>Most of the price comes down to a handful of things: size, adding a bathroom, building a legal second unit, waterproofing, egress windows and relocating plumbing. Two basements the same size can be far apart in price, so we don&#x27;t quote by the square foot over the phone. We give you a fixed written price after a free site visit.</p></div></div>
           </div>
           <div class="acc__item">
             <h3><button class="acc__btn" type="button" aria-expanded="false" aria-controls="faq-a2" id="faq-q2">Do I need a building permit for my renovation?<span class="acc__icon" aria-hidden="true"></span></button></h3>
@@ -1488,7 +1514,7 @@
           </div>
           <div class="acc__item">
             <h3><button class="acc__btn" type="button" aria-expanded="false" aria-controls="faq-a3" id="faq-q3">How long does a kitchen renovation take?<span class="acc__icon" aria-hidden="true"></span></button></h3>
-            <div class="acc__panel" id="faq-a3" role="region" aria-labelledby="faq-q3"><div><p>Plan on [X weeks] of on-site work for a typical kitchen once materials have arrived, and longer if walls move or plumbing relocates. Cabinets have the longest lead time, so we order them the week the design is signed. Quartz or porcelain counters are templated after the cabinets are installed, which adds [X] days before the sink and backsplash go in.</p></div></div>
+            <div class="acc__panel" id="faq-a3" role="region" aria-labelledby="faq-q3"><div><p>It depends on how much of the room moves. Keeping the layout is quicker than moving walls or plumbing. Cabinets have the longest lead time, so we order them the week the design is signed, and quartz or porcelain counters are templated after the cabinets are installed. Your quote gives you a start date and a finish date in writing.</p></div></div>
           </div>
           <div class="acc__item">
             <h3><button class="acc__btn" type="button" aria-expanded="false" aria-controls="faq-a4" id="faq-q4">Is LVP or hardwood better for a basement?<span class="acc__icon" aria-hidden="true"></span></button></h3>
@@ -1504,11 +1530,11 @@
           </div>
           <div class="acc__item">
             <h3><button class="acc__btn" type="button" aria-expanded="false" aria-controls="faq-a7" id="faq-q7">What is your payment schedule?<span class="acc__icon" aria-hidden="true"></span></button></h3>
-            <div class="acc__panel" id="faq-a7" role="region" aria-labelledby="faq-q7"><div><p>A deposit of [X]% when you sign, progress payments tied to finished stages that are written into the contract, and a final payment after the walkthrough list is closed. You never pay ahead of work that has not happened. HST is shown as its own line on the quote and on every invoice.</p></div></div>
+            <div class="acc__panel" id="faq-a7" role="region" aria-labelledby="faq-q7"><div><p>A deposit when you sign, progress payments tied to finished stages that are written into the contract, and a final payment after the walkthrough list is closed. You never pay ahead of work that has not happened. HST is shown as its own line on the quote and on every invoice.</p></div></div>
           </div>
           <div class="acc__item">
             <h3><button class="acc__btn" type="button" aria-expanded="false" aria-controls="faq-a8" id="faq-q8">What does your warranty cover?<span class="acc__icon" aria-hidden="true"></span></button></h3>
-            <div class="acc__panel" id="faq-a8" role="region" aria-labelledby="faq-q8"><div><p>Our workmanship warranty covers labour and installation for [X] years from completion, in writing. If a tile cracks because of how it was set, or a door we hung stops closing properly, we come back and fix it. Manufacturer warranties on flooring, fixtures and cabinetry are passed to you with the paperwork at handover.</p></div></div>
+            <div class="acc__panel" id="faq-a8" role="region" aria-labelledby="faq-q8"><div><p>Our workmanship warranty covers labour and installation, in writing, for the term stated in your contract. If a tile cracks because of how it was set, or a door we hung stops closing properly, we come back and fix it. Manufacturer warranties on flooring, fixtures and cabinetry are passed to you with the paperwork at handover.</p></div></div>
           </div>
         </div>
       </div>
@@ -1571,7 +1597,7 @@
             </div>
             <button class="btn btn--primary lform__submit" type="submit">Get my free quote</button>
             <div class="qstatus qstatus--error" role="alert" hidden></div>
-            <p class="qfine">No obligation. We reply within [X] hours, or call (647) 513-7955 any time. Your details are only used for this quote.</p>
+            <p class="qfine">Free and no obligation. Prefer to talk? Call (647) 513-7955 any time, 24/7. Your details are only used for this quote.</p>
           </form>
 
           <div class="qform qdone" id="lead-faq-done" tabindex="-1" hidden>
@@ -1581,7 +1607,7 @@
             <p class="lform__title">Got it. Thanks.</p>
             <p>Here's what happens next:</p>
             <ol>
-              <li>A project lead calls you, usually within [X] hours.</li>
+              <li>A project lead calls you back.</li>
               <li>We book a site visit at a time that suits you.</li>
               <li>You get a written, fixed-price quote with HST shown.</li>
             </ol>

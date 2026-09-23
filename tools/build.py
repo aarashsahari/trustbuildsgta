@@ -20,7 +20,7 @@ Sources:
   src/site.js          behaviour for every page
 
 The build lints every page (banned words, em/en dashes, meta description
-length, one H1, duplicate ids, root-absolute links) and fails if anything is off.
+length, one H1, duplicate ids, broken links, non-contact placeholders) and fails if anything is off.
 """
 import datetime
 import html
@@ -222,7 +222,10 @@ def header(current):
           {PHONE}
           <span>Call any time, 24/7</span>
         </a>
-        <a class="btn btn--primary header-cta" href="#quote">Get a Quote</a>
+        <a class="btn btn--primary header-cta" href="#quote">Get a Free Quote</a>
+        <a class="header-call" href="{TEL}" aria-label="Call {PHONE}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z" fill="currentColor"/></svg>
+        </a>
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
           <span class="sr-only">Menu</span>
           <span class="menu-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span>
@@ -253,7 +256,7 @@ def header(current):
             {top('contact', 'Contact')}
           </ul>
           <div class="mobile-panel__foot">
-            <a class="btn btn--primary" href="#quote">Get a Quote</a>
+            <a class="btn btn--primary" href="#quote">Get a Free Quote</a>
             <a class="btn btn--line" href="{TEL}">Call {PHONE}</a>
             <p class="mobile-panel__hours">Call any time, 24/7</p>
           </div>
@@ -389,7 +392,7 @@ def trust_strip():
           <li>WSIB covered</li>
           <li>Written fixed-price quotes</li>
           <li>Call any time, 24/7</li>
-          <li>[X]-year workmanship warranty</li>
+          <li>Written workmanship warranty</li>
         </ul>
       </div>
     </div>"""
@@ -473,7 +476,7 @@ def lead_form(fid, service=None, city=None, wrap_class=""):
             </div>
             <button class="btn btn--primary lform__submit" type="submit">Get my free quote</button>
             <div class="qstatus qstatus--error" role="alert" hidden></div>
-            <p class="qfine">No obligation. We reply within [X] hours, or call {PHONE} any time. Your details are only used for this quote.</p>
+            <p class="qfine">Free and no obligation. Prefer to talk? Call {PHONE} any time, 24/7. Your details are only used for this quote.</p>
           </form>
 
           <div class="qform qdone" id="{fid}-done" tabindex="-1" hidden>
@@ -483,7 +486,7 @@ def lead_form(fid, service=None, city=None, wrap_class=""):
             <p class="lform__title">Got it. Thanks.</p>
             <p>Here's what happens next:</p>
             <ol>
-              <li>A project lead calls you, usually within [X] hours.</li>
+              <li>A project lead calls you back.</li>
               <li>We book a site visit at a time that suits you.</li>
               <li>You get a written, fixed-price quote with HST shown.</li>
             </ol>
@@ -644,6 +647,13 @@ def home_page():
         ("Permits handled", "We apply, book inspections and meet the inspector under the Ontario Building Code."),
         ("Site cleaned daily", "Floor protection, dust walls, and a swept site before we leave each day."),
     ]
+    checks = [
+        ("WSIB clearance certificate", "Proof we're registered and in good standing, so a workplace injury on your property isn't your liability."),
+        ("Liability insurance certificate", "A current certificate of insurance, sent with your quote."),
+        ("Permit numbers", "When a job needs a permit, you get the number. It's on file with your city's building department."),
+        ("Written warranty", "The workmanship warranty is in your contract: what it covers and for how long."),
+    ]
+    check_html = "".join(f"<li class=\"reveal\"><h3>{e(t)}</h3><p>{e(d)}</p></li>" for t, d in checks)
     promise_html = "".join(f"<li class=\"reveal\"><h3>{e(t)}</h3><p>{e(d)}</p></li>" for t, d in promises)
 
     main = f"""{partial("home-hero")}
@@ -678,13 +688,15 @@ def home_page():
         <div class="teaser__body reveal">
           <p class="eyebrow">Featured project</p>
           <h2 id="featured-title">Kitchen renovation in Lorne Park</h2>
-          <p>A 1970s side-split, opened up. The wall to the dining room came out, an engineered beam went in, and engineered oak runs through the main floor with no seam at the old doorway. [X weeks] on site.</p>
+          <p>A 1970s side-split, opened up. The wall to the dining room came out, an engineered beam went in, and engineered oak runs through the main floor with no seam at the old doorway.</p>
           <p class="teaser__links">
             <a class="arrow-link" href="{link('projects')}">See the before and after {ARROW}</a>
           </p>
         </div>
       </div>
     </section>
+
+{cta_band("Find out what your project will cost", "One free site visit, then a written fixed price with HST shown. No obligation, and no pressure to sign.")}
 
     <section class="section bg-ink on-dark" id="why" aria-labelledby="why-title">
       <div class="wrap">
@@ -694,7 +706,13 @@ def home_page():
       </div>
     </section>
 
-{partial("reviews")}
+    <section class="section bg-limestone" id="check" aria-labelledby="check-title">
+      <div class="wrap">
+{section_head("Before you sign", "Don't take our word for it. Check.", "Anyone can say licensed and insured. These come with your quote, so you can confirm them yourself before any work starts.", "check-title")}
+        <ul class="promise-strip promise-strip--light">{check_html}</ul>
+        <p class="more-link reveal"><a class="btn btn--primary" href="#quote">Request them with your quote</a></p>
+      </div>
+    </section>
 
 {contact_section("lead-home")}"""
 
@@ -770,7 +788,8 @@ def section_page(slug):
         },
         breadcrumbs_schema(crumbs),
     ]
-    hero_extra = ""
+    hero_extra = (f'<p class="phero__call"><a class="btn btn--primary" href="#quote">Get a Free Quote</a> '
+                  f'<a class="btn btn--line" href="{TEL}">Call {PHONE}</a> <span>Free site visit. Call any time, 24/7.</span></p>')
     if slug == "contact":
         hero_extra = f'<p class="phero__call"><a class="btn btn--primary" href="{TEL}">Call {PHONE}</a> <span>Call any time, 24/7</span></p>'
     hero = page_hero(crumbs, m["eyebrow"], m["h1"], m["lede"], hero_extra)

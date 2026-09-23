@@ -3,7 +3,8 @@ Page copy for the TrustBuildGTA service and city landing pages.
 
 Rules for anyone editing this file (the build script lints for most of them):
 - No em or en dashes. No emoji. Canadian spelling.
-- Never invent prices, reviews, stats or licence numbers. Use [price range], [X weeks], [X].
+- Never invent prices, reviews, stats, timelines or licence numbers. Write around them
+  ("your quote gives you a start and finish date") instead of using placeholders.
 - Banned words are listed in build.py (BANNED). Keep the voice plain and specific.
 """
 
@@ -65,7 +66,7 @@ SERVICES = [
         },
         "faq": [
             ("Do I need a permit to finish my basement?", "Yes, if you are adding a bathroom, a bedroom or a second unit, or moving walls or plumbing. A plain finish with no new plumbing may not need one, but the rules vary by city, so we check with the building department for your address before we quote. When a permit is needed, we handle the drawings, the application and the inspections."),
-            ("How long does a basement renovation take?", "Plan on [X weeks] on site for a typical finish once the permit is in hand, and [X weeks] for a legal second suite. Inspections are booked as we go, so the schedule on your quote already includes them."),
+            ("How long does a basement renovation take?", "It depends on the size, a bathroom and the permit. An open rec room is a shorter job than a legal second suite, which has more inspections. Your quote gives you a start date and a finish date in writing, with the inspections already built in."),
             ("Can you turn my basement into a legal second suite?", "In most cases, yes. Ontario allows a second unit in most detached houses, semis and townhouses, subject to the Ontario Building Code and your city's zoning rules. It needs fire separation, egress windows, interconnected alarms and a permit. We confirm your address qualifies before you spend anything on drawings."),
             ("What flooring is best for a basement?", "LVP, in most cases. It is waterproof and floats over a subfloor or membrane on the slab. Engineered hardwood can work over a dry slab with a proper subfloor, but solid hardwood should not go below grade."),
         ],
@@ -105,7 +106,7 @@ SERVICES = [
             ("Measure and design", "We measure the room, check where plumbing and ducts can move, and draw a layout with you. Cabinet and finish selections happen here."),
             ("Order and schedule", "Cabinets go on order the week you sign. The start date is set around their delivery, so your kitchen isn't torn out and sitting empty."),
             ("Demolition and rough-in", "Old kitchen out, floors protected, dust walls up. Plumbing and electrical move, and the inspector signs off if a permit applies."),
-            ("Cabinets, then counters", "Cabinets are installed and levelled, then counters are templated from the real boxes. Fabrication takes [X] days."),
+            ("Cabinets, then counters", "Cabinets are installed and levelled, then counters are templated from the real boxes. Fabrication time is already built into your schedule."),
             ("Backsplash and finishes", "Sink and appliances hooked up, backsplash tiled, paint and trim finished."),
             ("Walkthrough", "We go drawer by drawer with you and fix anything that's off before the final payment."),
         ],
@@ -125,7 +126,7 @@ SERVICES = [
             "Hamilton": "Ancaster kitchens run larger, and century homes in Westdale often need wiring brought up to date first.",
         },
         "faq": [
-            ("How long does a kitchen renovation take?", "Plan on [X weeks] of on-site work for a typical kitchen once the cabinets have arrived, and longer if walls move. Counters are templated after the cabinets go in, which adds [X] days before the sink and backsplash."),
+            ("How long does a kitchen renovation take?", "It depends on how much of the room moves. Keeping the layout is quicker than moving walls or plumbing. Cabinets have the longest lead time, so we order them the week you sign, and counters are templated after the cabinets go in. Your quote gives you a start date and a finish date in writing."),
             ("Can I live at home during a kitchen renovation?", "Yes, most of our clients do. We set up dust walls and floor protection, and help you plan a temporary kitchen in another room with the fridge and a microwave."),
             ("Should I choose quartz or porcelain counters?", "Quartz is the safe default: consistent, hard to stain and easy to seam. Porcelain slab is thinner, handles heat better and suits a modern look, but it is harder to fabricate and can chip at the edge if hit hard. We show you both before you pick."),
             ("Do I need a permit for a kitchen renovation?", "Not for new cabinets, counters and finishes. You do need one to remove or alter a load-bearing wall, and for significant plumbing changes. We tell you at the site visit and handle the application if one is needed."),
@@ -142,7 +143,7 @@ SERVICES = [
         "desc": "Bathroom renovation in Mississauga, Oakville, Burlington and Hamilton. Showers waterproofed with Schluter-KERDI and DITRA, flood tested, at a fixed price.",
         "h1": "Bathroom Renovation in Mississauga, Oakville, Burlington & Hamilton",
         "sub": "Showers and ensuites waterproofed with Schluter-KERDI and DITRA, then tiled. A fixed price up front, and a flood test before any tile goes on.",
-        "ticks": ["Written fixed-price quote, HST shown", "Schluter waterproofing on every shower", "[X]-year workmanship warranty"],
+        "ticks": ["Written fixed-price quote, HST shown", "Schluter waterproofing on every shower", "Written workmanship warranty"],
         "hero": ("1552321554-5fefe8c9ef14", "Walk-in shower with large-format porcelain tile and a glass panel",
                  "finished TrustBuildGTA shower or ensuite, landscape, natural light"),
         "intro_h2": "The part of a bathroom that matters is the part you never see",
@@ -186,7 +187,7 @@ SERVICES = [
             "Hamilton": "Century homes in Westdale and Dundas often need the subfloor rebuilt before new tile can go down.",
         },
         "faq": [
-            ("How long does a bathroom renovation take?", "A main bathroom usually takes [X weeks] on site, and a large ensuite [X weeks]. The flood test and grout curing are built into that schedule, because rushing them is how showers fail."),
+            ("How long does a bathroom renovation take?", "A powder room is a short job and a full ensuite takes longer. The flood test and grout curing are built into the schedule, because rushing them is how showers fail. Your quote gives you a start date and a finish date in writing."),
             ("Can you convert my tub into a walk-in shower?", "Yes. It is one of the most common jobs we do. We check the drain location and floor structure first to see if a low curb or a curbless entry is possible."),
             ("What is Schluter-KERDI and why does it matter?", "KERDI is a waterproof sheet membrane that goes on shower walls and floors under the tile. It stops water from reaching the drywall and framing. Tile and grout on their own let water through."),
             ("Is a heated bathroom floor worth it?", "In a bathroom on a slab or over a garage, most people say yes. It is an electric mat under the tile on its own thermostat, and it adds little labour if you decide before the tile goes in."),
@@ -236,7 +237,7 @@ SERVICES = [
         "method": [
             ("Measure and test", "Square footage measured room by room, and concrete tested for moisture if we're going below grade."),
             ("Choose the material", "Samples in your light, in your rooms. We explain the trade-offs so you only pick once."),
-            ("Acclimatize", "Hardwood and engineered boxes sit in the house for [X] days to adjust to its humidity before installation."),
+            ("Acclimatize", "Hardwood and engineered boxes sit in the house for the time the manufacturer specifies, so the boards adjust to its humidity before installation."),
             ("Prep the subfloor", "Old floor out, loose subfloor fixed, low spots levelled."),
             ("Install", "Boards or tile down with the right expansion gaps at walls and doorways."),
             ("Finish and clean up", "Baseboard, quarter round and transitions installed, site vacuumed, furniture back in place."),
@@ -259,8 +260,8 @@ SERVICES = [
         "faq": [
             ("Is LVP or hardwood better for a basement?", "LVP, in most basements. It is waterproof, it floats over the slab and it shrugs off the humidity swings that come with being below grade. Solid hardwood should not go on a concrete slab. Engineered hardwood can work over a dry slab with a proper subfloor if you want real wood underfoot, but it costs more and is less forgiving if water ever gets in."),
             ("Can engineered hardwood be refinished?", "Yes, if the wear layer is thick enough. A thick wear layer can be sanded and refinished more than once. A thin one may only take a light screen and recoat. We show you the wear layer spec on every product we quote."),
-            ("Will you install flooring I bought myself?", "Yes. We check it on delivery for damage and quantity, and plan for [X]% extra for cuts. The material warranty stays between you and the supplier, and our workmanship warranty covers the installation."),
-            ("How long does flooring installation take?", "A typical main floor takes [X] days once the material has acclimatized. Stairs add [X] days. You get the schedule in writing with the quote."),
+            ("Will you install flooring I bought myself?", "Yes. We check it on delivery for damage and quantity, and make sure there's enough extra to cover cuts. The material warranty stays between you and the supplier, and our workmanship warranty covers the installation."),
+            ("How long does flooring installation take?", "Most main floors go down in a matter of days once the material has acclimatized. Stairs add time because each step is cut and fitted on its own. You get the schedule in writing with the quote."),
         ],
         "cta_h2": "Get a flooring quote with the prep included",
         "cta_p": "We bring samples to the site visit and check the subfloor while we're there, so the price you get is the real one.",
@@ -319,7 +320,7 @@ SERVICES = [
         },
         "faq": [
             ("Should I get a concrete patio or interlock?", "Poured concrete costs less up front and lasts for decades if it is air-entrained and placed on a properly compacted base. Interlock costs more, but single pavers can be lifted and relaid if the ground settles, and it does not crack the way a slab can. For a plain rectangle, concrete is good value. For curves, steps or soft ground, interlock is usually the better call."),
-            ("How soon can I walk on a new concrete patio?", "Foot traffic after about [X] days and furniture after about [X] days. Concrete reaches its design strength at around 28 days. We leave you a written care sheet with the dates."),
+            ("How soon can I walk on a new concrete patio?", "Light foot traffic is usually fine after a day or two, and furniture after about a week. Concrete keeps gaining strength for around 28 days, so keep heavy loads off until then. We leave you a written care sheet with the dates for your pour."),
             ("Will my new concrete crack?", "Concrete shrinks as it cures, so some cracking is normal. Control joints decide where it cracks: in a straight line at the joint instead of across the slab. A compacted base and air-entrained concrete are what stop the heaving and flaking that ruin a patio."),
             ("Can I use salt on a new concrete patio?", "Not in the first winter. After that, avoid de-icers with ammonium nitrate or ammonium sulphate, which attack concrete. Sand for grip, or calcium chloride used sparingly, is safer."),
         ],
@@ -414,7 +415,7 @@ CITIES = [
         ],
         "faq": [
             ("Do I need a permit for a basement apartment in Mississauga?", "Yes. A second unit needs a building permit from the City of Mississauga and has to meet the Ontario Building Code and the city's zoning rules. We check that your property qualifies, prepare the drawings, apply for the permit and book the inspections."),
-            ("How soon can you start a job in Mississauga?", "Site visits are usually booked within [X] days of your call. Start dates depend on the season and on permits, and the date on your quote is the date we hold."),
+            ("How soon can you start a job in Mississauga?", "Call or send the form and we'll book a site visit at a time that suits you. Start dates depend on the season and on permits, and the date on your quote is the date we hold."),
             ("Do you also work in Brampton or Milton?", "Our main area is Mississauga, Oakville, Burlington and Hamilton. For jobs just outside it, call and ask. If we can't give your project proper attention, we'll tell you so."),
         ],
     },
@@ -443,7 +444,7 @@ CITIES = [
         "faq": [
             ("Do you handle building permits with the Town of Oakville?", "Yes. Where the Ontario Building Code calls for a permit, we prepare the drawings, apply to the Town of Oakville and book the inspections. The permit fee is shown on your quote."),
             ("Can you match the finishes in the rest of my house?", "Usually, yes. We bring samples to the site visit and match trim profiles, stain colours and flooring as closely as the products allow. If an exact match isn't possible, we'll suggest a clean break at a doorway instead."),
-            ("How soon can you start a job in Oakville?", "Site visits are usually booked within [X] days of your call. Start dates depend on the season and on permits, and the date on your quote is the date we hold."),
+            ("How soon can you start a job in Oakville?", "Call or send the form and we'll book a site visit at a time that suits you. Start dates depend on the season and on permits, and the date on your quote is the date we hold."),
         ],
     },
     {
@@ -471,7 +472,7 @@ CITIES = [
         "faq": [
             ("Do you handle building permits with the City of Burlington?", "Yes. Where the Ontario Building Code calls for a permit, we prepare the drawings, apply to the City of Burlington and book the inspections. The permit fee is shown on your quote."),
             ("Do you build decks in Burlington?", "Yes. Decks attached to the house or more than 60 cm above grade need a permit, and we draw the plans and apply for it. Footings go below the frost line, roughly 1.2 metres down."),
-            ("How soon can you start a job in Burlington?", "Site visits are usually booked within [X] days of your call. Start dates depend on the season and on permits, and the date on your quote is the date we hold."),
+            ("How soon can you start a job in Burlington?", "Call or send the form and we'll book a site visit at a time that suits you. Start dates depend on the season and on permits, and the date on your quote is the date we hold."),
         ],
     },
     {
@@ -509,5 +510,5 @@ PROCESS = [
     ("Site visit and measure", "We measure every room we're touching and check the things that change a price: panel capacity, drain locations, moisture on the foundation, what's under the old floor.", "a visit from the person who would actually run your job, not a salesperson."),
     ("Written quote and design", "A line-item quote with a fixed price and HST on its own line. Layout drawings and finish selections get settled here, before a single trade is booked.", "the fixed-price quote, drawings, a materials list and a start date."),
     ("Build with a dedicated lead", "One project lead runs the job from demolition to final paint. They book trades, meet the inspector and send you a short update at the end of each day.", "one phone number for the whole job and a swept, cleared site every evening."),
-    ("Walkthrough and warranty", "We walk every room with you and write down anything that isn't right. It gets fixed before the final payment is due.", "a closed permit, product warranties and a [X]-year workmanship warranty in writing."),
+    ("Walkthrough and warranty", "We walk every room with you and write down anything that isn't right. It gets fixed before the final payment is due.", "a closed permit, product warranties and a written workmanship warranty."),
 ]

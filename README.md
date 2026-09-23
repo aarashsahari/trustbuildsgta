@@ -38,11 +38,12 @@ id, a broken internal link, or an in-page link to a missing anchor. Don't edit t
   it is set, every form shows an error with the phone number, and the browser console
   says the lead was not sent. Any service that accepts a JSON POST works (Formspree,
   Basin, a CRM or Zapier/Make webhook).
-- **Placeholders.** Search for `[X]`, `[X weeks]`, `[price range]`, `[EMAIL]`,
-  `[OWNER NAME]`, `[GOOGLE_REVIEWS_URL]`, `[REVIEW TEXT]`, `[NAME]` and `[CITY]`.
+- **Email.** `[EMAIL]` in the contact details is the only text placeholder left. Set it in
+  `tools/build.py` (search for `[EMAIL]`) and rebuild. The build fails if any other
+  `[PLACEHOLDER]` appears on a page.
 - **Photos.** Unsplash images are placeholders. Each one has a `REAL PHOTO` comment, or a
   note in `content.py`, describing the photo to swap in.
-- **Analytics.** Forms push `form_start`, `form_step`, `generate_lead` and `form_error` to
+- **Analytics.** Forms push `form_start`, `generate_lead` and `form_error` to
   `dataLayer`, and phone links push `click_to_call`. Add Google Tag Manager and use
   `generate_lead` as the conversion. Each lead also carries UTM tags, `gclid`, the landing
   page and the referrer.

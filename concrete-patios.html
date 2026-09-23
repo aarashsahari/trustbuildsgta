@@ -121,7 +121,7 @@
       "name": "How soon can I walk on a new concrete patio?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Foot traffic after about [X] days and furniture after about [X] days. Concrete reaches its design strength at around 28 days. We leave you a written care sheet with the dates."
+        "text": "Light foot traffic is usually fine after a day or two, and furniture after about a week. Concrete keeps gaining strength for around 28 days, so keep heavy loads off until then. We leave you a written care sheet with the dates for your pour."
       }
     },
     {
@@ -1368,6 +1368,29 @@
     }
     .mosaic__cap strong { font-weight: 600; }
     .mosaic__item { min-width: 0; }
+
+    /* ============================================================
+       24. CONVERSION DETAILS
+       ============================================================ */
+    /* Tap-to-call button in the header on phones */
+    .header-call {
+      display: inline-grid; place-items: center; flex: none;
+      width: 46px; height: 46px; border-radius: var(--pill);
+      background: var(--accent); color: var(--white);
+    }
+    .header-call:hover { background: var(--accent-dark); color: var(--white); }
+    .header-call svg { width: 20px; height: 20px; }
+    @media (min-width: 768px) { .header-call { display: none; } }
+    .header-actions { gap: 12px; }
+    @media (min-width: 768px) { .header-actions { gap: 20px; } }
+
+    .hero__assure { margin: 18px 0 0; font-size: 15px; color: rgba(248, 247, 243, .85); }
+
+    /* Light version of the promise strip ("Before you sign") */
+    .promise-strip--light li { border-top-color: var(--ink); }
+    .promise-strip--light li::before { background: var(--accent); }
+    .promise-strip--light h3 { color: var(--ink); }
+    .promise-strip--light p { color: #26323B; }
   </style>
 </head>
 
@@ -1417,7 +1440,10 @@
           (647) 513-7955
           <span>Call any time, 24/7</span>
         </a>
-        <a class="btn btn--primary header-cta" href="#quote">Get a Quote</a>
+        <a class="btn btn--primary header-cta" href="#quote">Get a Free Quote</a>
+        <a class="header-call" href="tel:+16475137955" aria-label="Call (647) 513-7955">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z" fill="currentColor"/></svg>
+        </a>
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
           <span class="sr-only">Menu</span>
           <span class="menu-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span>
@@ -1456,7 +1482,7 @@
             <li><a href="contact.html">Contact</a></li>
           </ul>
           <div class="mobile-panel__foot">
-            <a class="btn btn--primary" href="#quote">Get a Quote</a>
+            <a class="btn btn--primary" href="#quote">Get a Free Quote</a>
             <a class="btn btn--line" href="tel:+16475137955">Call (647) 513-7955</a>
             <p class="mobile-panel__hours">Call any time, 24/7</p>
           </div>
@@ -1521,7 +1547,7 @@
             </div>
             <button class="btn btn--primary lform__submit" type="submit">Get my free quote</button>
             <div class="qstatus qstatus--error" role="alert" hidden></div>
-            <p class="qfine">No obligation. We reply within [X] hours, or call (647) 513-7955 any time. Your details are only used for this quote.</p>
+            <p class="qfine">Free and no obligation. Prefer to talk? Call (647) 513-7955 any time, 24/7. Your details are only used for this quote.</p>
           </form>
 
           <div class="qform qdone" id="lead-concrete-patios-done" tabindex="-1" hidden>
@@ -1531,7 +1557,7 @@
             <p class="lform__title">Got it. Thanks.</p>
             <p>Here's what happens next:</p>
             <ol>
-              <li>A project lead calls you, usually within [X] hours.</li>
+              <li>A project lead calls you back.</li>
               <li>We book a site visit at a time that suits you.</li>
               <li>You get a written, fixed-price quote with HST shown.</li>
             </ol>
@@ -1547,7 +1573,7 @@
           <li>WSIB covered</li>
           <li>Written fixed-price quotes</li>
           <li>Call any time, 24/7</li>
-          <li>[X]-year workmanship warranty</li>
+          <li>Written workmanship warranty</li>
         </ul>
       </div>
     </div>
@@ -1683,7 +1709,7 @@
           </div>
           <div class="acc__item">
             <h3><button class="acc__btn" type="button" aria-expanded="false" aria-controls="faq-a2" id="faq-q2">How soon can I walk on a new concrete patio?<span class="acc__icon" aria-hidden="true"></span></button></h3>
-            <div class="acc__panel" id="faq-a2" role="region" aria-labelledby="faq-q2"><div><p>Foot traffic after about [X] days and furniture after about [X] days. Concrete reaches its design strength at around 28 days. We leave you a written care sheet with the dates.</p></div></div>
+            <div class="acc__panel" id="faq-a2" role="region" aria-labelledby="faq-q2"><div><p>Light foot traffic is usually fine after a day or two, and furniture after about a week. Concrete keeps gaining strength for around 28 days, so keep heavy loads off until then. We leave you a written care sheet with the dates for your pour.</p></div></div>
           </div>
           <div class="acc__item">
             <h3><button class="acc__btn" type="button" aria-expanded="false" aria-controls="faq-a3" id="faq-q3">Will my new concrete crack?<span class="acc__icon" aria-hidden="true"></span></button></h3>

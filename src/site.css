@@ -1221,3 +1221,26 @@
     }
     .mosaic__cap strong { font-weight: 600; }
     .mosaic__item { min-width: 0; }
+
+    /* ============================================================
+       24. CONVERSION DETAILS
+       ============================================================ */
+    /* Tap-to-call button in the header on phones */
+    .header-call {
+      display: inline-grid; place-items: center; flex: none;
+      width: 46px; height: 46px; border-radius: var(--pill);
+      background: var(--accent); color: var(--white);
+    }
+    .header-call:hover { background: var(--accent-dark); color: var(--white); }
+    .header-call svg { width: 20px; height: 20px; }
+    @media (min-width: 768px) { .header-call { display: none; } }
+    .header-actions { gap: 12px; }
+    @media (min-width: 768px) { .header-actions { gap: 20px; } }
+
+    .hero__assure { margin: 18px 0 0; font-size: 15px; color: rgba(248, 247, 243, .85); }
+
+    /* Light version of the promise strip ("Before you sign") */
+    .promise-strip--light li { border-top-color: var(--ink); }
+    .promise-strip--light li::before { background: var(--accent); }
+    .promise-strip--light h3 { color: var(--ink); }
+    .promise-strip--light p { color: #26323B; }

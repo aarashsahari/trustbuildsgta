@@ -15,6 +15,7 @@ SERVICES = [
     # ------------------------------------------------------------------ BASEMENT
     {
         "slug": "basement-renovation",
+        "card": "Turn an unfinished basement into a warm, dry family room, home office or legal rental suite.",
         "name": "Basement renovation",
         "variant": "photo",
         "title": "Basement Renovation Mississauga, Oakville, Burlington & Hamilton | TrustBuildGTA",
@@ -63,6 +64,7 @@ SERVICES = [
             "Oakville": "Glen Abbey and Joshua Creek basements are usually big, open and unfinished, which makes them good candidates for a rec room with a full bathroom.",
             "Burlington": "Aldershot bungalows often need ceiling height worked out around ductwork before the finishing starts.",
             "Hamilton": "Older homes in Westdale and Dundas usually need waterproofing first, and sometimes underpinning to get a usable ceiling.",
+            "GTA": "In Brampton and Milton, basement second suites are one of the most common requests we get.",
         },
         "faq": [
             ("Do I need a permit to finish my basement?", "Yes, if you are adding a bathroom, a bedroom or a second unit, or moving walls or plumbing. A plain finish with no new plumbing may not need one, but the rules vary by city, so we check with the building department for your address before we quote. When a permit is needed, we handle the drawings, the application and the inspections."),
@@ -76,6 +78,7 @@ SERVICES = [
     # ------------------------------------------------------------------ KITCHEN
     {
         "slug": "kitchen-renovation",
+        "card": "A kitchen that works the way you cook, with the price and the finish date agreed before we start.",
         "name": "Kitchen renovation",
         "variant": "split",
         "title": "Kitchen Renovation Mississauga, Oakville, Burlington & Hamilton | TrustBuildGTA",
@@ -124,6 +127,7 @@ SERVICES = [
             "Oakville": "Glen Abbey and Joshua Creek homes from the eighties and nineties are due for their first real kitchen.",
             "Burlington": "Millcroft and Alton Village kitchens are usually refreshes: same layout, better cabinets and quartz.",
             "Hamilton": "Ancaster kitchens run larger, and century homes in Westdale often need wiring brought up to date first.",
+            "GTA": "Etobicoke bungalows often get their first real kitchen update, sometimes with a wall opened up.",
         },
         "faq": [
             ("How long does a kitchen renovation take?", "It depends on how much of the room moves, since keeping the layout is quicker than moving walls or plumbing. Your quote gives you a start date and a finish date in writing."),
@@ -137,6 +141,7 @@ SERVICES = [
     # ------------------------------------------------------------------ BATHROOM
     {
         "slug": "bathroom-renovation",
+        "card": "A new bathroom or walk-in shower that looks good and stays watertight for years.",
         "name": "Bathroom renovation",
         "variant": "split",
         "title": "Bathroom Renovation Mississauga, Oakville, Burlington & Hamilton | TrustBuildGTA",
@@ -185,6 +190,7 @@ SERVICES = [
             "Oakville": "Ensuites in Glen Abbey and Joshua Creek are the most common job: the builder's corner tub comes out and a walk-in shower goes in.",
             "Burlington": "Millcroft and Alton Village bathrooms usually keep the layout and replace everything else.",
             "Hamilton": "Century homes in Westdale and Dundas often need the subfloor rebuilt before new tile can go down.",
+            "GTA": "Across the GTA, the most common ask is swapping a tub nobody uses for a walk-in shower.",
         },
         "faq": [
             ("How long does a bathroom renovation take?", "A powder room is a short job and a full ensuite takes longer, with the flood test and grout curing built in. Your quote gives you a start date and a finish date in writing."),
@@ -198,6 +204,7 @@ SERVICES = [
     # ------------------------------------------------------------------ FLOORING
     {
         "slug": "flooring",
+        "card": "New hardwood, vinyl plank or tile, with honest advice on what suits each room.",
         "name": "Flooring installation",
         "variant": "photo",
         "title": "Flooring Installation Mississauga, Oakville, Burlington & Hamilton | TrustBuildGTA",
@@ -256,6 +263,7 @@ SERVICES = [
             "Oakville": "Engineered hardwood through the main floor of Glen Abbey and Bronte homes is our most common Oakville flooring job.",
             "Burlington": "Millcroft and Alton Village homes usually swap builder carpet upstairs for engineered or LVP.",
             "Hamilton": "Older floors in Westdale and Dundas are often out of level, so the prep takes longer than the install.",
+            "GTA": "Newer Brampton and Milton homes usually swap builder carpet for engineered hardwood or LVP.",
         },
         "faq": [
             ("Is LVP or hardwood better for a basement?", "LVP, in most basements. It is waterproof, it floats over the slab and it shrugs off the humidity swings that come with being below grade. Solid hardwood should not go on a concrete slab. Engineered hardwood can work over a dry slab with a proper subfloor if you want real wood underfoot, but it costs more and is less forgiving if water ever gets in."),
@@ -269,6 +277,7 @@ SERVICES = [
     # ------------------------------------------------------------------ CONCRETE
     {
         "slug": "concrete-patios",
+        "card": "A patio, walkway or steps that won't crack and heave after a few winters.",
         "name": "Concrete patios and walkways",
         "variant": "photo",
         "title": "Concrete Patios & Walkways Mississauga, Oakville, Burlington & Hamilton | TrustBuildGTA",
@@ -317,6 +326,7 @@ SERVICES = [
             "Oakville": "Bronte backyards often want a patio and a walkway to the side gate done in one pour.",
             "Burlington": "Aldershot lots tend to be large, and pads for hot tubs and sheds are common.",
             "Hamilton": "On the Mountain and in Stoney Creek, grading away from the house is usually the first problem to solve.",
+            "GTA": "Wherever you are in the GTA, the fix is the same: a properly compacted base and air-entrained concrete.",
         },
         "faq": [
             ("Should I get a concrete patio or interlock?", "Poured concrete costs less up front and lasts for decades if it is air-entrained and placed on a properly compacted base. Interlock costs more, but single pavers can be lifted and relaid if the ground settles, and it does not crack the way a slab can. For a plain rectangle, concrete is good value. For curves, steps or soft ground, interlock is usually the better call."),
@@ -330,6 +340,7 @@ SERVICES = [
     # ------------------------------------------------------------------ BACKYARD
     {
         "slug": "backyard-landscaping",
+        "card": "Decks, interlock patios, retaining walls and fences, built to stay level through Ontario winters.",
         "name": "Backyard and landscaping builds",
         "variant": "split",
         "title": "Backyard Landscaping & Decks Mississauga, Oakville, Burlington & Hamilton | TrustBuildGTA",
@@ -378,6 +389,7 @@ SERVICES = [
             "Oakville": "Bronte and Glen Abbey backyards often need the grading fixed before anything gets built.",
             "Burlington": "Aldershot and Millcroft lots suit a deck off the kitchen with steps down to interlock.",
             "Hamilton": "Ancaster and the Mountain have sloped lots where retaining walls do most of the work.",
+            "GTA": "Brampton and Milton lots often need the grading fixed before a deck or patio goes in.",
         },
         "faq": [
             ("Do I need a permit to build a deck?", "In most of our cities you need one for a deck attached to the house, or any deck more than 60 cm above grade. We check your city's rules, draw the plans and book the inspections."),
@@ -416,7 +428,7 @@ CITIES = [
         "faq": [
             ("Do I need a permit for a basement apartment in Mississauga?", "Yes. A second unit needs a building permit from the City of Mississauga and has to meet the Ontario Building Code and the city's zoning rules. We check that your property qualifies, prepare the drawings, apply for the permit and book the inspections."),
             ("How soon can you start a job in Mississauga?", "Call or send the form and we'll book a site visit at a time that suits you. Start dates depend on the season and on permits, and the date on your quote is the date we hold."),
-            ("Do you also work in Brampton or Milton?", "Our main area is Mississauga, Oakville, Burlington and Hamilton. For jobs just outside it, call and ask. If we can't give your project proper attention, we'll tell you so."),
+            ("Do you also work in Brampton or Milton?", "Yes. We work across the GTA, including Brampton, Milton and Etobicoke. Call or send the form with your address and we'll book a site visit."),
         ],
     },
     {
@@ -501,6 +513,31 @@ CITIES = [
             ("Can you waterproof an old stone foundation?", "Yes, but the method depends on the wall. Most older Hamilton basements need exterior excavation and a membrane, or interior drainage to a sump, before finishing. We tell you which one your house needs at the site visit, and why."),
             ("What is underpinning and do I need it?", "Underpinning lowers a basement floor by digging below the existing footings in sections and pouring new ones deeper. It is how you get usable ceiling height in an old basement. It needs an engineer and a permit, and we coordinate both."),
             ("Do you handle building permits with the City of Hamilton?", "Yes. Where the Ontario Building Code calls for a permit, we prepare the drawings, apply to the City of Hamilton and book the inspections. The permit fee is shown on your quote."),
+        ],
+    },
+    {
+        "slug": "gta", "name": "GTA", "in_name": "the GTA", "variant": "photo",
+        "title": "General Contractor GTA | Basements, Kitchens & Bathrooms | TrustBuildGTA",
+        "desc": "General contractor across the GTA, including Etobicoke, Brampton, Milton and Toronto. Basements, kitchens, bathrooms, flooring and backyards. Fixed quotes.",
+        "h1": "General Contractor in the GTA",
+        "sub": "Basements, kitchens, bathrooms, floors and backyards across the Greater Toronto Area. One project lead and a written fixed price.",
+        "ticks": ["Written fixed-price quote, HST shown", "Permits with your city handled", "One project lead from start to finish"],
+        "hero": ("1600607687939-ce8a6c25118c", "Renovated open-plan main floor in a GTA home",
+                 "a finished TrustBuildGTA project elsewhere in the GTA, landscape"),
+        "intro_h2": "Based in Mississauga, working across the GTA",
+        "intro": [
+            "Our office sits by the 401 and 403, so most of the GTA is a short drive away. Beyond our four core cities, we take on work in Etobicoke, Brampton, Milton and nearby parts of Toronto.",
+        ],
+        "hoods": [
+            ("Etobicoke", "Postwar bungalows and split-levels. Basements, kitchens and bathrooms."),
+            ("Brampton", "Newer detached homes and townhouses. Basement suites and flooring."),
+            ("Milton", "Newer subdivisions with builder-grade finishes that owners are ready to replace."),
+            ("Toronto", "Older semis and detached homes where basements often need waterproofing first."),
+        ],
+        "faq": [
+            ("Do you work everywhere in the GTA?", "We work across the west and central GTA, with Mississauga as home base. If you're further out, call and we'll tell you straight if we can give your project the attention it needs."),
+            ("Do you handle permits in Toronto and Brampton?", "Yes. Where the Ontario Building Code calls for a permit, we prepare the drawings, apply to your city and book the inspections."),
+            ("How soon can you start a job in the GTA?", "Call or send the form and we'll book a site visit at a time that suits you. The start date on your quote is the date we hold."),
         ],
     },
 ]

@@ -253,24 +253,8 @@
       });
     }
 
-    /* ---------- Gallery filter ---------- */
-    var filterBtns = document.querySelectorAll('.filters button');
+    /* ---------- Gallery items (used by the lightbox) ---------- */
     var items = Array.prototype.slice.call(document.querySelectorAll('#gallery li'));
-    var galleryStatus = document.getElementById('gallery-status');
-
-    filterBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var f = btn.getAttribute('data-filter');
-        filterBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
-        var shown = 0;
-        items.forEach(function (li) {
-          var match = f === 'all' || li.getAttribute('data-cat') === f;
-          li.hidden = !match;
-          if (match) shown++;
-        });
-        if (galleryStatus) galleryStatus.textContent = 'Showing ' + shown + ' ' + (shown === 1 ? 'project' : 'projects');
-      });
-    });
 
     /* ---------- Lightbox ---------- */
     var lb = document.getElementById('lightbox');

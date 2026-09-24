@@ -1467,6 +1467,7 @@
               <li><a href="oakville.html">Oakville</a></li>
               <li><a href="burlington.html">Burlington</a></li>
               <li><a href="hamilton.html">Hamilton</a></li>
+              <li><a href="gta.html">GTA</a></li>
             </ul>
           </li>
           <li><a href="faq.html" aria-current="page">FAQ</a></li>
@@ -1515,6 +1516,7 @@
                 <li><a href="oakville.html">Oakville</a></li>
                 <li><a href="burlington.html">Burlington</a></li>
                 <li><a href="hamilton.html">Hamilton</a></li>
+                <li><a href="gta.html">GTA</a></li>
               </ul>
             </li>
             <li><a href="faq.html" aria-current="page">FAQ</a></li>
@@ -1632,7 +1634,7 @@
             </div><div class="field">
               <label for="lead-faq-city">City</label>
               <select id="lead-faq-city" name="city" required aria-describedby="lead-faq-city-err">
-                <option value="">Choose a city</option><option>Mississauga</option><option>Oakville</option><option>Burlington</option><option>Hamilton</option><option>Somewhere nearby</option>
+                <option value="">Choose a city</option><option>Mississauga</option><option>Oakville</option><option>Burlington</option><option>Hamilton</option><option>Elsewhere in the GTA</option><option>Somewhere else</option>
               </select>
               <p class="err" id="lead-faq-city-err"></p>
             </div></div>
@@ -1677,7 +1679,7 @@
               <dt>Email</dt>
               <dd><a href="mailto:[EMAIL]">[EMAIL]</a></dd>
               <dt>Serving</dt>
-              <dd><a href="mississauga.html">Mississauga</a>, <a href="oakville.html">Oakville</a>, <a href="burlington.html">Burlington</a>, <a href="hamilton.html">Hamilton</a></dd>
+              <dd><a href="mississauga.html">Mississauga</a>, <a href="oakville.html">Oakville</a>, <a href="burlington.html">Burlington</a>, <a href="hamilton.html">Hamilton</a>, <a href="gta.html">GTA</a></dd>
             </dl>
             <!-- REAL PHOTO: the project lead or crew on a real job site, landscape, faces optional -->
             <figure class="contact-img ph">
@@ -1728,6 +1730,7 @@
             <li><a href="oakville.html">Oakville</a></li>
             <li><a href="burlington.html">Burlington</a></li>
             <li><a href="hamilton.html">Hamilton</a></li>
+            <li><a href="gta.html">GTA</a></li>
           </ul>
         </nav>
 
@@ -1744,7 +1747,7 @@
       </div>
 
       <div class="foot-base">
-        <p>Serving Mississauga, Oakville, Burlington and Hamilton</p>
+        <p>Serving Mississauga, Oakville, Burlington, Hamilton and the GTA</p>
         <p>&copy; <span id="year">2026</span> TrustBuildGTA</p>
       </div>
     </div>
@@ -2015,24 +2018,8 @@
       });
     }
 
-    /* ---------- Gallery filter ---------- */
-    var filterBtns = document.querySelectorAll('.filters button');
+    /* ---------- Gallery items (used by the lightbox) ---------- */
     var items = Array.prototype.slice.call(document.querySelectorAll('#gallery li'));
-    var galleryStatus = document.getElementById('gallery-status');
-
-    filterBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var f = btn.getAttribute('data-filter');
-        filterBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
-        var shown = 0;
-        items.forEach(function (li) {
-          var match = f === 'all' || li.getAttribute('data-cat') === f;
-          li.hidden = !match;
-          if (match) shown++;
-        });
-        if (galleryStatus) galleryStatus.textContent = 'Showing ' + shown + ' ' + (shown === 1 ? 'project' : 'projects');
-      });
-    });
 
     /* ---------- Lightbox ---------- */
     var lb = document.getElementById('lightbox');

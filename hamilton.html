@@ -1451,6 +1451,7 @@
               <li><a href="oakville.html">Oakville</a></li>
               <li><a href="burlington.html">Burlington</a></li>
               <li><a href="hamilton.html" aria-current="page">Hamilton</a></li>
+              <li><a href="gta.html">GTA</a></li>
             </ul>
           </li>
           <li><a href="faq.html">FAQ</a></li>
@@ -1499,6 +1500,7 @@
                 <li><a href="oakville.html">Oakville</a></li>
                 <li><a href="burlington.html">Burlington</a></li>
                 <li><a href="hamilton.html" aria-current="page">Hamilton</a></li>
+                <li><a href="gta.html">GTA</a></li>
               </ul>
             </li>
             <li><a href="faq.html">FAQ</a></li>
@@ -1747,6 +1749,7 @@
           <li><a href="mississauga.html">General contractor in Mississauga<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a></li>
           <li><a href="oakville.html">General contractor in Oakville<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a></li>
           <li><a href="burlington.html">General contractor in Burlington<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a></li>
+          <li><a href="gta.html">General contractor in the GTA<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a></li>
         </ul>
       </div>
     </section>
@@ -1789,6 +1792,7 @@
             <li><a href="oakville.html">Oakville</a></li>
             <li><a href="burlington.html">Burlington</a></li>
             <li><a href="hamilton.html">Hamilton</a></li>
+            <li><a href="gta.html">GTA</a></li>
           </ul>
         </nav>
 
@@ -1805,7 +1809,7 @@
       </div>
 
       <div class="foot-base">
-        <p>Serving Mississauga, Oakville, Burlington and Hamilton</p>
+        <p>Serving Mississauga, Oakville, Burlington, Hamilton and the GTA</p>
         <p>&copy; <span id="year">2026</span> TrustBuildGTA</p>
       </div>
     </div>
@@ -2076,24 +2080,8 @@
       });
     }
 
-    /* ---------- Gallery filter ---------- */
-    var filterBtns = document.querySelectorAll('.filters button');
+    /* ---------- Gallery items (used by the lightbox) ---------- */
     var items = Array.prototype.slice.call(document.querySelectorAll('#gallery li'));
-    var galleryStatus = document.getElementById('gallery-status');
-
-    filterBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var f = btn.getAttribute('data-filter');
-        filterBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
-        var shown = 0;
-        items.forEach(function (li) {
-          var match = f === 'all' || li.getAttribute('data-cat') === f;
-          li.hidden = !match;
-          if (match) shown++;
-        });
-        if (galleryStatus) galleryStatus.textContent = 'Showing ' + shown + ' ' + (shown === 1 ? 'project' : 'projects');
-      });
-    });
 
     /* ---------- Lightbox ---------- */
     var lb = document.getElementById('lightbox');

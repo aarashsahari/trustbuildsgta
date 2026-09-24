@@ -85,6 +85,16 @@ def first_sentence(text):
     return text.split(". ")[0].rstrip(".") + "."
 
 
+def in_name(c):
+    """How a service area reads in a sentence: "in Oakville", "in the GTA"."""
+    return c.get("in_name", c["name"])
+
+
+def area_served(c):
+    return {"@type": "AdministrativeArea" if c["slug"] == "gta" else "City",
+            "name": "Greater Toronto Area" if c["slug"] == "gta" else c["name"]}
+
+
 def brief(text, n=1):
     """First n sentences of a piece of copy. Keeps pages light on words."""
     parts = re.split(r"(?<=[.!?])\s+(?=[A-Z])", text.strip())
@@ -345,7 +355,7 @@ def footer():
       </div>
 
       <div class="foot-base">
-        <p>Serving Mississauga, Oakville, Burlington and Hamilton</p>
+        <p>Serving Mississauga, Oakville, Burlington, Hamilton and the GTA</p>
         <p>&copy; <span id="year">2026</span> TrustBuildGTA</p>
       </div>
     </div>
@@ -449,7 +459,7 @@ def section_head(eyebrow, h2, lede, hid):
 def lead_form(fid, service=None, city=None, wrap_class=""):
     """The one quote form used everywhere. Service pages fix the service, city
     pages fix the city, every other page asks for both."""
-    city_opts = "".join(f"<option>{c}</option>" for c in CITIES_ORDER) + "<option>Somewhere nearby</option>"
+    city_opts = "".join(f"<option>{c}</option>" for c in CITIES_ORDER) + "<option>Elsewhere in the GTA</option><option>Somewhere else</option>"
     proj_opts = "".join(f"<option>{e(s['name'])}</option>" for s in SERVICES)
     proj_opts += f"<option>{EXTRA_WORK}</option><option>Not sure yet</option>"
     tags, fixed, selects = [], [], []
@@ -636,7 +646,7 @@ def home_page():
                 "@type": "OpeningHoursSpecification",
                 "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
                 "opens": "00:00", "closes": "23:59"}],
-            "areaServed": [{"@type": "City", "name": c} for c in CITIES_ORDER],
+            "areaServed": [area_served(c) for c in CITIES],
             "hasOfferCatalog": {
                 "@type": "OfferCatalog",
                 "name": "Renovation and general contracting services",
@@ -649,16 +659,6 @@ def home_page():
         breadcrumbs_schema([("Home", "index")]),
     ]
 
-    rows = []
-    for i, s in enumerate(SERVICES, 1):
-        pid, alt, _note = s["hero"]
-        rows.append(f"""          <li class="reveal">
-            <!-- REAL PHOTO: finished {e(s["name"].lower())} job, crops to 4:3 -->
-            <div class="svc-rows__thumb ph"><img src="{e(img_url(pid, 480, 360))}" width="480" height="360" loading="lazy" decoding="async" alt="{e(alt)}"></div>
-            <h3>{e(s["name"])}</h3>
-            <p>{e(first_sentence(s["sub"]))}</p>
-            <a class="arrow-link" href="{link(s["slug"])}">Learn more<span class="sr-only"> about {e(s["name"].lower())}</span> {ARROW}</a>
-          </li>""")
 
     # Recent work mosaic: first photo is the big one
     recent = [
@@ -690,15 +690,7 @@ def home_page():
 
     main = f"""{partial("home-hero")}
 
-    <section class="section" id="services" aria-labelledby="services-title">
-      <div class="wrap">
-{section_head("Services", "Basement renovation, kitchens, bathrooms, floors and the concrete patio", None, "services-title")}
-        <ol class="svc-rows svc-rows--thumbs">
-{chr(10).join(rows)}
-        </ol>
-        <p class="more-link reveal"><a class="btn btn--line" href="{link('services')}">See all services</a></p>
-      </div>
-    </section>
+{service_cards()}
 
     <section class="section bg-limestone" id="recent" aria-labelledby="recent-title">
       <div class="wrap">
@@ -783,9 +775,9 @@ SECTION_META = {
         og="1504307651254-35680f356dfd"),
     "areas": dict(
         title="Service Areas: Mississauga, Oakville, Burlington & Hamilton | TrustBuildGTA",
-        desc="TrustBuildGTA is a general contractor serving Mississauga, Oakville, Burlington and Hamilton. See the neighbourhoods we work in and the projects we see most.",
+        desc="TrustBuildGTA is a general contractor serving Mississauga, Oakville, Burlington, Hamilton and the wider GTA. See the neighbourhoods we work in the most.",
         eyebrow="Service areas",
-        h1="General Contractor for Mississauga, Oakville, Burlington & Hamilton",
+        h1="General Contractor for Mississauga, Oakville, Burlington, Hamilton & the GTA",
         lede="We stay close to home, so your project lead can be on site every working day.",
         og="1600047509807-ba8f99d2cdde"),
     "faq": dict(
@@ -805,7 +797,8 @@ SECTION_META = {
 }
 
 
-def service_cards():
+def service_cards(h2="What can we help you with?", eyebrow="Services", sid="services"):
+    """Photo cards in rows and columns. Used on the homepage and the Services page."""
     cards = []
     for s in SERVICES:
         pid, alt, _note = s["hero"]
@@ -814,19 +807,19 @@ def service_cards():
               <!-- REAL PHOTO: finished {e(s["name"].lower())} job, crops to 4:3 -->
               <span class="card__img ph"><img src="{e(img_url(pid, 800, 600))}" width="800" height="600" loading="lazy" decoding="async" alt="{e(alt)}"></span>
               <span class="card__body">
-                <span class="card__title">{e(s["name"])}</span>
-                <span class="card__text">{e(first_sentence(s["sub"]))}</span>
-                <span class="card__more">Learn more {ARROW}</span>
+                <h3 class="card__title">{e(s["name"])}</h3>
+                <span class="card__text">{e(s["card"])}</span>
+                <span class="card__more">See what's included {ARROW}</span>
               </span>
             </a>
           </li>""")
-    return f"""    <section class="section" id="services" aria-labelledby="services-title">
+    return f"""    <section class="section" id="{sid}" aria-labelledby="{sid}-title">
       <div class="wrap">
-{section_head("What we build", "Six things we do most", None, "services-title")}
+{section_head(eyebrow, h2, None, sid + "-title")}
         <ul class="cards">
 {chr(10).join(cards)}
         </ul>
-        <p class="more-link reveal">Also drywall, trim, painting and additions. <a href="#quote">Ask us about it</a>.</p>
+        <p class="more-link reveal">Something else on your list? We also do drywall, trim, painting and additions. <a href="#quote">Just ask</a>.</p>
       </div>
     </section>"""
 
@@ -839,11 +832,11 @@ def area_cards():
         items.append(f"""          <article class="area reveal">
             <div class="area__top"><h3>{e(c["name"])}</h3>{tag}</div>
             <p class="area__hoods">{e(hoods)}</p>
-            <a class="arrow-link" href="{link(c["slug"])}">General contractor in {e(c["name"])} {ARROW}</a>
+            <a class="arrow-link" href="{link(c["slug"])}">General contractor in {e(in_name(c))} {ARROW}</a>
           </article>""")
     return f"""    <section class="section" id="areas" aria-labelledby="areas-title">
       <div class="wrap">
-{section_head("Service areas", "Four cities along the lake", None, "areas-title")}
+{section_head("Service areas", "Where we work", None, "areas-title")}
         <div class="areas">
 {chr(10).join(items)}
         </div>
@@ -902,7 +895,7 @@ def section_page(slug):
     fid = f"lead-{slug}"
 
     if slug == "services":
-        body = service_cards() + "\n\n" + contact_section(fid, bg="bg-limestone")
+        body = service_cards(eyebrow="What we build") + "\n\n" + contact_section(fid, bg="bg-limestone")
     elif slug == "projects":
         body = partial("featured") + "\n\n" + partial("gallery") + "\n\n" + contact_section(fid, bg="bg-limestone")
     elif slug == "process":
@@ -978,7 +971,7 @@ def service_page(s):
             "description": s["desc"],
             "url": canonical(slug),
             "provider": BUSINESS,
-            "areaServed": [{"@type": "City", "name": c} for c in CITIES_ORDER],
+            "areaServed": [area_served(c) for c in CITIES],
         },
         breadcrumbs_schema(crumbs),
         faq_schema(faq),
@@ -1029,8 +1022,8 @@ def service_page(s):
     related = "\n".join(
         f'          <li><a href="{link(o["slug"])}">{e(o["name"])}{ARROW}</a></li>'
         for o in SERVICES if o["slug"] != slug)
-    city_links = ", ".join(f'<a href="{link(c.lower())}">{c}</a>' for c in CITIES_ORDER[:-1]) + \
-        f' and <a href="{link(CITIES_ORDER[-1].lower())}">{CITIES_ORDER[-1]}</a>'
+    city_links = ", ".join(f'<a href="{link(c["slug"])}">{e(in_name(c))}</a>' for c in CITIES[:-1]) + \
+        f' and <a href="{link(CITIES[-1]["slug"])}">{e(in_name(CITIES[-1]))}</a>'
 
     main = f"""{landing_hero(s, fid, crumbs, "Service", service=s["name"])}
 
@@ -1104,12 +1097,12 @@ def city_page(c):
         {
             "@context": "https://schema.org",
             "@type": "Service",
-            "name": f"General contracting in {c['name']}",
+            "name": f"General contracting in {in_name(c)}",
             "serviceType": "General contractor",
             "description": c["desc"],
             "url": canonical(slug),
             "provider": BUSINESS,
-            "areaServed": {"@type": "City", "name": c["name"]},
+            "areaServed": area_served(c),
         },
         breadcrumbs_schema(crumbs),
         faq_schema(faq),
@@ -1129,7 +1122,7 @@ def city_page(c):
 
 
     others = "\n".join(
-        f'          <li><a href="{link(o["slug"])}">General contractor in {e(o["name"])}{ARROW}</a></li>'
+        f'          <li><a href="{link(o["slug"])}">General contractor in {e(in_name(o))}{ARROW}</a></li>'
         for o in CITIES if o["slug"] != slug)
 
     main = f"""{landing_hero(c, fid, crumbs, "Service area", city=c["name"])}
@@ -1151,18 +1144,18 @@ def city_page(c):
 
     <section class="section bg-limestone" id="services" aria-labelledby="services-title">
       <div class="wrap">
-{section_head("Services", "Renovation services in " + c["name"], None, "services-title")}
+{section_head("Services", "Renovation services in " + in_name(c), None, "services-title")}
         <ol class="svc-rows">
 {chr(10).join(rows)}
         </ol>
       </div>
     </section>
 
-{process_steps("How a job runs in " + c["name"])}
+{process_steps("How a job runs in " + in_name(c))}
 
 {faq_section(faq, "Questions from " + c["name"] + " homeowners", "faq")}
 
-{cta_band("Book a site visit in " + c["name"], "One visit, then a written fixed price.")}
+{cta_band("Book a site visit in " + in_name(c), "One visit, then a written fixed price.")}
 
     <section class="section" id="related" aria-labelledby="related-title">
       <div class="wrap">

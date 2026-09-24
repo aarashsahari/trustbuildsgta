@@ -136,6 +136,10 @@ EARLY = """<!-- Flag JS so scroll reveals only hide content when they can also s
   <script>document.documentElement.classList.add('js');</script>"""
 
 
+# Prerender same-site pages on hover or touch (Chrome, Edge). Plain string, not an f-string.
+SPEC_RULES = '{"prerender": [{"where": {"and": [{"href_matches": "/*"}, {"not": {"selector_matches": "[target=_blank], [href^=\'#\']"}}]}, "eagerness": "moderate"}]}'
+
+
 def head(title, desc, slug, og_img, schema):
     url = canonical(slug)
     blocks = "\n".join(
@@ -172,7 +176,16 @@ def head(title, desc, slug, og_img, schema):
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&amp;family=Public+Sans:wght@400;500;600&amp;family=Source+Serif+4:ital,wght@1,400;1,500&amp;display=swap">
+  <!-- Fonts load in the background so they never block the page from showing -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&amp;family=Public+Sans:wght@400;500;600&amp;family=Source+Serif+4:ital,wght@1,400;1,500&amp;display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&amp;family=Public+Sans:wght@400;500;600&amp;family=Source+Serif+4:ital,wght@1,400;1,500&amp;display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&amp;family=Public+Sans:wght@400;500;600&amp;family=Source+Serif+4:ital,wght@1,400;1,500&amp;display=swap"></noscript>
+
+  <!-- Instant page loads: Chrome and Edge prerender a page when a link is hovered
+       or touched. Other browsers get a prefetch from the shared script. -->
+  <script type="speculationrules">
+  {SPEC_RULES}
+  </script>
 
   {EARLY}
 

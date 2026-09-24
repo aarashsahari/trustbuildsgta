@@ -930,7 +930,8 @@
     /* ============================================================
        17. SCROLL REVEAL (short, calm, disabled for reduced motion)
        ============================================================ */
-    .js .reveal { opacity: 0; translate: 0 18px; transition: opacity .7s var(--ease), translate .7s var(--ease); }
+    .js .reveal { opacity: 0; translate: 0 14px; transition: opacity .45s var(--ease), translate .45s var(--ease); }
+    .js .reveal.no-anim { transition: none; }
     .js .reveal.is-in { opacity: 1; translate: 0 0; }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1265,3 +1266,17 @@
     .card__more { display: inline-flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 8px; font-weight: 600; color: var(--accent); }
     .card__more svg { width: 14px; height: 14px; transition: translate .2s var(--ease); }
     .card:hover .card__more svg { translate: 3px 0; }
+
+
+    /* ============================================================
+       26. FAST PAGE CHANGES
+       A quick cross-fade between pages where the browser supports
+       cross-document view transitions; the header stays put.
+       ============================================================ */
+    @view-transition { navigation: auto; }
+    .site-header { view-transition-name: site-header; }
+    ::view-transition-old(root),
+    ::view-transition-new(root) { animation-duration: .18s; }
+    @media (prefers-reduced-motion: reduce) {
+      @view-transition { navigation: none; }
+    }

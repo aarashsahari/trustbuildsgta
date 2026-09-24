@@ -48,6 +48,14 @@ id, a broken internal link, or an in-page link to a missing anchor. Don't edit t
   `generate_lead` as the conversion. Each lead also carries UTM tags, `gclid`, the landing
   page and the referrer.
 
+## Speed
+
+- Chrome and Edge prerender a page when a visitor hovers or touches its link (speculation
+  rules in each page head). Other browsers prefetch it from `src/site.js`.
+- Supporting browsers cross-fade between pages in 0.18 seconds, with the header held in place.
+- Fonts load without blocking the page, and content already on screen never fades in.
+- Prerendering only works when the site is served over http(s), not opened from disk.
+
 ## Hosting
 
 Upload the `.html` files, `sitemap.xml` and `robots.txt` (the `src` and `tools` folders are

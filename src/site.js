@@ -146,8 +146,19 @@
       }
     });
 
-    /* ---------- Scroll reveal ---------- */
+    /* ---------- Scroll reveal ----------
+       Anything already on screen when the page opens shows immediately, with no
+       fade, so a new page never looks like it is still loading. Only content
+       further down fades in as it scrolls into view. */
     var reveals = document.querySelectorAll('.reveal');
+    var fold = window.innerHeight || document.documentElement.clientHeight;
+    reveals = Array.prototype.filter.call(reveals, function (el) {
+      if (el.getBoundingClientRect().top < fold) {
+        el.classList.add('is-in', 'no-anim');
+        return false;
+      }
+      return true;
+    });
     if ('IntersectionObserver' in window && !reduceMotion) {
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
@@ -161,6 +172,32 @@
     } else {
       reveals.forEach(function (el) { el.classList.add('is-in'); });
     }
+
+    /* ---------- Prefetch the next page on hover or touch ----------
+       Browsers that support speculation rules (Chrome, Edge) prerender from the
+       rules in the page head. Everyone else gets a prefetch here, so the next
+       page is usually in the cache before the click lands. */
+    var supportsRules = window.HTMLScriptElement && HTMLScriptElement.supports && HTMLScriptElement.supports('speculationrules');
+    var fetched = {};
+    function prefetch(a) {
+      if (supportsRules || !a || a.target === '_blank') return;
+      var url;
+      try { url = new URL(a.getAttribute('href'), window.location.href); } catch (err) { return; }
+      if (!/^https?:$/.test(url.protocol) || url.origin !== window.location.origin) return;
+      var key = url.origin + url.pathname;
+      if (fetched[key] || key === window.location.origin + window.location.pathname) return;
+      fetched[key] = true;
+      var l = document.createElement('link');
+      l.rel = 'prefetch';
+      l.href = key;
+      document.head.appendChild(l);
+    }
+    ['pointerover', 'touchstart', 'focusin'].forEach(function (type) {
+      document.addEventListener(type, function (e) {
+        var a = e.target.closest && e.target.closest('a[href$=".html"], a[href*=".html#"]');
+        if (a) prefetch(a);
+      }, { passive: true });
+    });
 
     /* ---------- FAQ accordion ---------- */
     document.querySelectorAll('.acc__btn').forEach(function (btn) {

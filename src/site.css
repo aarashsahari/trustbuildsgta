@@ -1244,3 +1244,24 @@
     .promise-strip--light li::before { background: var(--accent); }
     .promise-strip--light h3 { color: var(--ink); }
     .promise-strip--light p { color: #26323B; }
+
+    /* ============================================================
+       25. LIGHTER LAYOUTS: headings without intros, service cards
+       ============================================================ */
+    .section-head--solo { display: block; margin-bottom: 40px; }
+    @media (min-width: 1024px) { .section-head--solo { display: block; margin-bottom: 56px; } }
+    .section-head--solo h2 { margin: 0; max-width: 20ch; }
+
+    .cards { list-style: none; display: grid; gap: 28px; }
+    @media (min-width: 640px)  { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (min-width: 1024px) { .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; } }
+    .card { display: flex; flex-direction: column; height: 100%; color: var(--ink); text-decoration: none; }
+    .card__img { display: block; overflow: hidden; border-radius: 12px; aspect-ratio: 4 / 3; }
+    .card__img img { width: 100%; height: 100%; object-fit: cover; transition: scale .6s var(--ease); }
+    .card:hover .card__img img { scale: 1.04; }
+    .card__body { display: flex; flex-direction: column; gap: 6px; padding-top: 16px; flex: 1; }
+    .card__title { font-family: var(--f-head); font-weight: 700; font-size: 1.3rem; letter-spacing: -0.015em; line-height: 1.2; }
+    .card__text { color: #26323B; font-size: 16px; }
+    .card__more { display: inline-flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 8px; font-weight: 600; color: var(--accent); }
+    .card__more svg { width: 14px; height: 14px; transition: translate .2s var(--ease); }
+    .card:hover .card__more svg { translate: 3px 0; }

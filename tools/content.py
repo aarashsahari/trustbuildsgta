@@ -66,7 +66,7 @@ SERVICES = [
         },
         "faq": [
             ("Do I need a permit to finish my basement?", "Yes, if you are adding a bathroom, a bedroom or a second unit, or moving walls or plumbing. A plain finish with no new plumbing may not need one, but the rules vary by city, so we check with the building department for your address before we quote. When a permit is needed, we handle the drawings, the application and the inspections."),
-            ("How long does a basement renovation take?", "It depends on the size, a bathroom and the permit. An open rec room is a shorter job than a legal second suite, which has more inspections. Your quote gives you a start date and a finish date in writing, with the inspections already built in."),
+            ("How long does a basement renovation take?", "It depends on the size, a bathroom and the permit, since a legal second suite has more inspections. Your quote gives you a start date and a finish date in writing, with inspections built in."),
             ("Can you turn my basement into a legal second suite?", "In most cases, yes. Ontario allows a second unit in most detached houses, semis and townhouses, subject to the Ontario Building Code and your city's zoning rules. It needs fire separation, egress windows, interconnected alarms and a permit. We confirm your address qualifies before you spend anything on drawings."),
             ("What flooring is best for a basement?", "LVP, in most cases. It is waterproof and floats over a subfloor or membrane on the slab. Engineered hardwood can work over a dry slab with a proper subfloor, but solid hardwood should not go below grade."),
         ],
@@ -126,7 +126,7 @@ SERVICES = [
             "Hamilton": "Ancaster kitchens run larger, and century homes in Westdale often need wiring brought up to date first.",
         },
         "faq": [
-            ("How long does a kitchen renovation take?", "It depends on how much of the room moves. Keeping the layout is quicker than moving walls or plumbing. Cabinets have the longest lead time, so we order them the week you sign, and counters are templated after the cabinets go in. Your quote gives you a start date and a finish date in writing."),
+            ("How long does a kitchen renovation take?", "It depends on how much of the room moves, since keeping the layout is quicker than moving walls or plumbing. Your quote gives you a start date and a finish date in writing."),
             ("Can I live at home during a kitchen renovation?", "Yes, most of our clients do. We set up dust walls and floor protection, and help you plan a temporary kitchen in another room with the fridge and a microwave."),
             ("Should I choose quartz or porcelain counters?", "Quartz is the safe default: consistent, hard to stain and easy to seam. Porcelain slab is thinner, handles heat better and suits a modern look, but it is harder to fabricate and can chip at the edge if hit hard. We show you both before you pick."),
             ("Do I need a permit for a kitchen renovation?", "Not for new cabinets, counters and finishes. You do need one to remove or alter a load-bearing wall, and for significant plumbing changes. We tell you at the site visit and handle the application if one is needed."),
@@ -187,7 +187,7 @@ SERVICES = [
             "Hamilton": "Century homes in Westdale and Dundas often need the subfloor rebuilt before new tile can go down.",
         },
         "faq": [
-            ("How long does a bathroom renovation take?", "A powder room is a short job and a full ensuite takes longer. The flood test and grout curing are built into the schedule, because rushing them is how showers fail. Your quote gives you a start date and a finish date in writing."),
+            ("How long does a bathroom renovation take?", "A powder room is a short job and a full ensuite takes longer, with the flood test and grout curing built in. Your quote gives you a start date and a finish date in writing."),
             ("Can you convert my tub into a walk-in shower?", "Yes. It is one of the most common jobs we do. We check the drain location and floor structure first to see if a low curb or a curbless entry is possible."),
             ("What is Schluter-KERDI and why does it matter?", "KERDI is a waterproof sheet membrane that goes on shower walls and floors under the tile. It stops water from reaching the drywall and framing. Tile and grout on their own let water through."),
             ("Is a heated bathroom floor worth it?", "In a bathroom on a slab or over a garage, most people say yes. It is an electric mat under the tile on its own thermostat, and it adds little labour if you decide before the tile goes in."),
@@ -261,7 +261,7 @@ SERVICES = [
             ("Is LVP or hardwood better for a basement?", "LVP, in most basements. It is waterproof, it floats over the slab and it shrugs off the humidity swings that come with being below grade. Solid hardwood should not go on a concrete slab. Engineered hardwood can work over a dry slab with a proper subfloor if you want real wood underfoot, but it costs more and is less forgiving if water ever gets in."),
             ("Can engineered hardwood be refinished?", "Yes, if the wear layer is thick enough. A thick wear layer can be sanded and refinished more than once. A thin one may only take a light screen and recoat. We show you the wear layer spec on every product we quote."),
             ("Will you install flooring I bought myself?", "Yes. We check it on delivery for damage and quantity, and make sure there's enough extra to cover cuts. The material warranty stays between you and the supplier, and our workmanship warranty covers the installation."),
-            ("How long does flooring installation take?", "Most main floors go down in a matter of days once the material has acclimatized. Stairs add time because each step is cut and fitted on its own. You get the schedule in writing with the quote."),
+            ("How long does flooring installation take?", "Most main floors go down in a matter of days once the material has acclimatized, and stairs add time. You get the schedule in writing with the quote."),
         ],
         "cta_h2": "Get a flooring quote with the prep included",
         "cta_p": "We bring samples to the site visit and check the subfloor while we're there, so the price you get is the real one.",

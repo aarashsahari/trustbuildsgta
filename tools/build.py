@@ -85,6 +85,26 @@ def first_sentence(text):
     return text.split(". ")[0].rstrip(".") + "."
 
 
+def brief(text, n=1):
+    """First n sentences of a piece of copy. Keeps pages light on words."""
+    parts = re.split(r"(?<=[.!?])\s+(?=[A-Z])", text.strip())
+    return " ".join(parts[:n])
+
+
+def short_faq(faq, n):
+    """At most n questions, answers cut to two sentences. Used for both the
+    visible FAQ and its schema, so they always match."""
+    return [(q, brief(a, 2)) for q, a in faq[:n]]
+
+
+PROMISES = [
+    ("Written fixed-price quotes", "Every line priced, HST shown. Changes are priced in writing first."),
+    ("One point of contact", "Your project lead is on site and answers their phone."),
+    ("Permits handled", "We apply, book the inspections and meet the inspector."),
+    ("Site cleaned daily", "Floors protected, dust walls up, swept every evening."),
+]
+
+
 ARROW = ('<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" '
          'fill="none" stroke="currentColor" stroke-width="1.6"/></svg>')
 
@@ -286,7 +306,7 @@ def footer():
             <a href="{TEL}">{PHONE}</a>
           </address>
           <p class="foot-hours">Open 24 hours, 7 days a week</p>
-          <a class="btn btn--primary" href="#quote">Get a Quote</a>
+          <a class="btn btn--primary" href="#quote">Get a Free Quote</a>
         </div>
 
         <nav aria-label="Services">
@@ -399,6 +419,11 @@ def trust_strip():
 
 
 def section_head(eyebrow, h2, lede, hid):
+    if not lede:
+        return f"""        <div class="section-head section-head--solo reveal">
+          <p class="eyebrow">{e(eyebrow)}</p>
+          <h2 id="{hid}">{e(h2)}</h2>
+        </div>"""
     return f"""        <div class="section-head reveal">
           <div>
             <p class="eyebrow">{e(eyebrow)}</p>
@@ -496,7 +521,7 @@ def lead_form(fid, service=None, city=None, wrap_class=""):
 
 
 def contact_section(fid, h2="Get a written quote",
-                    lede="Name and phone are all we need. A project lead calls you back to book a site visit. If it's urgent, just call.",
+                    lede="Name and phone is all we need. Prefer to talk? Call any time.",
                     bg=""):
     """Form plus contact details. Identical on the homepage, the contact page and every section page."""
     cities = ", ".join(f'<a href="{link(c["slug"])}">{e(c["name"])}</a>' for c in CITIES)
@@ -641,26 +666,20 @@ def home_page():
             </a>
           </li>""")
 
-    promises = [
-        ("Written fixed-price quotes", "Every line priced and HST shown. Changes come as a written change order, priced first."),
-        ("One point of contact", "Your project lead is on site, knows your house and answers their phone."),
-        ("Permits handled", "We apply, book inspections and meet the inspector under the Ontario Building Code."),
-        ("Site cleaned daily", "Floor protection, dust walls, and a swept site before we leave each day."),
-    ]
     checks = [
-        ("WSIB clearance certificate", "Proof we're registered and in good standing, so a workplace injury on your property isn't your liability."),
-        ("Liability insurance certificate", "A current certificate of insurance, sent with your quote."),
-        ("Permit numbers", "When a job needs a permit, you get the number. It's on file with your city's building department."),
-        ("Written warranty", "The workmanship warranty is in your contract: what it covers and for how long."),
+        ("WSIB clearance certificate", "Proof we're in good standing, so an injury on site isn't your liability."),
+        ("Liability insurance certificate", "A current certificate, sent with your quote."),
+        ("Permit numbers", "Every permit number, on file with your city."),
+        ("Written warranty", "What it covers and for how long, in your contract."),
     ]
     check_html = "".join(f"<li class=\"reveal\"><h3>{e(t)}</h3><p>{e(d)}</p></li>" for t, d in checks)
-    promise_html = "".join(f"<li class=\"reveal\"><h3>{e(t)}</h3><p>{e(d)}</p></li>" for t, d in promises)
+    promise_html = "".join(f"<li class=\"reveal\"><h3>{e(t)}</h3><p>{e(d)}</p></li>" for t, d in PROMISES)
 
     main = f"""{partial("home-hero")}
 
     <section class="section" id="services" aria-labelledby="services-title">
       <div class="wrap">
-{section_head("Services", "Basement renovation, kitchens, bathrooms, floors and the concrete patio", "Six kinds of work make up most of our calendar. Each has its own page with what's included, how we build it and what moves the price.", "services-title")}
+{section_head("Services", "Basement renovation, kitchens, bathrooms, floors and the concrete patio", None, "services-title")}
         <ol class="svc-rows svc-rows--thumbs">
 {chr(10).join(rows)}
         </ol>
@@ -670,7 +689,7 @@ def home_page():
 
     <section class="section bg-limestone" id="recent" aria-labelledby="recent-title">
       <div class="wrap">
-{section_head("Recent work", "Recent kitchens, bathrooms, basements and backyards", "A few finished jobs from across the four cities. The full gallery, with a before and after, is on the Projects page.", "recent-title")}
+{section_head("Recent work", "Recent kitchens, bathrooms, basements and backyards", None, "recent-title")}
         <ul class="mosaic">
 {chr(10).join(mosaic)}
         </ul>
@@ -688,7 +707,7 @@ def home_page():
         <div class="teaser__body reveal">
           <p class="eyebrow">Featured project</p>
           <h2 id="featured-title">Kitchen renovation in Lorne Park</h2>
-          <p>A 1970s side-split, opened up. The wall to the dining room came out, an engineered beam went in, and engineered oak runs through the main floor with no seam at the old doorway.</p>
+          <p>A 1970s side-split, opened up: wall out, beam in, and engineered oak through the whole main floor.</p>
           <p class="teaser__links">
             <a class="arrow-link" href="{link('projects')}">See the before and after {ARROW}</a>
           </p>
@@ -696,11 +715,11 @@ def home_page():
       </div>
     </section>
 
-{cta_band("Find out what your project will cost", "One free site visit, then a written fixed price with HST shown. No obligation, and no pressure to sign.")}
+{cta_band("Find out what your project will cost", "One free site visit, then a written fixed price. No obligation.")}
 
     <section class="section bg-ink on-dark" id="why" aria-labelledby="why-title">
       <div class="wrap">
-{section_head("Why TrustBuildGTA", "The contractor you can check up on", "The name is the promise. This is what it means on your job.", "why-title")}
+{section_head("Why TrustBuildGTA", "The contractor you can check up on", None, "why-title")}
         <ul class="promise-strip">{promise_html}</ul>
         <p class="more-link reveal"><a class="arrow-link" href="{link('process')}">How a job runs, start to finish {ARROW}</a></p>
       </div>
@@ -708,7 +727,7 @@ def home_page():
 
     <section class="section bg-limestone" id="check" aria-labelledby="check-title">
       <div class="wrap">
-{section_head("Before you sign", "Don't take our word for it. Check.", "Anyone can say licensed and insured. These come with your quote, so you can confirm them yourself before any work starts.", "check-title")}
+{section_head("Before you sign", "Don't take our word for it. Check.", "These come with your quote, so you can confirm them yourself.", "check-title")}
         <ul class="promise-strip promise-strip--light">{check_html}</ul>
         <p class="more-link reveal"><a class="btn btn--primary" href="#quote">Request them with your quote</a></p>
       </div>
@@ -733,44 +752,118 @@ SECTION_META = {
         desc="Basement, kitchen and bathroom renovation, flooring installation, concrete patios and backyard builds across Mississauga, Oakville, Burlington and Hamilton.",
         eyebrow="Services",
         h1="Renovation Services in Mississauga, Oakville, Burlington & Hamilton",
-        lede="Pick a service for the full details: what's included, how we build it, what moves the price and what we see most in your city.",
+        lede="Pick a service for what's included, how we build it and what moves the price.",
         og="1600566753190-17f0baa2a6c3"),
     "projects": dict(
         title="Renovation Projects Mississauga, Oakville, Burlington & Hamilton | TrustBuildGTA",
         desc="Before and after photos of TrustBuildGTA basements, kitchens, bathrooms, flooring and outdoor work across Mississauga, Oakville, Burlington and Hamilton.",
         eyebrow="Projects",
         h1="Recent Renovation Projects",
-        lede="Finished jobs from Port Credit to Ancaster. Drag the before and after, or filter the gallery by the kind of work you're planning.",
+        lede="Finished jobs from Port Credit to Ancaster.",
         og="1556912173-3bb406ef7e77"),
     "process": dict(
         title="How We Work: Renovation Process and Guarantees | TrustBuildGTA",
         desc="How a TrustBuildGTA renovation runs: site visit, written fixed-price quote, one project lead, permits and inspections, daily clean-up and a written warranty.",
         eyebrow="Process",
         h1="How a Renovation Runs With Us",
-        lede="Four stages, one project lead, and a price that doesn't move unless you sign a change order. Here's what happens and what you get at each step.",
+        lede="Four stages, one project lead and a price that doesn't move.",
         og="1504307651254-35680f356dfd"),
     "areas": dict(
         title="Service Areas: Mississauga, Oakville, Burlington & Hamilton | TrustBuildGTA",
         desc="TrustBuildGTA is a general contractor serving Mississauga, Oakville, Burlington and Hamilton. See the neighbourhoods we work in and the projects we see most.",
         eyebrow="Service areas",
         h1="General Contractor for Mississauga, Oakville, Burlington & Hamilton",
-        lede="From our office near Hurontario and the 401 to the Hamilton Mountain is about an hour on a good day. We don't go further than that, so your project lead can be on site every working day.",
+        lede="We stay close to home, so your project lead can be on site every working day.",
         og="1600047509807-ba8f99d2cdde"),
     "faq": dict(
         title="Renovation FAQ: Costs, Permits, Timelines & Warranty | TrustBuildGTA",
         desc="Answers on renovation costs in Ontario, building permits, kitchen timelines, LVP vs hardwood, concrete vs interlock, design, payment schedules and warranty.",
         eyebrow="FAQ",
         h1="Renovation Questions, Answered",
-        lede="The questions we hear every week about cost, permits, timelines and materials. Specific answers, with placeholders where a real number depends on your house.",
+        lede="Straight answers on cost, permits, timelines and materials.",
         og="1600607687939-ce8a6c25118c"),
     "contact": dict(
         title="Contact TrustBuildGTA | General Contractor in Mississauga, Call 24/7",
         desc="Get a free written quote from TrustBuildGTA. Call (647) 513-7955 any time, 24/7, or send the form. Office at 8 Matheson Blvd E, Mississauga, ON L4W 2V3.",
         eyebrow="Contact",
         h1="Contact TrustBuildGTA",
-        lede="Send the form or call. Either way you talk to a project lead, not a call centre, and the next step is a site visit.",
+        lede="Send the form or call. Either way, you talk to a project lead.",
         og="1504307651254-35680f356dfd"),
 }
+
+
+def service_cards():
+    cards = []
+    for s in SERVICES:
+        pid, alt, _note = s["hero"]
+        cards.append(f"""          <li class="reveal">
+            <a class="card" href="{link(s["slug"])}">
+              <!-- REAL PHOTO: finished {e(s["name"].lower())} job, crops to 4:3 -->
+              <span class="card__img ph"><img src="{e(img_url(pid, 800, 600))}" width="800" height="600" loading="lazy" decoding="async" alt="{e(alt)}"></span>
+              <span class="card__body">
+                <span class="card__title">{e(s["name"])}</span>
+                <span class="card__text">{e(first_sentence(s["sub"]))}</span>
+                <span class="card__more">Learn more {ARROW}</span>
+              </span>
+            </a>
+          </li>""")
+    return f"""    <section class="section" id="services" aria-labelledby="services-title">
+      <div class="wrap">
+{section_head("What we build", "Six things we do most", None, "services-title")}
+        <ul class="cards">
+{chr(10).join(cards)}
+        </ul>
+        <p class="more-link reveal">Also drywall, trim, painting and additions. <a href="#quote">Ask us about it</a>.</p>
+      </div>
+    </section>"""
+
+
+def area_cards():
+    items = []
+    for c in CITIES:
+        hoods = ", ".join(n for n, _t in c["hoods"][:4])
+        tag = '<span class="area__tag">Home base</span>' if c["slug"] == "mississauga" else ""
+        items.append(f"""          <article class="area reveal">
+            <div class="area__top"><h3>{e(c["name"])}</h3>{tag}</div>
+            <p class="area__hoods">{e(hoods)}</p>
+            <a class="arrow-link" href="{link(c["slug"])}">General contractor in {e(c["name"])} {ARROW}</a>
+          </article>""")
+    return f"""    <section class="section" id="areas" aria-labelledby="areas-title">
+      <div class="wrap">
+{section_head("Service areas", "Four cities along the lake", None, "areas-title")}
+        <div class="areas">
+{chr(10).join(items)}
+        </div>
+      </div>
+    </section>"""
+
+
+def process_steps(h2):
+    steps = []
+    for i, (t, d, _get) in enumerate(PROCESS, 1):
+        steps.append(f"""          <li class="step reveal">
+            <span class="step__n" aria-hidden="true">{i:02d}</span>
+            <h3>{e(t)}</h3>
+            <p>{e(brief(d, 1))}</p>
+          </li>""")
+    return f"""    <section class="section bg-ink on-dark" id="process" aria-labelledby="process-title">
+      <div class="wrap">
+{section_head("Process", h2, None, "process-title")}
+        <ol class="steps">
+{chr(10).join(steps)}
+        </ol>
+      </div>
+    </section>"""
+
+
+def promises_section():
+    items = "".join(f"<li class=\"reveal\"><h3>{e(t)}</h3><p>{e(d)}</p></li>" for t, d in PROMISES)
+    return f"""    <section class="section" id="why" aria-labelledby="why-title">
+      <div class="wrap">
+{section_head("Why TrustBuildGTA", "What you can hold us to", None, "why-title")}
+        <ul class="promise-strip promise-strip--light">{items}</ul>
+      </div>
+    </section>"""
 
 
 def section_page(slug):
@@ -796,19 +889,20 @@ def section_page(slug):
     fid = f"lead-{slug}"
 
     if slug == "services":
-        body = partial("services-grid") + "\n\n" + contact_section(fid, bg="bg-limestone")
+        body = service_cards() + "\n\n" + contact_section(fid, bg="bg-limestone")
     elif slug == "projects":
         body = partial("featured") + "\n\n" + partial("gallery") + "\n\n" + contact_section(fid, bg="bg-limestone")
     elif slug == "process":
-        body = partial("process") + "\n\n" + partial("why") + "\n\n" + contact_section(fid, bg="bg-limestone")
+        body = process_steps("How a job runs") + "\n\n" + promises_section() + "\n\n" + contact_section(fid, bg="bg-limestone")
     elif slug == "areas":
-        body = partial("areas") + "\n\n" + contact_section(fid, bg="bg-limestone")
+        body = area_cards() + "\n\n" + contact_section(fid, bg="bg-limestone")
     elif slug == "faq":
-        schema.append(faq_schema(HOME_FAQ))
-        body = faq_section(HOME_FAQ, "Questions we answer every week", "faq") + "\n\n" + contact_section(fid, bg="bg-limestone")
+        faq = short_faq(HOME_FAQ, 8)
+        schema.append(faq_schema(faq))
+        body = faq_section(faq, "Questions we answer every week", "faq") + "\n\n" + contact_section(fid, bg="bg-limestone")
     else:  # contact
         body = contact_section(fid, h2="Send us the details",
-                               lede="Name and phone are all we need to start. We reply to set up a site visit, usually the same day.")
+                               lede="Name and phone is all we need to start.")
 
     return page_shell(head(m["title"], m["desc"], slug, m["og"], schema), slug, hero + "\n\n" + body)
 
@@ -828,7 +922,7 @@ def landing_hero(page, fid, crumbs, eyebrow, service=None, city=None):
           {crumbs_html(crumbs)}
           <p class="eyebrow">{e(eyebrow)}</p>
           <h1 id="page-title">{e(page["h1"])}</h1>
-          <p class="lhero__sub">{e(page["sub"])}</p>
+          <p class="lhero__sub">{e(brief(page["sub"], 1))}</p>
           <ul class="ticks">{ticks}</ul>
           <p class="lhero__call">Rather talk it through? Call <a href="{TEL}">{PHONE}</a>. Any time, 24/7.</p>
         </div>"""
@@ -860,6 +954,7 @@ def landing_hero(page, fid, crumbs, eyebrow, service=None, city=None):
 
 def service_page(s):
     slug = s["slug"]
+    faq = short_faq(s["faq"], 3)
     crumbs = [("Home", "index"), ("Services", "services"), (s["name"], slug)]
     schema = [
         {
@@ -873,14 +968,14 @@ def service_page(s):
             "areaServed": [{"@type": "City", "name": c} for c in CITIES_ORDER],
         },
         breadcrumbs_schema(crumbs),
-        faq_schema(s["faq"]),
+        faq_schema(faq),
     ]
     fid = "lead-" + slug
 
     scope = "\n".join(
         f"""          <li class="scope__group">
             <h3>{e(t)}</h3>
-            <ul class="inc">{"".join(f"<li>{e(i)}</li>" for i in items)}</ul>
+            <ul class="inc">{"".join(f"<li>{e(i)}</li>" for i in items[:3])}</ul>
           </li>""" for t, items in s["scope"])
 
     pair = []
@@ -892,7 +987,7 @@ def service_page(s):
           </figure>""")
 
     method = "\n".join(
-        f'          <li class="reveal"><h3>{e(t)}</h3><p>{e(d)}</p></li>' for t, d in s["method"])
+        f'          <li class="reveal"><h3>{e(t)}</h3><p>{e(brief(d, 1))}</p></li>' for t, d in s["method"])
 
     compare_html = ""
     if s.get("compare"):
@@ -900,11 +995,11 @@ def service_page(s):
         thead = "".join(f'<th scope="col">{e(x)}</th>' for x in c["cols"])
         rows = "".join(
             f'<tr><th scope="row">{e(r)}</th>{"".join(f"<td>{e(v)}</td>" for v in vals)}</tr>'
-            for r, vals in c["rows"])
+            for r, vals in c["rows"] if r in ("Below grade", "Water", "Best spot"))
         compare_html = f"""
     <section class="section" id="compare" aria-labelledby="compare-title">
       <div class="wrap">
-{section_head("Compare", "Hardwood, engineered, LVP or tile: which floor goes where", "The short version of what we explain at every site visit. Scroll sideways on a phone.", "compare-title")}
+{section_head("Compare", "Hardwood, engineered, LVP or tile: which floor goes where", None, "compare-title")}
         <div class="table-scroll reveal" role="region" aria-label="Flooring comparison table" tabindex="0">
           <table class="compare compare--wide">
             <caption class="sr-only">Comparison of flooring types</caption>
@@ -915,20 +1010,14 @@ def service_page(s):
       </div>
     </section>"""
 
-    drivers = "".join(f"<li><strong>{e(t)}</strong><span>{e(d)}</span></li>" for t, d in s["drivers"])
+    drivers = "".join(f"<li><strong>{e(t)}</strong><span>{e(brief(d, 1))}</span></li>" for t, d in s["drivers"][:4])
 
-    local = []
-    for city in CITIES_ORDER:
-        local.append(f"""          <article class="area reveal">
-            <div class="area__top"><h3>{city}</h3></div>
-            <p>{e(s["local"][city])}</p>
-            <a class="arrow-link" href="{link(city.lower())}">General contractor in {city}
-              {ARROW}</a>
-          </article>""")
 
     related = "\n".join(
         f'          <li><a href="{link(o["slug"])}">{e(o["name"])}{ARROW}</a></li>'
         for o in SERVICES if o["slug"] != slug)
+    city_links = ", ".join(f'<a href="{link(c.lower())}">{c}</a>' for c in CITIES_ORDER[:-1]) + \
+        f' and <a href="{link(CITIES_ORDER[-1].lower())}">{CITIES_ORDER[-1]}</a>'
 
     main = f"""{landing_hero(s, fid, crumbs, "Service", service=s["name"])}
 
@@ -940,7 +1029,7 @@ def service_page(s):
             <h2 id="scope-title">{e(s["intro_h2"])}</h2>
           </div>
           <div class="split-head__body">
-            {"".join(f"<p>{e(p)}</p>" for p in s["intro"])}
+            <p>{e(brief(s["intro"][0], 2))}</p>
           </div>
         </div>
         <ul class="scope">
@@ -954,7 +1043,7 @@ def service_page(s):
 {compare_html}
     <section class="section bg-limestone" id="method" aria-labelledby="method-title">
       <div class="wrap">
-{section_head("How we build it", s["method_h2"], s["method_lede"], "method-title")}
+{section_head("How we build it", s["method_h2"], None, "method-title")}
         <ol class="method">
 {method}
         </ol>
@@ -966,7 +1055,7 @@ def service_page(s):
         <div class="reveal">
           <p class="eyebrow">Cost</p>
           <h2 id="cost-title">{e(s["price_h2"])}</h2>
-          <p class="lede">{e(s["price_intro"])}</p>
+          <p class="lede">{e(brief(s["price_intro"], 1))}</p>
           <p class="price__note">Every quote is a fixed price for your house, with HST shown as its own line.</p>
           <p><a class="btn btn--primary" href="#quote">Get your fixed price</a></p>
         </div>
@@ -976,25 +1065,18 @@ def service_page(s):
       </div>
     </section>
 
-    <section class="section bg-limestone" id="areas" aria-labelledby="areas-title">
-      <div class="wrap">
-{section_head("Where we work", s["name"] + " in Mississauga, Oakville, Burlington and Hamilton", "The same crew and the same fixed-price quote in all four cities. Here's what we see most in each.", "areas-title")}
-        <div class="areas">
-{chr(10).join(local)}
-        </div>
-      </div>
-    </section>
 
-{faq_section(s["faq"], s["name"] + " questions", "faq")}
+{faq_section(faq, s["name"] + " questions", "faq")}
 
 {cta_band(s["cta_h2"], s["cta_p"])}
 
     <section class="section" id="related" aria-labelledby="related-title">
       <div class="wrap">
-{section_head("More services", "Other work we do", "Most jobs turn into two. We quote each one on its own line.", "related-title")}
+{section_head("More services", "Other work we do", None, "related-title")}
         <ul class="related reveal">
 {related}
         </ul>
+        <p class="more-link reveal">{e(s["name"])} in {city_links}.</p>
       </div>
     </section>"""
 
@@ -1003,6 +1085,7 @@ def service_page(s):
 
 def city_page(c):
     slug = c["slug"]
+    faq = short_faq(c["faq"], 3)
     crumbs = [("Home", "index"), ("Areas", "areas"), (c["name"], slug)]
     schema = [
         {
@@ -1016,11 +1099,11 @@ def city_page(c):
             "areaServed": {"@type": "City", "name": c["name"]},
         },
         breadcrumbs_schema(crumbs),
-        faq_schema(c["faq"]),
+        faq_schema(faq),
     ]
     fid = "lead-" + slug
 
-    hoods = "".join(f"<li><h3>{e(n)}</h3><p>{e(t)}</p></li>" for n, t in c["hoods"])
+    hoods = "".join(f"<li><h3>{e(n)}</h3><p>{e(brief(t, 1))}</p></li>" for n, t in c["hoods"][:4])
 
     rows = []
     for i, s in enumerate(SERVICES, 1):
@@ -1031,14 +1114,6 @@ def city_page(c):
             <a class="arrow-link" href="{link(s["slug"])}">Learn more<span class="sr-only"> about {e(s["name"].lower())}</span> {ARROW}</a>
           </li>""")
 
-    steps = []
-    for i, (t, d, get) in enumerate(PROCESS, 1):
-        steps.append(f"""          <li class="step reveal">
-            <span class="step__n" aria-hidden="true">{i:02d}</span>
-            <h3>{e(t)}</h3>
-            <p>{e(d)}</p>
-            <p class="step__get"><strong>You get:</strong> {e(get)}</p>
-          </li>""")
 
     others = "\n".join(
         f'          <li><a href="{link(o["slug"])}">General contractor in {e(o["name"])}{ARROW}</a></li>'
@@ -1054,7 +1129,7 @@ def city_page(c):
             <h2 id="about-title">{e(c["intro_h2"])}</h2>
           </div>
           <div class="split-head__body">
-            {"".join(f"<p>{e(p)}</p>" for p in c["intro"])}
+            <p>{e(brief(c["intro"][0], 2))}</p>
           </div>
         </div>
         <ul class="hoods reveal">{hoods}</ul>
@@ -1063,29 +1138,22 @@ def city_page(c):
 
     <section class="section bg-limestone" id="services" aria-labelledby="services-title">
       <div class="wrap">
-{section_head("Services", "Renovation services in " + c["name"], "Six kinds of work make up most of our calendar here. Each has its own page with the details.", "services-title")}
+{section_head("Services", "Renovation services in " + c["name"], None, "services-title")}
         <ol class="svc-rows">
 {chr(10).join(rows)}
         </ol>
       </div>
     </section>
 
-    <section class="section bg-ink on-dark" id="process" aria-labelledby="process-title">
-      <div class="wrap">
-{section_head("Process", "How a job runs in " + c["name"], "Four stages. You always know which one you're in and who to call about it.", "process-title")}
-        <ol class="steps">
-{chr(10).join(steps)}
-        </ol>
-      </div>
-    </section>
+{process_steps("How a job runs in " + c["name"])}
 
-{faq_section(c["faq"], "Questions from " + c["name"] + " homeowners", "faq")}
+{faq_section(faq, "Questions from " + c["name"] + " homeowners", "faq")}
 
-{cta_band("Book a site visit in " + c["name"], "One visit, then a written fixed price with HST shown. Call any time, 24/7.")}
+{cta_band("Book a site visit in " + c["name"], "One visit, then a written fixed price.")}
 
     <section class="section" id="related" aria-labelledby="related-title">
       <div class="wrap">
-{section_head("Other areas", "We also work in", "Same crew, same fixed-price quotes.", "related-title")}
+{section_head("Other areas", "We also work in", None, "related-title")}
         <ul class="related reveal">
 {others}
         </ul>

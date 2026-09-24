@@ -1313,6 +1313,27 @@
     .promise-strip--light li::before { background: var(--accent); }
     .promise-strip--light h3 { color: var(--ink); }
     .promise-strip--light p { color: #26323B; }
+
+    /* ============================================================
+       25. LIGHTER LAYOUTS: headings without intros, service cards
+       ============================================================ */
+    .section-head--solo { display: block; margin-bottom: 40px; }
+    @media (min-width: 1024px) { .section-head--solo { display: block; margin-bottom: 56px; } }
+    .section-head--solo h2 { margin: 0; max-width: 20ch; }
+
+    .cards { list-style: none; display: grid; gap: 28px; }
+    @media (min-width: 640px)  { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (min-width: 1024px) { .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; } }
+    .card { display: flex; flex-direction: column; height: 100%; color: var(--ink); text-decoration: none; }
+    .card__img { display: block; overflow: hidden; border-radius: 12px; aspect-ratio: 4 / 3; }
+    .card__img img { width: 100%; height: 100%; object-fit: cover; transition: scale .6s var(--ease); }
+    .card:hover .card__img img { scale: 1.04; }
+    .card__body { display: flex; flex-direction: column; gap: 6px; padding-top: 16px; flex: 1; }
+    .card__title { font-family: var(--f-head); font-weight: 700; font-size: 1.3rem; letter-spacing: -0.015em; line-height: 1.2; }
+    .card__text { color: #26323B; font-size: 16px; }
+    .card__more { display: inline-flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 8px; font-weight: 600; color: var(--accent); }
+    .card__more svg { width: 14px; height: 14px; transition: translate .2s var(--ease); }
+    .card:hover .card__more svg { translate: 3px 0; }
   </style>
 </head>
 
@@ -1419,7 +1440,7 @@
         <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="index.html">Home</a></li><li aria-current="page">Projects</li></ol></nav>
         <p class="eyebrow">Projects</p>
         <h1 id="page-title">Recent Renovation Projects</h1>
-        <p class="phero__lede">Finished jobs from Port Credit to Ancaster. Drag the before and after, or filter the gallery by the kind of work you&#x27;re planning.</p>
+        <p class="phero__lede">Finished jobs from Port Credit to Ancaster.</p>
         <p class="phero__call"><a class="btn btn--primary" href="#quote">Get a Free Quote</a> <a class="btn btn--line" href="tel:+16475137955">Call (647) 513-7955</a> <span>Free site visit. Call any time, 24/7.</span></p>
       </div>
     </section>
@@ -1600,7 +1621,7 @@
             <p class="eyebrow">Contact</p>
             <h2 id="contact-title">Get a written quote</h2>
           </div>
-          <p class="lede">Name and phone are all we need. A project lead calls you back to book a site visit. If it&#x27;s urgent, just call.</p>
+          <p class="lede">Name and phone is all we need. Prefer to talk? Call any time.</p>
         </div>
         <div class="quote">
           <div class="reveal" id="quote">
@@ -1714,7 +1735,7 @@
             <a href="tel:+16475137955">(647) 513-7955</a>
           </address>
           <p class="foot-hours">Open 24 hours, 7 days a week</p>
-          <a class="btn btn--primary" href="#quote">Get a Quote</a>
+          <a class="btn btn--primary" href="#quote">Get a Free Quote</a>
         </div>
 
         <nav aria-label="Services">

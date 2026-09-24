@@ -1410,6 +1410,27 @@
     .promise-strip--light li::before { background: var(--accent); }
     .promise-strip--light h3 { color: var(--ink); }
     .promise-strip--light p { color: #26323B; }
+
+    /* ============================================================
+       25. LIGHTER LAYOUTS: headings without intros, service cards
+       ============================================================ */
+    .section-head--solo { display: block; margin-bottom: 40px; }
+    @media (min-width: 1024px) { .section-head--solo { display: block; margin-bottom: 56px; } }
+    .section-head--solo h2 { margin: 0; max-width: 20ch; }
+
+    .cards { list-style: none; display: grid; gap: 28px; }
+    @media (min-width: 640px)  { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (min-width: 1024px) { .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; } }
+    .card { display: flex; flex-direction: column; height: 100%; color: var(--ink); text-decoration: none; }
+    .card__img { display: block; overflow: hidden; border-radius: 12px; aspect-ratio: 4 / 3; }
+    .card__img img { width: 100%; height: 100%; object-fit: cover; transition: scale .6s var(--ease); }
+    .card:hover .card__img img { scale: 1.04; }
+    .card__body { display: flex; flex-direction: column; gap: 6px; padding-top: 16px; flex: 1; }
+    .card__title { font-family: var(--f-head); font-weight: 700; font-size: 1.3rem; letter-spacing: -0.015em; line-height: 1.2; }
+    .card__text { color: #26323B; font-size: 16px; }
+    .card__more { display: inline-flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 8px; font-weight: 600; color: var(--accent); }
+    .card__more svg { width: 14px; height: 14px; transition: translate .2s var(--ease); }
+    .card:hover .card__more svg { translate: 3px 0; }
   </style>
 </head>
 
@@ -1549,12 +1570,9 @@
 
     <section class="section" id="services" aria-labelledby="services-title">
       <div class="wrap">
-        <div class="section-head reveal">
-          <div>
-            <p class="eyebrow">Services</p>
-            <h2 id="services-title">Basement renovation, kitchens, bathrooms, floors and the concrete patio</h2>
-          </div>
-          <p class="lede">Six kinds of work make up most of our calendar. Each has its own page with what&#x27;s included, how we build it and what moves the price.</p>
+        <div class="section-head section-head--solo reveal">
+          <p class="eyebrow">Services</p>
+          <h2 id="services-title">Basement renovation, kitchens, bathrooms, floors and the concrete patio</h2>
         </div>
         <ol class="svc-rows svc-rows--thumbs">
           <li class="reveal">
@@ -1606,12 +1624,9 @@
 
     <section class="section bg-limestone" id="recent" aria-labelledby="recent-title">
       <div class="wrap">
-        <div class="section-head reveal">
-          <div>
-            <p class="eyebrow">Recent work</p>
-            <h2 id="recent-title">Recent kitchens, bathrooms, basements and backyards</h2>
-          </div>
-          <p class="lede">A few finished jobs from across the four cities. The full gallery, with a before and after, is on the Projects page.</p>
+        <div class="section-head section-head--solo reveal">
+          <p class="eyebrow">Recent work</p>
+          <h2 id="recent-title">Recent kitchens, bathrooms, basements and backyards</h2>
         </div>
         <ul class="mosaic">
           <li class="mosaic__item mosaic__item--big reveal">
@@ -1664,7 +1679,7 @@
         <div class="teaser__body reveal">
           <p class="eyebrow">Featured project</p>
           <h2 id="featured-title">Kitchen renovation in Lorne Park</h2>
-          <p>A 1970s side-split, opened up. The wall to the dining room came out, an engineered beam went in, and engineered oak runs through the main floor with no seam at the old doorway.</p>
+          <p>A 1970s side-split, opened up: wall out, beam in, and engineered oak through the whole main floor.</p>
           <p class="teaser__links">
             <a class="arrow-link" href="projects.html">See the before and after <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a>
           </p>
@@ -1676,7 +1691,7 @@
       <div class="wrap cta-band__grid reveal">
         <div>
           <h2 id="cta-title">Find out what your project will cost</h2>
-          <p>One free site visit, then a written fixed price with HST shown. No obligation, and no pressure to sign.</p>
+          <p>One free site visit, then a written fixed price. No obligation.</p>
         </div>
         <div class="cta-band__btns">
           <a class="btn btn--primary" href="#quote">Get a Free Quote</a>
@@ -1687,14 +1702,11 @@
 
     <section class="section bg-ink on-dark" id="why" aria-labelledby="why-title">
       <div class="wrap">
-        <div class="section-head reveal">
-          <div>
-            <p class="eyebrow">Why TrustBuildGTA</p>
-            <h2 id="why-title">The contractor you can check up on</h2>
-          </div>
-          <p class="lede">The name is the promise. This is what it means on your job.</p>
+        <div class="section-head section-head--solo reveal">
+          <p class="eyebrow">Why TrustBuildGTA</p>
+          <h2 id="why-title">The contractor you can check up on</h2>
         </div>
-        <ul class="promise-strip"><li class="reveal"><h3>Written fixed-price quotes</h3><p>Every line priced and HST shown. Changes come as a written change order, priced first.</p></li><li class="reveal"><h3>One point of contact</h3><p>Your project lead is on site, knows your house and answers their phone.</p></li><li class="reveal"><h3>Permits handled</h3><p>We apply, book inspections and meet the inspector under the Ontario Building Code.</p></li><li class="reveal"><h3>Site cleaned daily</h3><p>Floor protection, dust walls, and a swept site before we leave each day.</p></li></ul>
+        <ul class="promise-strip"><li class="reveal"><h3>Written fixed-price quotes</h3><p>Every line priced, HST shown. Changes are priced in writing first.</p></li><li class="reveal"><h3>One point of contact</h3><p>Your project lead is on site and answers their phone.</p></li><li class="reveal"><h3>Permits handled</h3><p>We apply, book the inspections and meet the inspector.</p></li><li class="reveal"><h3>Site cleaned daily</h3><p>Floors protected, dust walls up, swept every evening.</p></li></ul>
         <p class="more-link reveal"><a class="arrow-link" href="process.html">How a job runs, start to finish <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a></p>
       </div>
     </section>
@@ -1706,9 +1718,9 @@
             <p class="eyebrow">Before you sign</p>
             <h2 id="check-title">Don&#x27;t take our word for it. Check.</h2>
           </div>
-          <p class="lede">Anyone can say licensed and insured. These come with your quote, so you can confirm them yourself before any work starts.</p>
+          <p class="lede">These come with your quote, so you can confirm them yourself.</p>
         </div>
-        <ul class="promise-strip promise-strip--light"><li class="reveal"><h3>WSIB clearance certificate</h3><p>Proof we&#x27;re registered and in good standing, so a workplace injury on your property isn&#x27;t your liability.</p></li><li class="reveal"><h3>Liability insurance certificate</h3><p>A current certificate of insurance, sent with your quote.</p></li><li class="reveal"><h3>Permit numbers</h3><p>When a job needs a permit, you get the number. It&#x27;s on file with your city&#x27;s building department.</p></li><li class="reveal"><h3>Written warranty</h3><p>The workmanship warranty is in your contract: what it covers and for how long.</p></li></ul>
+        <ul class="promise-strip promise-strip--light"><li class="reveal"><h3>WSIB clearance certificate</h3><p>Proof we&#x27;re in good standing, so an injury on site isn&#x27;t your liability.</p></li><li class="reveal"><h3>Liability insurance certificate</h3><p>A current certificate, sent with your quote.</p></li><li class="reveal"><h3>Permit numbers</h3><p>Every permit number, on file with your city.</p></li><li class="reveal"><h3>Written warranty</h3><p>What it covers and for how long, in your contract.</p></li></ul>
         <p class="more-link reveal"><a class="btn btn--primary" href="#quote">Request them with your quote</a></p>
       </div>
     </section>
@@ -1720,7 +1732,7 @@
             <p class="eyebrow">Contact</p>
             <h2 id="contact-title">Get a written quote</h2>
           </div>
-          <p class="lede">Name and phone are all we need. A project lead calls you back to book a site visit. If it&#x27;s urgent, just call.</p>
+          <p class="lede">Name and phone is all we need. Prefer to talk? Call any time.</p>
         </div>
         <div class="quote">
           <div class="reveal" id="quote">
@@ -1834,7 +1846,7 @@
             <a href="tel:+16475137955">(647) 513-7955</a>
           </address>
           <p class="foot-hours">Open 24 hours, 7 days a week</p>
-          <a class="btn btn--primary" href="#quote">Get a Quote</a>
+          <a class="btn btn--primary" href="#quote">Get a Free Quote</a>
         </div>
 
         <nav aria-label="Services">

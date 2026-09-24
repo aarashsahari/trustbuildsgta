@@ -1313,6 +1313,27 @@
     .promise-strip--light li::before { background: var(--accent); }
     .promise-strip--light h3 { color: var(--ink); }
     .promise-strip--light p { color: #26323B; }
+
+    /* ============================================================
+       25. LIGHTER LAYOUTS: headings without intros, service cards
+       ============================================================ */
+    .section-head--solo { display: block; margin-bottom: 40px; }
+    @media (min-width: 1024px) { .section-head--solo { display: block; margin-bottom: 56px; } }
+    .section-head--solo h2 { margin: 0; max-width: 20ch; }
+
+    .cards { list-style: none; display: grid; gap: 28px; }
+    @media (min-width: 640px)  { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (min-width: 1024px) { .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; } }
+    .card { display: flex; flex-direction: column; height: 100%; color: var(--ink); text-decoration: none; }
+    .card__img { display: block; overflow: hidden; border-radius: 12px; aspect-ratio: 4 / 3; }
+    .card__img img { width: 100%; height: 100%; object-fit: cover; transition: scale .6s var(--ease); }
+    .card:hover .card__img img { scale: 1.04; }
+    .card__body { display: flex; flex-direction: column; gap: 6px; padding-top: 16px; flex: 1; }
+    .card__title { font-family: var(--f-head); font-weight: 700; font-size: 1.3rem; letter-spacing: -0.015em; line-height: 1.2; }
+    .card__text { color: #26323B; font-size: 16px; }
+    .card__more { display: inline-flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 8px; font-weight: 600; color: var(--accent); }
+    .card__more svg { width: 14px; height: 14px; transition: translate .2s var(--ease); }
+    .card:hover .card__more svg { translate: 3px 0; }
   </style>
 </head>
 
@@ -1419,61 +1440,37 @@
         <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="index.html">Home</a></li><li aria-current="page">Areas</li></ol></nav>
         <p class="eyebrow">Service areas</p>
         <h1 id="page-title">General Contractor for Mississauga, Oakville, Burlington &amp; Hamilton</h1>
-        <p class="phero__lede">From our office near Hurontario and the 401 to the Hamilton Mountain is about an hour on a good day. We don&#x27;t go further than that, so your project lead can be on site every working day.</p>
+        <p class="phero__lede">We stay close to home, so your project lead can be on site every working day.</p>
         <p class="phero__call"><a class="btn btn--primary" href="#quote">Get a Free Quote</a> <a class="btn btn--line" href="tel:+16475137955">Call (647) 513-7955</a> <span>Free site visit. Call any time, 24/7.</span></p>
       </div>
     </section>
 
     <section class="section" id="areas" aria-labelledby="areas-title">
       <div class="wrap">
-        <div class="section-head reveal">
-          <div>
-            <p class="eyebrow">Service areas</p>
-            <h2 id="areas-title">A local general contractor for four cities along the lake</h2>
-          </div>
-          <p class="lede">From our office near Hurontario and the 401 to the Hamilton Mountain is about an hour on a good day. We don't take jobs further out than that, because a lead who's stuck on the QEW can't be on your site.</p>
+        <div class="section-head section-head--solo reveal">
+          <p class="eyebrow">Service areas</p>
+          <h2 id="areas-title">Four cities along the lake</h2>
         </div>
-
         <div class="areas">
           <article class="area reveal">
-            <div class="area__top">
-              <h3>Mississauga</h3>
-              <span class="area__tag">Home base</span>
-            </div>
-            <p>Most of our work is within twenty minutes of the office. A lot of it is basements in Meadowvale and Erin Mills townhouses and semis, many of them becoming legal second suites, plus flooring swaps in older Streetsville and Port Credit homes. Lorne Park kitchens tend to be the bigger jobs.</p>
-            <p class="area__hoods">Port Credit, Streetsville, Erin Mills, Lorne Park, Meadowvale</p>
-            <a class="arrow-link" href="mississauga.html">General contractor in Mississauga
-              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a>
+            <div class="area__top"><h3>Mississauga</h3><span class="area__tag">Home base</span></div>
+            <p class="area__hoods">Port Credit, Streetsville, Erin Mills, Lorne Park</p>
+            <a class="arrow-link" href="mississauga.html">General contractor in Mississauga <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a>
           </article>
-
           <article class="area reveal">
-            <div class="area__top">
-              <h3>Oakville</h3>
-            </div>
-            <p>Glen Abbey and Joshua Creek houses from the eighties and nineties are due for their first real kitchen and ensuite, and that's most of what we do here. Engineered hardwood through the main floor usually follows. Closer to the lake in Bronte, it's more often the backyard.</p>
-            <p class="area__hoods">Glen Abbey, Bronte, Joshua Creek</p>
-            <a class="arrow-link" href="oakville.html">General contractor in Oakville
-              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a>
+            <div class="area__top"><h3>Oakville</h3></div>
+            <p class="area__hoods">Glen Abbey, Bronte, Joshua Creek, Old Oakville</p>
+            <a class="arrow-link" href="oakville.html">General contractor in Oakville <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a>
           </article>
-
           <article class="area reveal">
-            <div class="area__top">
-              <h3>Burlington</h3>
-            </div>
-            <p>In Millcroft and Alton Village the job is usually a kitchen or bathroom upgrade in a house that's twenty or thirty years old and was built with builder-grade finishes. Aldershot has older bungalows where the basement is the project, and the patio comes the summer after.</p>
-            <p class="area__hoods">Aldershot, Millcroft, Alton Village</p>
-            <a class="arrow-link" href="burlington.html">General contractor in Burlington
-              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a>
+            <div class="area__top"><h3>Burlington</h3></div>
+            <p class="area__hoods">Aldershot, Millcroft, Alton Village, Tyandaga</p>
+            <a class="arrow-link" href="burlington.html">General contractor in Burlington <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a>
           </article>
-
           <article class="area reveal">
-            <div class="area__top">
-              <h3>Hamilton</h3>
-            </div>
-            <p>Westdale, Dundas and the older streets below the escarpment have century homes on stone or block foundations that let water in. Waterproofing comes before finishing there, and some basements need underpinning to get a ceiling you can stand under. Up on the Mountain, in Ancaster and Stoney Creek, it's more kitchens, baths and patios.</p>
-            <p class="area__hoods">Westdale, Ancaster, Dundas, Stoney Creek, the Mountain</p>
-            <a class="arrow-link" href="hamilton.html">General contractor in Hamilton
-              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a>
+            <div class="area__top"><h3>Hamilton</h3></div>
+            <p class="area__hoods">Westdale, Dundas, Ancaster, Stoney Creek</p>
+            <a class="arrow-link" href="hamilton.html">General contractor in Hamilton <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a>
           </article>
         </div>
       </div>
@@ -1486,7 +1483,7 @@
             <p class="eyebrow">Contact</p>
             <h2 id="contact-title">Get a written quote</h2>
           </div>
-          <p class="lede">Name and phone are all we need. A project lead calls you back to book a site visit. If it&#x27;s urgent, just call.</p>
+          <p class="lede">Name and phone is all we need. Prefer to talk? Call any time.</p>
         </div>
         <div class="quote">
           <div class="reveal" id="quote">
@@ -1600,7 +1597,7 @@
             <a href="tel:+16475137955">(647) 513-7955</a>
           </address>
           <p class="foot-hours">Open 24 hours, 7 days a week</p>
-          <a class="btn btn--primary" href="#quote">Get a Quote</a>
+          <a class="btn btn--primary" href="#quote">Get a Free Quote</a>
         </div>
 
         <nav aria-label="Services">

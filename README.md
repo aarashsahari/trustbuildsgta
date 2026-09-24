@@ -22,7 +22,7 @@ works on any host, in a subfolder, or opened straight from disk.
 | --- | --- |
 | Service and city copy | `tools/content.py` |
 | General FAQ answers | `tools/home_faq.json` |
-| Hand-written sections (services grid, gallery, process, why, reviews, areas, hero) | `src/partials/*.html` |
+| Hand-written sections (homepage hero, featured before/after, gallery) | `src/partials/*.html` |
 | Colours, type, layout | `src/site.css` (palette tokens at the top) |
 | Menus, forms, gallery, tracking | `src/site.js` |
 | Page structure, header, footer, quote form | `tools/build.py` |

@@ -113,7 +113,7 @@
       "name": "How long does a kitchen renovation take?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It depends on how much of the room moves. Keeping the layout is quicker than moving walls or plumbing. Cabinets have the longest lead time, so we order them the week you sign, and counters are templated after the cabinets go in. Your quote gives you a start date and a finish date in writing."
+        "text": "It depends on how much of the room moves, since keeping the layout is quicker than moving walls or plumbing. Your quote gives you a start date and a finish date in writing."
       }
     },
     {
@@ -129,15 +129,7 @@
       "name": "Should I choose quartz or porcelain counters?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Quartz is the safe default: consistent, hard to stain and easy to seam. Porcelain slab is thinner, handles heat better and suits a modern look, but it is harder to fabricate and can chip at the edge if hit hard. We show you both before you pick."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Do I need a permit for a kitchen renovation?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Not for new cabinets, counters and finishes. You do need one to remove or alter a load-bearing wall, and for significant plumbing changes. We tell you at the site visit and handle the application if one is needed."
+        "text": "Quartz is the safe default: consistent, hard to stain and easy to seam. Porcelain slab is thinner, handles heat better and suits a modern look, but it is harder to fabricate and can chip at the edge if hit hard."
       }
     }
   ]
@@ -1391,6 +1383,27 @@
     .promise-strip--light li::before { background: var(--accent); }
     .promise-strip--light h3 { color: var(--ink); }
     .promise-strip--light p { color: #26323B; }
+
+    /* ============================================================
+       25. LIGHTER LAYOUTS: headings without intros, service cards
+       ============================================================ */
+    .section-head--solo { display: block; margin-bottom: 40px; }
+    @media (min-width: 1024px) { .section-head--solo { display: block; margin-bottom: 56px; } }
+    .section-head--solo h2 { margin: 0; max-width: 20ch; }
+
+    .cards { list-style: none; display: grid; gap: 28px; }
+    @media (min-width: 640px)  { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (min-width: 1024px) { .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; } }
+    .card { display: flex; flex-direction: column; height: 100%; color: var(--ink); text-decoration: none; }
+    .card__img { display: block; overflow: hidden; border-radius: 12px; aspect-ratio: 4 / 3; }
+    .card__img img { width: 100%; height: 100%; object-fit: cover; transition: scale .6s var(--ease); }
+    .card:hover .card__img img { scale: 1.04; }
+    .card__body { display: flex; flex-direction: column; gap: 6px; padding-top: 16px; flex: 1; }
+    .card__title { font-family: var(--f-head); font-weight: 700; font-size: 1.3rem; letter-spacing: -0.015em; line-height: 1.2; }
+    .card__text { color: #26323B; font-size: 16px; }
+    .card__more { display: inline-flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 8px; font-weight: 600; color: var(--accent); }
+    .card__more svg { width: 14px; height: 14px; transition: translate .2s var(--ease); }
+    .card:hover .card__more svg { translate: 3px 0; }
   </style>
 </head>
 
@@ -1498,7 +1511,7 @@
           <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="index.html">Home</a></li><li><a href="services.html">Services</a></li><li aria-current="page">Kitchen renovation</li></ol></nav>
           <p class="eyebrow">Service</p>
           <h1 id="page-title">Kitchen Renovation in Mississauga, Oakville, Burlington &amp; Hamilton</h1>
-          <p class="lhero__sub">New layouts, cabinets and slab counters, built in the right order by one crew. You get a fixed price and a finish date before we pull the first cabinet off the wall.</p>
+          <p class="lhero__sub">New layouts, cabinets and slab counters, built in the right order by one crew.</p>
           <ul class="ticks"><li>Written fixed-price quote, HST shown</li><li>Layout drawings before you sign</li><li>Soft-close hardware as standard</li></ul>
           <p class="lhero__call">Rather talk it through? Call <a href="tel:+16475137955">(647) 513-7955</a>. Any time, 24/7.</p>
         </div>
@@ -1592,25 +1605,25 @@
             <h2 id="scope-title">Most kitchen delays come from bad sequencing</h2>
           </div>
           <div class="split-head__body">
-            <p>A kitchen involves more trades than any other room: demolition, plumbing, electrical, drywall, cabinets, counters, tile and paint. When one of them shows up early or late, the whole job stalls. Your project lead books every trade in order and is on site when they arrive.</p><p>We order cabinets the week you sign the design, since they have the longest lead time. Quartz or porcelain slab counters are templated after the cabinets are installed and level, never from drawings.</p>
+            <p>A kitchen involves more trades than any other room: demolition, plumbing, electrical, drywall, cabinets, counters, tile and paint. When one of them shows up early or late, the whole job stalls.</p>
           </div>
         </div>
         <ul class="scope">
           <li class="scope__group">
             <h3>Layout and structure</h3>
-            <ul class="inc"><li>Wall removal with an engineered beam and a permit</li><li>Island and peninsula layouts</li><li>Moving the sink, range or fridge</li><li>Bulkhead removal where ducts allow</li></ul>
+            <ul class="inc"><li>Wall removal with an engineered beam and a permit</li><li>Island and peninsula layouts</li><li>Moving the sink, range or fridge</li></ul>
           </li>
           <li class="scope__group">
             <h3>Mechanical</h3>
-            <ul class="inc"><li>Dedicated circuits for range, dishwasher and microwave</li><li>Under-cabinet and pot lighting</li><li>Range hood vented outside</li><li>Gas line moves by a licensed fitter</li></ul>
+            <ul class="inc"><li>Dedicated circuits for range, dishwasher and microwave</li><li>Under-cabinet and pot lighting</li><li>Range hood vented outside</li></ul>
           </li>
           <li class="scope__group">
             <h3>Cabinets and counters</h3>
-            <ul class="inc"><li>Stock, semi-custom or custom cabinetry</li><li>Soft-close hinges and drawer slides</li><li>Quartz or porcelain slab counters</li><li>Undermount sinks and new faucets</li></ul>
+            <ul class="inc"><li>Stock, semi-custom or custom cabinetry</li><li>Soft-close hinges and drawer slides</li><li>Quartz or porcelain slab counters</li></ul>
           </li>
           <li class="scope__group">
             <h3>Finishes</h3>
-            <ul class="inc"><li>Tile backsplash</li><li>Flooring carried into adjoining rooms</li><li>Drywall repair and paint</li><li>Trim, crown and filler panels</li></ul>
+            <ul class="inc"><li>Tile backsplash</li><li>Flooring carried into adjoining rooms</li><li>Drywall repair and paint</li></ul>
           </li>
         </ul>
         <div class="pair">
@@ -1630,18 +1643,15 @@
 
     <section class="section bg-limestone" id="method" aria-labelledby="method-title">
       <div class="wrap">
-        <div class="section-head reveal">
-          <div>
-            <p class="eyebrow">How we build it</p>
-            <h2 id="method-title">How a kitchen renovation runs</h2>
-          </div>
-          <p class="lede">The order matters more than the speed. This is the order we hold to.</p>
+        <div class="section-head section-head--solo reveal">
+          <p class="eyebrow">How we build it</p>
+          <h2 id="method-title">How a kitchen renovation runs</h2>
         </div>
         <ol class="method">
-          <li class="reveal"><h3>Measure and design</h3><p>We measure the room, check where plumbing and ducts can move, and draw a layout with you. Cabinet and finish selections happen here.</p></li>
-          <li class="reveal"><h3>Order and schedule</h3><p>Cabinets go on order the week you sign. The start date is set around their delivery, so your kitchen isn&#x27;t torn out and sitting empty.</p></li>
-          <li class="reveal"><h3>Demolition and rough-in</h3><p>Old kitchen out, floors protected, dust walls up. Plumbing and electrical move, and the inspector signs off if a permit applies.</p></li>
-          <li class="reveal"><h3>Cabinets, then counters</h3><p>Cabinets are installed and levelled, then counters are templated from the real boxes. Fabrication time is already built into your schedule.</p></li>
+          <li class="reveal"><h3>Measure and design</h3><p>We measure the room, check where plumbing and ducts can move, and draw a layout with you.</p></li>
+          <li class="reveal"><h3>Order and schedule</h3><p>Cabinets go on order the week you sign.</p></li>
+          <li class="reveal"><h3>Demolition and rough-in</h3><p>Old kitchen out, floors protected, dust walls up.</p></li>
+          <li class="reveal"><h3>Cabinets, then counters</h3><p>Cabinets are installed and levelled, then counters are templated from the real boxes.</p></li>
           <li class="reveal"><h3>Backsplash and finishes</h3><p>Sink and appliances hooked up, backsplash tiled, paint and trim finished.</p></li>
           <li class="reveal"><h3>Walkthrough</h3><p>We go drawer by drawer with you and fix anything that&#x27;s off before the final payment.</p></li>
         </ol>
@@ -1653,53 +1663,16 @@
         <div class="reveal">
           <p class="eyebrow">Cost</p>
           <h2 id="cost-title">What a kitchen renovation costs</h2>
-          <p class="lede">Cabinets and counters are usually more than half the price. After that, it comes down to how much of the room moves.</p>
+          <p class="lede">Cabinets and counters are usually more than half the price.</p>
           <p class="price__note">Every quote is a fixed price for your house, with HST shown as its own line.</p>
           <p><a class="btn btn--primary" href="#quote">Get your fixed price</a></p>
         </div>
         <div class="reveal">
-          <ul class="drivers"><li><strong>Layout changes</strong><span>Keeping the sink and range where they are saves plumbing, venting and electrical.</span></li><li><strong>Walls</strong><span>Taking out a load-bearing wall means an engineer, a beam and a permit.</span></li><li><strong>Cabinet grade</strong><span>Stock, semi-custom and custom cabinets can differ by a wide margin for the same layout.</span></li><li><strong>Counters</strong><span>Quartz and porcelain are priced by the slab, so a large island can mean an extra slab.</span></li><li><strong>Flooring</strong><span>Running new flooring through the main floor avoids a seam but adds square footage.</span></li></ul>
+          <ul class="drivers"><li><strong>Layout changes</strong><span>Keeping the sink and range where they are saves plumbing, venting and electrical.</span></li><li><strong>Walls</strong><span>Taking out a load-bearing wall means an engineer, a beam and a permit.</span></li><li><strong>Cabinet grade</strong><span>Stock, semi-custom and custom cabinets can differ by a wide margin for the same layout.</span></li><li><strong>Counters</strong><span>Quartz and porcelain are priced by the slab, so a large island can mean an extra slab.</span></li></ul>
         </div>
       </div>
     </section>
 
-    <section class="section bg-limestone" id="areas" aria-labelledby="areas-title">
-      <div class="wrap">
-        <div class="section-head reveal">
-          <div>
-            <p class="eyebrow">Where we work</p>
-            <h2 id="areas-title">Kitchen renovation in Mississauga, Oakville, Burlington and Hamilton</h2>
-          </div>
-          <p class="lede">The same crew and the same fixed-price quote in all four cities. Here&#x27;s what we see most in each.</p>
-        </div>
-        <div class="areas">
-          <article class="area reveal">
-            <div class="area__top"><h3>Mississauga</h3></div>
-            <p>Lorne Park and Port Credit kitchens tend to be full renovations, often with a wall coming down to the dining room.</p>
-            <a class="arrow-link" href="mississauga.html">General contractor in Mississauga
-              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a>
-          </article>
-          <article class="area reveal">
-            <div class="area__top"><h3>Oakville</h3></div>
-            <p>Glen Abbey and Joshua Creek homes from the eighties and nineties are due for their first real kitchen.</p>
-            <a class="arrow-link" href="oakville.html">General contractor in Oakville
-              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a>
-          </article>
-          <article class="area reveal">
-            <div class="area__top"><h3>Burlington</h3></div>
-            <p>Millcroft and Alton Village kitchens are usually refreshes: same layout, better cabinets and quartz.</p>
-            <a class="arrow-link" href="burlington.html">General contractor in Burlington
-              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a>
-          </article>
-          <article class="area reveal">
-            <div class="area__top"><h3>Hamilton</h3></div>
-            <p>Ancaster kitchens run larger, and century homes in Westdale often need wiring brought up to date first.</p>
-            <a class="arrow-link" href="hamilton.html">General contractor in Hamilton
-              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a>
-          </article>
-        </div>
-      </div>
-    </section>
 
     <section class="section " id="faq" aria-labelledby="faq-title">
       <div class="wrap faq">
@@ -1711,7 +1684,7 @@
         <div class="acc reveal">
           <div class="acc__item">
             <h3><button class="acc__btn" type="button" aria-expanded="false" aria-controls="faq-a1" id="faq-q1">How long does a kitchen renovation take?<span class="acc__icon" aria-hidden="true"></span></button></h3>
-            <div class="acc__panel" id="faq-a1" role="region" aria-labelledby="faq-q1"><div><p>It depends on how much of the room moves. Keeping the layout is quicker than moving walls or plumbing. Cabinets have the longest lead time, so we order them the week you sign, and counters are templated after the cabinets go in. Your quote gives you a start date and a finish date in writing.</p></div></div>
+            <div class="acc__panel" id="faq-a1" role="region" aria-labelledby="faq-q1"><div><p>It depends on how much of the room moves, since keeping the layout is quicker than moving walls or plumbing. Your quote gives you a start date and a finish date in writing.</p></div></div>
           </div>
           <div class="acc__item">
             <h3><button class="acc__btn" type="button" aria-expanded="false" aria-controls="faq-a2" id="faq-q2">Can I live at home during a kitchen renovation?<span class="acc__icon" aria-hidden="true"></span></button></h3>
@@ -1719,11 +1692,7 @@
           </div>
           <div class="acc__item">
             <h3><button class="acc__btn" type="button" aria-expanded="false" aria-controls="faq-a3" id="faq-q3">Should I choose quartz or porcelain counters?<span class="acc__icon" aria-hidden="true"></span></button></h3>
-            <div class="acc__panel" id="faq-a3" role="region" aria-labelledby="faq-q3"><div><p>Quartz is the safe default: consistent, hard to stain and easy to seam. Porcelain slab is thinner, handles heat better and suits a modern look, but it is harder to fabricate and can chip at the edge if hit hard. We show you both before you pick.</p></div></div>
-          </div>
-          <div class="acc__item">
-            <h3><button class="acc__btn" type="button" aria-expanded="false" aria-controls="faq-a4" id="faq-q4">Do I need a permit for a kitchen renovation?<span class="acc__icon" aria-hidden="true"></span></button></h3>
-            <div class="acc__panel" id="faq-a4" role="region" aria-labelledby="faq-q4"><div><p>Not for new cabinets, counters and finishes. You do need one to remove or alter a load-bearing wall, and for significant plumbing changes. We tell you at the site visit and handle the application if one is needed.</p></div></div>
+            <div class="acc__panel" id="faq-a3" role="region" aria-labelledby="faq-q3"><div><p>Quartz is the safe default: consistent, hard to stain and easy to seam. Porcelain slab is thinner, handles heat better and suits a modern look, but it is harder to fabricate and can chip at the edge if hit hard.</p></div></div>
           </div>
         </div>
       </div>
@@ -1744,12 +1713,9 @@
 
     <section class="section" id="related" aria-labelledby="related-title">
       <div class="wrap">
-        <div class="section-head reveal">
-          <div>
-            <p class="eyebrow">More services</p>
-            <h2 id="related-title">Other work we do</h2>
-          </div>
-          <p class="lede">Most jobs turn into two. We quote each one on its own line.</p>
+        <div class="section-head section-head--solo reveal">
+          <p class="eyebrow">More services</p>
+          <h2 id="related-title">Other work we do</h2>
         </div>
         <ul class="related reveal">
           <li><a href="basement-renovation.html">Basement renovation<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a></li>
@@ -1758,6 +1724,7 @@
           <li><a href="concrete-patios.html">Concrete patios and walkways<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a></li>
           <li><a href="backyard-landscaping.html">Backyard and landscaping builds<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a></li>
         </ul>
+        <p class="more-link reveal">Kitchen renovation in <a href="mississauga.html">Mississauga</a>, <a href="oakville.html">Oakville</a>, <a href="burlington.html">Burlington</a> and <a href="hamilton.html">Hamilton</a>.</p>
       </div>
     </section>
   </main>
@@ -1777,7 +1744,7 @@
             <a href="tel:+16475137955">(647) 513-7955</a>
           </address>
           <p class="foot-hours">Open 24 hours, 7 days a week</p>
-          <a class="btn btn--primary" href="#quote">Get a Quote</a>
+          <a class="btn btn--primary" href="#quote">Get a Free Quote</a>
         </div>
 
         <nav aria-label="Services">

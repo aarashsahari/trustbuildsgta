@@ -99,7 +99,7 @@
       "name": "Can you waterproof an old stone foundation?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes, but the method depends on the wall. Most older Hamilton basements need exterior excavation and a membrane, or interior drainage to a sump, before finishing. We tell you which one your house needs at the site visit, and why."
+        "text": "Yes, but the method depends on the wall. Most older Hamilton basements need exterior excavation and a membrane, or interior drainage to a sump, before finishing."
       }
     },
     {
@@ -107,7 +107,7 @@
       "name": "What is underpinning and do I need it?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Underpinning lowers a basement floor by digging below the existing footings in sections and pouring new ones deeper. It is how you get usable ceiling height in an old basement. It needs an engineer and a permit, and we coordinate both."
+        "text": "Underpinning lowers a basement floor by digging below the existing footings in sections and pouring new ones deeper. It is how you get usable ceiling height in an old basement."
       }
     },
     {
@@ -115,7 +115,7 @@
       "name": "Do you handle building permits with the City of Hamilton?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. Where the Ontario Building Code calls for a permit, we prepare the drawings, apply to the City of Hamilton and book the inspections. The permit fee is shown on your quote."
+        "text": "Yes. Where the Ontario Building Code calls for a permit, we prepare the drawings, apply to the City of Hamilton and book the inspections."
       }
     }
   ]
@@ -1369,6 +1369,27 @@
     .promise-strip--light li::before { background: var(--accent); }
     .promise-strip--light h3 { color: var(--ink); }
     .promise-strip--light p { color: #26323B; }
+
+    /* ============================================================
+       25. LIGHTER LAYOUTS: headings without intros, service cards
+       ============================================================ */
+    .section-head--solo { display: block; margin-bottom: 40px; }
+    @media (min-width: 1024px) { .section-head--solo { display: block; margin-bottom: 56px; } }
+    .section-head--solo h2 { margin: 0; max-width: 20ch; }
+
+    .cards { list-style: none; display: grid; gap: 28px; }
+    @media (min-width: 640px)  { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (min-width: 1024px) { .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; } }
+    .card { display: flex; flex-direction: column; height: 100%; color: var(--ink); text-decoration: none; }
+    .card__img { display: block; overflow: hidden; border-radius: 12px; aspect-ratio: 4 / 3; }
+    .card__img img { width: 100%; height: 100%; object-fit: cover; transition: scale .6s var(--ease); }
+    .card:hover .card__img img { scale: 1.04; }
+    .card__body { display: flex; flex-direction: column; gap: 6px; padding-top: 16px; flex: 1; }
+    .card__title { font-family: var(--f-head); font-weight: 700; font-size: 1.3rem; letter-spacing: -0.015em; line-height: 1.2; }
+    .card__text { color: #26323B; font-size: 16px; }
+    .card__more { display: inline-flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 8px; font-weight: 600; color: var(--accent); }
+    .card__more svg { width: 14px; height: 14px; transition: translate .2s var(--ease); }
+    .card:hover .card__more svg { translate: 3px 0; }
   </style>
 </head>
 
@@ -1570,21 +1591,18 @@
             <h2 id="about-title">Old houses below the escarpment, newer ones above it</h2>
           </div>
           <div class="split-head__body">
-            <p>Hamilton has the oldest housing we work in. Below the escarpment, in Westdale, Dundas and the older streets downtown, there are century homes on stone or block foundations. Up on the Mountain and in Ancaster and Stoney Creek, it&#x27;s mostly postwar and newer homes.</p><p>That split shapes the work. Older homes usually need basement waterproofing, underpinning or updated wiring before the finishing starts. Newer ones are more about kitchens, bathrooms and backyards.</p>
+            <p>Hamilton has the oldest housing we work in. Below the escarpment, in Westdale, Dundas and the older streets downtown, there are century homes on stone or block foundations.</p>
           </div>
         </div>
-        <ul class="hoods reveal"><li><h3>Westdale</h3><p>Century homes near McMaster. Basement waterproofing, bathrooms and careful kitchen work around plaster and trim.</p></li><li><h3>Dundas</h3><p>Older homes in the valley with stone foundations and wet basements. Waterproofing and underpinning come first.</p></li><li><h3>Ancaster</h3><p>Larger homes and lots. Kitchens, ensuites, and backyards with retaining walls.</p></li><li><h3>Stoney Creek</h3><p>Family homes from the seventies onward. Basements, flooring and patios.</p></li><li><h3>The Mountain</h3><p>Postwar bungalows and split-levels. Basement suites and main-floor kitchens.</p></li><li><h3>Kirkendall and Locke Street</h3><p>Older semis and detached homes. Kitchens, bathrooms and basements that need waterproofing.</p></li></ul>
+        <ul class="hoods reveal"><li><h3>Westdale</h3><p>Century homes near McMaster.</p></li><li><h3>Dundas</h3><p>Older homes in the valley with stone foundations and wet basements.</p></li><li><h3>Ancaster</h3><p>Larger homes and lots.</p></li><li><h3>Stoney Creek</h3><p>Family homes from the seventies onward.</p></li></ul>
       </div>
     </section>
 
     <section class="section bg-limestone" id="services" aria-labelledby="services-title">
       <div class="wrap">
-        <div class="section-head reveal">
-          <div>
-            <p class="eyebrow">Services</p>
-            <h2 id="services-title">Renovation services in Hamilton</h2>
-          </div>
-          <p class="lede">Six kinds of work make up most of our calendar here. Each has its own page with the details.</p>
+        <div class="section-head section-head--solo reveal">
+          <p class="eyebrow">Services</p>
+          <h2 id="services-title">Renovation services in Hamilton</h2>
         </div>
         <ol class="svc-rows">
           <li class="reveal">
@@ -1629,37 +1647,30 @@
 
     <section class="section bg-ink on-dark" id="process" aria-labelledby="process-title">
       <div class="wrap">
-        <div class="section-head reveal">
-          <div>
-            <p class="eyebrow">Process</p>
-            <h2 id="process-title">How a job runs in Hamilton</h2>
-          </div>
-          <p class="lede">Four stages. You always know which one you&#x27;re in and who to call about it.</p>
+        <div class="section-head section-head--solo reveal">
+          <p class="eyebrow">Process</p>
+          <h2 id="process-title">How a job runs in Hamilton</h2>
         </div>
         <ol class="steps">
           <li class="step reveal">
             <span class="step__n" aria-hidden="true">01</span>
             <h3>Site visit and measure</h3>
             <p>We measure every room we&#x27;re touching and check the things that change a price: panel capacity, drain locations, moisture on the foundation, what&#x27;s under the old floor.</p>
-            <p class="step__get"><strong>You get:</strong> a visit from the person who would actually run your job, not a salesperson.</p>
           </li>
           <li class="step reveal">
             <span class="step__n" aria-hidden="true">02</span>
             <h3>Written quote and design</h3>
-            <p>A line-item quote with a fixed price and HST on its own line. Layout drawings and finish selections get settled here, before a single trade is booked.</p>
-            <p class="step__get"><strong>You get:</strong> the fixed-price quote, drawings, a materials list and a start date.</p>
+            <p>A line-item quote with a fixed price and HST on its own line.</p>
           </li>
           <li class="step reveal">
             <span class="step__n" aria-hidden="true">03</span>
             <h3>Build with a dedicated lead</h3>
-            <p>One project lead runs the job from demolition to final paint. They book trades, meet the inspector and send you a short update at the end of each day.</p>
-            <p class="step__get"><strong>You get:</strong> one phone number for the whole job and a swept, cleared site every evening.</p>
+            <p>One project lead runs the job from demolition to final paint.</p>
           </li>
           <li class="step reveal">
             <span class="step__n" aria-hidden="true">04</span>
             <h3>Walkthrough and warranty</h3>
-            <p>We walk every room with you and write down anything that isn&#x27;t right. It gets fixed before the final payment is due.</p>
-            <p class="step__get"><strong>You get:</strong> a closed permit, product warranties and a written workmanship warranty.</p>
+            <p>We walk every room with you and write down anything that isn&#x27;t right.</p>
           </li>
         </ol>
       </div>
@@ -1675,15 +1686,15 @@
         <div class="acc reveal">
           <div class="acc__item">
             <h3><button class="acc__btn" type="button" aria-expanded="false" aria-controls="faq-a1" id="faq-q1">Can you waterproof an old stone foundation?<span class="acc__icon" aria-hidden="true"></span></button></h3>
-            <div class="acc__panel" id="faq-a1" role="region" aria-labelledby="faq-q1"><div><p>Yes, but the method depends on the wall. Most older Hamilton basements need exterior excavation and a membrane, or interior drainage to a sump, before finishing. We tell you which one your house needs at the site visit, and why.</p></div></div>
+            <div class="acc__panel" id="faq-a1" role="region" aria-labelledby="faq-q1"><div><p>Yes, but the method depends on the wall. Most older Hamilton basements need exterior excavation and a membrane, or interior drainage to a sump, before finishing.</p></div></div>
           </div>
           <div class="acc__item">
             <h3><button class="acc__btn" type="button" aria-expanded="false" aria-controls="faq-a2" id="faq-q2">What is underpinning and do I need it?<span class="acc__icon" aria-hidden="true"></span></button></h3>
-            <div class="acc__panel" id="faq-a2" role="region" aria-labelledby="faq-q2"><div><p>Underpinning lowers a basement floor by digging below the existing footings in sections and pouring new ones deeper. It is how you get usable ceiling height in an old basement. It needs an engineer and a permit, and we coordinate both.</p></div></div>
+            <div class="acc__panel" id="faq-a2" role="region" aria-labelledby="faq-q2"><div><p>Underpinning lowers a basement floor by digging below the existing footings in sections and pouring new ones deeper. It is how you get usable ceiling height in an old basement.</p></div></div>
           </div>
           <div class="acc__item">
             <h3><button class="acc__btn" type="button" aria-expanded="false" aria-controls="faq-a3" id="faq-q3">Do you handle building permits with the City of Hamilton?<span class="acc__icon" aria-hidden="true"></span></button></h3>
-            <div class="acc__panel" id="faq-a3" role="region" aria-labelledby="faq-q3"><div><p>Yes. Where the Ontario Building Code calls for a permit, we prepare the drawings, apply to the City of Hamilton and book the inspections. The permit fee is shown on your quote.</p></div></div>
+            <div class="acc__panel" id="faq-a3" role="region" aria-labelledby="faq-q3"><div><p>Yes. Where the Ontario Building Code calls for a permit, we prepare the drawings, apply to the City of Hamilton and book the inspections.</p></div></div>
           </div>
         </div>
       </div>
@@ -1693,7 +1704,7 @@
       <div class="wrap cta-band__grid reveal">
         <div>
           <h2 id="cta-title">Book a site visit in Hamilton</h2>
-          <p>One visit, then a written fixed price with HST shown. Call any time, 24/7.</p>
+          <p>One visit, then a written fixed price.</p>
         </div>
         <div class="cta-band__btns">
           <a class="btn btn--primary" href="#quote">Get a Free Quote</a>
@@ -1704,12 +1715,9 @@
 
     <section class="section" id="related" aria-labelledby="related-title">
       <div class="wrap">
-        <div class="section-head reveal">
-          <div>
-            <p class="eyebrow">Other areas</p>
-            <h2 id="related-title">We also work in</h2>
-          </div>
-          <p class="lede">Same crew, same fixed-price quotes.</p>
+        <div class="section-head section-head--solo reveal">
+          <p class="eyebrow">Other areas</p>
+          <h2 id="related-title">We also work in</h2>
         </div>
         <ul class="related reveal">
           <li><a href="mississauga.html">General contractor in Mississauga<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a></li>
@@ -1735,7 +1743,7 @@
             <a href="tel:+16475137955">(647) 513-7955</a>
           </address>
           <p class="foot-hours">Open 24 hours, 7 days a week</p>
-          <a class="btn btn--primary" href="#quote">Get a Quote</a>
+          <a class="btn btn--primary" href="#quote">Get a Free Quote</a>
         </div>
 
         <nav aria-label="Services">

@@ -1313,6 +1313,27 @@
     .promise-strip--light li::before { background: var(--accent); }
     .promise-strip--light h3 { color: var(--ink); }
     .promise-strip--light p { color: #26323B; }
+
+    /* ============================================================
+       25. LIGHTER LAYOUTS: headings without intros, service cards
+       ============================================================ */
+    .section-head--solo { display: block; margin-bottom: 40px; }
+    @media (min-width: 1024px) { .section-head--solo { display: block; margin-bottom: 56px; } }
+    .section-head--solo h2 { margin: 0; max-width: 20ch; }
+
+    .cards { list-style: none; display: grid; gap: 28px; }
+    @media (min-width: 640px)  { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (min-width: 1024px) { .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; } }
+    .card { display: flex; flex-direction: column; height: 100%; color: var(--ink); text-decoration: none; }
+    .card__img { display: block; overflow: hidden; border-radius: 12px; aspect-ratio: 4 / 3; }
+    .card__img img { width: 100%; height: 100%; object-fit: cover; transition: scale .6s var(--ease); }
+    .card:hover .card__img img { scale: 1.04; }
+    .card__body { display: flex; flex-direction: column; gap: 6px; padding-top: 16px; flex: 1; }
+    .card__title { font-family: var(--f-head); font-weight: 700; font-size: 1.3rem; letter-spacing: -0.015em; line-height: 1.2; }
+    .card__text { color: #26323B; font-size: 16px; }
+    .card__more { display: inline-flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 8px; font-weight: 600; color: var(--accent); }
+    .card__more svg { width: 14px; height: 14px; transition: translate .2s var(--ease); }
+    .card:hover .card__more svg { translate: 3px 0; }
   </style>
 </head>
 
@@ -1419,86 +1440,49 @@
         <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="index.html">Home</a></li><li aria-current="page">Process</li></ol></nav>
         <p class="eyebrow">Process</p>
         <h1 id="page-title">How a Renovation Runs With Us</h1>
-        <p class="phero__lede">Four stages, one project lead, and a price that doesn&#x27;t move unless you sign a change order. Here&#x27;s what happens and what you get at each step.</p>
+        <p class="phero__lede">Four stages, one project lead and a price that doesn&#x27;t move.</p>
         <p class="phero__call"><a class="btn btn--primary" href="#quote">Get a Free Quote</a> <a class="btn btn--line" href="tel:+16475137955">Call (647) 513-7955</a> <span>Free site visit. Call any time, 24/7.</span></p>
       </div>
     </section>
 
     <section class="section bg-ink on-dark" id="process" aria-labelledby="process-title">
       <div class="wrap">
-        <div class="section-head reveal">
-          <div>
-            <p class="eyebrow">Process</p>
-            <h2 id="process-title">How a job runs, from first visit to final walkthrough</h2>
-          </div>
-          <p class="lede">Four stages. You always know which one you're in and who to call about it.</p>
+        <div class="section-head section-head--solo reveal">
+          <p class="eyebrow">Process</p>
+          <h2 id="process-title">How a job runs</h2>
         </div>
-
         <ol class="steps">
           <li class="step reveal">
             <span class="step__n" aria-hidden="true">01</span>
             <h3>Site visit and measure</h3>
-            <p>We measure every room we're touching and check the things that change a price: panel capacity, drain locations, moisture on the foundation, what's under the old floor.</p>
-            <p class="step__get"><strong>You get:</strong> a visit from the person who would actually run your job, not a salesperson.</p>
+            <p>We measure every room we&#x27;re touching and check the things that change a price: panel capacity, drain locations, moisture on the foundation, what&#x27;s under the old floor.</p>
           </li>
           <li class="step reveal">
             <span class="step__n" aria-hidden="true">02</span>
             <h3>Written quote and design</h3>
-            <p>A line-item quote with a fixed price and HST on its own line. Layout drawings and finish selections get settled here, before a single trade is booked.</p>
-            <p class="step__get"><strong>You get:</strong> the fixed-price quote, drawings, a materials list and a start date.</p>
+            <p>A line-item quote with a fixed price and HST on its own line.</p>
           </li>
           <li class="step reveal">
             <span class="step__n" aria-hidden="true">03</span>
             <h3>Build with a dedicated lead</h3>
-            <p>One project lead runs the job from demolition to final paint. They book trades, meet the inspector and send you a short update at the end of each day.</p>
-            <p class="step__get"><strong>You get:</strong> one phone number for the whole job and a swept, cleared site every evening.</p>
+            <p>One project lead runs the job from demolition to final paint.</p>
           </li>
           <li class="step reveal">
             <span class="step__n" aria-hidden="true">04</span>
             <h3>Walkthrough and warranty</h3>
-            <p>We walk every room with you and write down anything that isn't right. It gets fixed before the final payment is due.</p>
-            <p class="step__get"><strong>You get:</strong> a closed permit, product warranties and a written workmanship warranty.</p>
+            <p>We walk every room with you and write down anything that isn&#x27;t right.</p>
           </li>
         </ol>
       </div>
     </section>
 
     <section class="section" id="why" aria-labelledby="why-title">
-      <div class="wrap why">
-        <div class="why__left reveal">
+      <div class="wrap">
+        <div class="section-head section-head--solo reveal">
           <p class="eyebrow">Why TrustBuildGTA</p>
-          <h2 id="why-title">Why homeowners hire a general contractor they can check up on</h2>
-          <p class="lede">The name is the promise, so here's what it means in practice. It's also what you should ask any contractor before you sign.</p>
-
-          <figure class="pull">
-            <blockquote>
-              <p>The price on the quote is the price you pay. If something changes, you'll see it in writing and sign off before we build it.</p>
-            </blockquote>
-            <figcaption>The TrustBuildGTA promise, written into every quote</figcaption>
-          </figure>
+          <h2 id="why-title">What you can hold us to</h2>
         </div>
-
-        <div class="reveal">
-          <ul class="promises">
-            <li class="promise">
-              <h3>Written fixed-price quotes</h3>
-              <p>Every line priced, materials named, HST shown separately. No vague allowances that quietly double. If you add something halfway through, you get a written change order with a price first.</p>
-            </li>
-            <li class="promise">
-              <h3>One point of contact</h3>
-              <p>Your project lead is on site, knows your house and answers their phone. Nobody hands you off to a coordinator after the contract is signed. The quote also carries a completion date, and if a delay is ours, you hear it from us the day we know.</p>
-            </li>
-            <li class="promise">
-              <h3>Permits handled</h3>
-              <p>Where the Ontario Building Code calls for a permit, we apply for it, book the inspections and are on site when the inspector comes. Second suites, structural walls and attached decks are all permit jobs.</p>
-            </li>
-            <li class="promise">
-              <h3>Site cleaned daily</h3>
-              <p>Floor protection goes down on day one. Zippered dust walls go up around the work area. The site gets swept and vacuumed before we leave each day, because you still live there.</p>
-            </li>
-          </ul>
-          <p class="creds">Licensed and insured with liability coverage and WSIB. Certificates are available on request before you sign.</p>
-        </div>
+        <ul class="promise-strip promise-strip--light"><li class="reveal"><h3>Written fixed-price quotes</h3><p>Every line priced, HST shown. Changes are priced in writing first.</p></li><li class="reveal"><h3>One point of contact</h3><p>Your project lead is on site and answers their phone.</p></li><li class="reveal"><h3>Permits handled</h3><p>We apply, book the inspections and meet the inspector.</p></li><li class="reveal"><h3>Site cleaned daily</h3><p>Floors protected, dust walls up, swept every evening.</p></li></ul>
       </div>
     </section>
 
@@ -1509,7 +1493,7 @@
             <p class="eyebrow">Contact</p>
             <h2 id="contact-title">Get a written quote</h2>
           </div>
-          <p class="lede">Name and phone are all we need. A project lead calls you back to book a site visit. If it&#x27;s urgent, just call.</p>
+          <p class="lede">Name and phone is all we need. Prefer to talk? Call any time.</p>
         </div>
         <div class="quote">
           <div class="reveal" id="quote">
@@ -1623,7 +1607,7 @@
             <a href="tel:+16475137955">(647) 513-7955</a>
           </address>
           <p class="foot-hours">Open 24 hours, 7 days a week</p>
-          <a class="btn btn--primary" href="#quote">Get a Quote</a>
+          <a class="btn btn--primary" href="#quote">Get a Free Quote</a>
         </div>
 
         <nav aria-label="Services">
